@@ -1,0 +1,8 @@
+﻿<maui:MauiWinUIApplication
+    x:Class="SmartProd_Mobile_Front_end.WinUI.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:maui="using:Microsoft.Maui"
+    xmlns:local="using:SmartProd_Mobile_Front_end.WinUI">
+
+</maui:MauiWinUIApplication>

@@ -1,0 +1,8 @@
+<Solution>
+  <Project Path="SmartProd/frontend/frontend.esproj">
+    <Build />
+    <Deploy />
+  </Project>
+  <Project Path="SmartProd/SmartProd.Server/SmartProd.Server.csproj" />
+  <Project Path="SmartProd_Mobile_Front-end/SmartProd_Mobile_Front-end.csproj" />
+</Solution>

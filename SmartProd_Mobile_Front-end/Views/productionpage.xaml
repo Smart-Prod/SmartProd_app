@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SmartProd_Mobile_Front_end.Views.ProductionPage"
+             Title="Produção"
+             BackgroundColor="#F8F6F2">
+    <Grid RowDefinitions="Auto, *">
+
+        <!-- Header -->
+        <VerticalStackLayout Grid.Row="0" Padding="24,20,24,12" BackgroundColor="White">
+            <Label Text="Minha Produção"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   TextColor="#071E27" />
+            <Label Text="Acompanhe suas ordens de produção"
+                   FontSize="13"
+                   TextColor="#6B7280" />
+        </VerticalStackLayout>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="16" Padding="20,20">
+
+                <!-- Search -->
+                <Border BackgroundColor="White"
+                        Stroke="#E5E7EB"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 12"
+                        Padding="16,10">
+
+                    <Border.Shadow>
+                        <Shadow Brush="#000000"
+                                Offset="0,2"
+                                Radius="8"
+                                Opacity="0.04" />
+                    </Border.Shadow>
+
+                    <HorizontalStackLayout Spacing="12">
+                        <Label Text="🔍"
+                               FontSize="16"
+                               VerticalOptions="Center" />
+                        <Entry Placeholder="Buscar ordem ou produto..."
+                               PlaceholderColor="#9CA3AF"
+                               TextColor="#071E27"
+                               FontSize="14"
+                               VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                </Border>
+
+                <!-- Efficiency Card -->
+                <Border BackgroundColor="#071E27"
+                        StrokeThickness="0"
+                        StrokeShape="RoundRectangle 16"
+                        Padding="24">
+
+                    <Border.Shadow>
+                        <Shadow Brush="#000000"
+                                Offset="0,4"
+                                Radius="12"
+                                Opacity="0.15" />
+                    </Border.Shadow>
+
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="EFICIÊNCIA DA LINHA"
+                               FontSize="11"
+                               FontAttributes="Bold"
+                               TextColor="#FF8C00"
+                               CharacterSpacing="1" />
+                        <Label Text="94,2%"
+                               FontSize="48"
+                               FontAttributes="Bold"
+                               TextColor="White" />
+                        <Label Text="OEE - Desempenho em tempo real"
+                               FontSize="13"
+                               TextColor="#9CA3AF" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Orders -->
+                <Label Text="ORDENS ATIVAS"
+                       FontSize="11"
+                       FontAttributes="Bold"
+                       TextColor="#6B7280"
+                       CharacterSpacing="1"
+                       Margin="4,8,0,0" />
+
+                <!-- Order 1 -->
+                <Border BackgroundColor="White"
+                        Stroke="#E5E7EB"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 12"
+                        Padding="20">
+
+                    <Border.Shadow>
+                        <Shadow Brush="#000000"
+                                Offset="0,2"
+                                Radius="8"
+                                Opacity="0.04" />
+                    </Border.Shadow>
+
+                    <Grid ColumnDefinitions="*, Auto"
+                          RowDefinitions="Auto, Auto, Auto, Auto">
+
+                        <Label Grid.Row="0" Grid.Column="0"
+                               Text="OP-88294-2024"
+                               FontSize="11"
+                               FontAttributes="Bold"
+                               TextColor="#6B7280" />
+
+                        <Border Grid.Row="0" Grid.Column="1"
+                                BackgroundColor="#FFF3E0"
+                                Padding="10,4"
+                                StrokeThickness="0"
+                                StrokeShape="RoundRectangle 6">
+                            <Label Text="EM ANDAMENTO"
+                                   FontSize="10"
+                                   FontAttributes="Bold"
+                                   TextColor="#FF8C00" />
+                        </Border>
+
+                        <Label Grid.Row="1" Grid.ColumnSpan="2"
+                               Text="Turbina Industrial&#10;Housing A2"
+                               FontSize="20"
+                               FontAttributes="Bold"
+                               TextColor="#071E27"
+                               Margin="0,8,0,20" />
+
+                        <Grid Grid.Row="2" Grid.ColumnSpan="2"
+                              ColumnDefinitions="*, *"
+                              Margin="0,0,0,16">
+                            <VerticalStackLayout Grid.Column="0" Spacing="4">
+                                <Label Text="INÍCIO" FontSize="10" FontAttributes="Bold" TextColor="#9CA3AF" />
+                                <Label Text="06:45" FontSize="16" FontAttributes="Bold" TextColor="#071E27" />
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                <Label Text="TÉRMINO PREV." FontSize="10" FontAttributes="Bold" TextColor="#9CA3AF" />
+                                <Label Text="14:30" FontSize="16" FontAttributes="Bold" TextColor="#071E27" />
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <Button Grid.Row="3" Grid.ColumnSpan="2"
+                                Text="INICIAR PRODUÇÃO"
+                                BackgroundColor="#FF8C00"
+                                TextColor="White"
+                                FontAttributes="Bold"
+                                CornerRadius="10"
+                                HeightRequest="48"
+                                FontSize="14" />
+                    </Grid>
+                </Border>
+
+                <!-- Order 2 -->
+                <Border BackgroundColor="White"
+                        Stroke="#E5E7EB"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 12"
+                        Padding="20">
+
+                    <Border.Shadow>
+                        <Shadow Brush="#000000"
+                                Offset="0,2"
+                                Radius="8"
+                                Opacity="0.04" />
+                    </Border.Shadow>
+
+                    <Grid ColumnDefinitions="*, Auto"
+                          RowDefinitions="Auto, Auto, Auto, Auto">
+
+                        <Label Grid.Row="0" Grid.Column="0"
+                               Text="OP-88301-2024"
+                               FontSize="11"
+                               FontAttributes="Bold"
+                               TextColor="#6B7280" />
+
+                        <Border Grid.Row="0" Grid.Column="1"
+                                BackgroundColor="#F3F4F6"
+                                Padding="10,4"
+                                StrokeThickness="0"
+                                StrokeShape="RoundRectangle 6">
+                            <Label Text="PENDENTE"
+                                   FontSize="10"
+                                   FontAttributes="Bold"
+                                   TextColor="#6B7280" />
+                        </Border>
+
+                        <Label Grid.Row="1" Grid.ColumnSpan="2"
+                               Text="Bloco Manifold&#10;Hidráulico X7"
+                               FontSize="20"
+                               FontAttributes="Bold"
+                               TextColor="#071E27"
+                               Margin="0,8,0,20" />
+
+                        <Grid Grid.Row="2" Grid.ColumnSpan="2"
+                              ColumnDefinitions="*, *"
+                              Margin="0,0,0,16">
+                            <VerticalStackLayout Grid.Column="0" Spacing="4">
+                                <Label Text="INÍCIO" FontSize="10" FontAttributes="Bold" TextColor="#9CA3AF" />
+                                <Label Text="15:00" FontSize="16" FontAttributes="Bold" TextColor="#071E27" />
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                <Label Text="TÉRMINO PREV." FontSize="10" FontAttributes="Bold" TextColor="#9CA3AF" />
+                                <Label Text="21:15" FontSize="16" FontAttributes="Bold" TextColor="#071E27" />
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <Button Grid.Row="3" Grid.ColumnSpan="2"
+                                Text="INICIAR PRODUÇÃO"
+                                BackgroundColor="#F3F4F6"
+                                TextColor="#6B7280"
+                                FontAttributes="Bold"
+                                CornerRadius="10"
+                                HeightRequest="48"
+                                FontSize="14" />
+                    </Grid>
+                </Border>
+
+                <BoxView HeightRequest="40" Color="Transparent" />
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+    </Grid>
+</ContentPage>

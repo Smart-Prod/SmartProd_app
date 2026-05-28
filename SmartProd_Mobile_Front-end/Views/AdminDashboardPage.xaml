@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SmartProd_Mobile_Front_end.Views.AdminDashboardPage"
+             Title="Dashboard"
+             BackgroundColor="#F8F6F2">
+    <Grid RowDefinitions="Auto, *">
+
+        <!-- Header -->
+        <Grid Grid.Row="0"
+              ColumnDefinitions="Auto, *, Auto"
+              Padding="24,20"
+              BackgroundColor="White">
+
+            <Label Grid.Column="0"
+                   Text="SMARTPROD"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   TextColor="#FF8C00"
+                   CharacterSpacing="1"
+                   VerticalOptions="Center" />
+
+            <Label Grid.Column="2"
+                   Text="Dashboard"
+                   FontSize="14"
+                   TextColor="#6B7280"
+                   VerticalOptions="Center" />
+        </Grid>
+
+        <!-- Loading -->
+        <ActivityIndicator Grid.Row="1"
+                           IsRunning="{Binding IsLoading}"
+                           IsVisible="{Binding IsLoading}"
+                           Color="#FF8C00"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center" />
+
+        <!-- Content -->
+        <ScrollView Grid.Row="1"
+                    IsVisible="{Binding HasData}">
+            <VerticalStackLayout Spacing="16" Padding="20,20">
+
+                <!-- Card: Produtos -->
+                <Border BackgroundColor="White"
+                        Stroke="#E5E7EB"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 12"
+                        Padding="20">
+                    <Border.Shadow>
+                        <Shadow Brush="#000000"
+                                Offset="0,2"
+                                Radius="8"
+                                Opacity="0.04" />
+                    </Border.Shadow>
+                    <VerticalStackLayout Spacing="8">
+                        <BoxView HeightRequest="4"
+                                 BackgroundColor="#FF8C00"
+                                 CornerRadius="2"
+                                 HorizontalOptions="Start"
+                                 WidthRequest="60"
+                                 Margin="0,0,0,4" />
+                        <Label Text="PRODUTOS"
+                               FontSize="11"
+                               FontAttributes="Bold"
+                               TextColor="#6B7280"
+                               CharacterSpacing="1" />
+                        <HorizontalStackLayout Spacing="4" VerticalOptions="Center">
+                            <Label Text="{Binding TotalProducts}"
+                                   FontSize="48"
+                                   FontAttributes="Bold"
+                                   TextColor="#071E27" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="12">
+                            <HorizontalStackLayout Spacing="4">
+                                <BoxView WidthRequest="8" HeightRequest="8" CornerRadius="4" Color="#FF8C00" VerticalOptions="Center" />
+                                <Label FontSize="13" TextColor="#071E27">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="MP: " />
+                                            <Span Text="{Binding MPCount}" FontAttributes="Bold" />
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout Spacing="4">
+                                <BoxView WidthRequest="8" HeightRequest="8" CornerRadius="4" Color="#059669" VerticalOptions="Center" />
+                                <Label FontSize="13" TextColor="#071E27">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="PA: " />
+                                            <Span Text="{Binding PACount}" FontAttributes="Bold" />
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                            </HorizontalStackLayout>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Card: Ordens de Produção -->
+                <Border BackgroundColor="#071E27"
+                        StrokeThickness="0"
+                        StrokeShape="RoundRectangle 16"
+                        Padding="24">
+                    <Border.Shadow>
+                        <Shadow Brush="#000000"
+                                Offset="0,4"
+                                Radius="12"
+                                Opacity="0.15" />
+                    </Border.Shadow>
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="ORDENS DE PRODUÇÃO"
+                               FontSize="11"
+                               FontAttributes="Bold"
+                               TextColor="#FF8C00"
+                               CharacterSpacing="1" />
+                        <HorizontalStackLayout Spacing="16">
+                            <VerticalStackLayout>
+                                <Label Text="{Binding TotalOrders}"
+                                       FontSize="48"
+                                       FontAttributes="Bold"
+                                       TextColor="White" />
+                                <Label Text="Total"
+                                       FontSize="13"
+                                       TextColor="#9CA3AF" />
+                            </VerticalStackLayout>
+                            <VerticalStackLayout>
+                                <Label Text="{Binding ActiveOrders}"
+                                       FontSize="48"
+                                       FontAttributes="Bold"
+                                       TextColor="#FF8C00" />
+                                <Label Text="Ativas"
+                                       FontSize="13"
+                                       TextColor="#9CA3AF" />
+                            </VerticalStackLayout>
+                        </HorizontalStackLayout>
+                        <Label FontSize="13" TextColor="#9CA3AF">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Total produzido: " />
+                                    <Span Text="{Binding TotalProduced}" FontAttributes="Bold" TextColor="White" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Card: Movimentações -->
+                <Border BackgroundColor="White"
+                        Stroke="#E5E7EB"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 12"
+                        Padding="20">
+                    <Border.Shadow>
+                        <Shadow Brush="#000000"
+                                Offset="0,2"
+                                Radius="8"
+                                Opacity="0.04" />
+                    </Border.Shadow>
+                    <VerticalStackLayout Spacing="8">
+                        <BoxView HeightRequest="4"
+                                 BackgroundColor="#3B82F6"
+                                 CornerRadius="2"
+                                 HorizontalOptions="Start"
+                                 WidthRequest="60"
+                                 Margin="0,0,0,4" />
+                        <Label Text="MOVIMENTAÇÕES"
+                               FontSize="11"
+                               FontAttributes="Bold"
+                               TextColor="#6B7280"
+                               CharacterSpacing="1" />
+                        <Label Text="{Binding TotalMovements}"
+                               FontSize="48"
+                               FontAttributes="Bold"
+                               TextColor="#071E27" />
+                        <Label Text="{Binding LastMovementInfo}"
+                               FontSize="12"
+                               TextColor="#6B7280" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Card: Alertas de Estoque -->
+                <Border BackgroundColor="White"
+                        Stroke="#E5E7EB"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 12"
+                        Padding="20">
+                    <Border.Shadow>
+                        <Shadow Brush="#000000"
+                                Offset="0,2"
+                                Radius="8"
+                                Opacity="0.04" />
+                    </Border.Shadow>
+                    <VerticalStackLayout Spacing="8">
+                        <BoxView HeightRequest="4"
+                                 BackgroundColor="#DC2626"
+                                 CornerRadius="2"
+                                 HorizontalOptions="Start"
+                                 WidthRequest="60"
+                                 Margin="0,0,0,4" />
+                        <Label Text="ALERTAS DE ESTOQUE"
+                               FontSize="11"
+                               FontAttributes="Bold"
+                               TextColor="#6B7280"
+                               CharacterSpacing="1" />
+                        <Label Text="{Binding LowStockCount}"
+                               FontSize="48"
+                               FontAttributes="Bold"
+                               TextColor="#071E27" />
+                        <Border BackgroundColor="#FEE2E2"
+                                Padding="12,8"
+                                StrokeThickness="0"
+                                StrokeShape="RoundRectangle 8"
+                                IsVisible="{Binding HasLowStock}">
+                            <HorizontalStackLayout Spacing="8">
+                                <Label Text="⚠️" FontSize="14" VerticalOptions="Center" />
+                                <Label Text="{Binding LowStockText}"
+                                       FontSize="11"
+                                       FontAttributes="Bold"
+                                       TextColor="#DC2626"
+                                       VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                        </Border>
+                        <Label Text="{Binding LowStockText}"
+                               FontSize="12"
+                               TextColor="#059669"
+                               IsVisible="{Binding HasNormalStock}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Card: Movimentações Recentes -->
+                <Border BackgroundColor="White"
+                        Stroke="#E5E7EB"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 12"
+                        Padding="16">
+                    <Border.Shadow>
+                        <Shadow Brush="#000000"
+                                Offset="0,2"
+                                Radius="8"
+                                Opacity="0.04" />
+                    </Border.Shadow>
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="MOVIMENTAÇÕES RECENTES"
+                               FontSize="11"
+                               FontAttributes="Bold"
+                               TextColor="#6B7280"
+                               CharacterSpacing="1"
+                               Margin="0,0,0,4" />
+                        <CollectionView ItemsSource="{Binding RecentMovements}"
+                                        HeightRequest="180">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <HorizontalStackLayout Spacing="8" Padding="4,6">
+                                        <BoxView WidthRequest="6" HeightRequest="6"
+                                                 CornerRadius="3" Color="#FF8C00"
+                                                 VerticalOptions="Center" />
+                                        <Label Text="{Binding .}"
+                                               FontSize="13"
+                                               TextColor="#071E27" />
+                                    </HorizontalStackLayout>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Refresh Button -->
+                <Button Text="ATUALIZAR DADOS"
+                        Command="{Binding RefreshCommand}"
+                        BackgroundColor="#FF8C00"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        FontSize="14"
+                        CornerRadius="12"
+                        HeightRequest="48"
+                        Margin="0,8,0,0" />
+
+                <BoxView HeightRequest="40" Color="Transparent" />
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+    </Grid>
+</ContentPage>
