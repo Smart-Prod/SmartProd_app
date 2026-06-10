@@ -8,12 +8,11 @@ public partial class RegistrationPage : ContentPage
 	public RegistrationPage(ApiService apiService)
 	{
 		InitializeComponent();
-		BindingContext = new RegistrationViewModel(apiService);
+		BindingContext = new RegisterViewModel(apiService);
 	}
 
-    protected override void OnAppearing()
+    private async void OnSignInTapped(object sender, EventArgs e)
     {
-        base.OnAppearing();
-        Shell.SetNavBarIsVisible(this, false);
+        await Navigation.PopAsync();
     }
 }

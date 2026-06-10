@@ -1,0 +1,404 @@
+{
+  "files": [
+    {
+      "fileName": "./icon.png",
+      "SPDXID": "SPDXRef-File--icon.png-7229B5BECEBBC51925AA2E08341DDB4BFB53F7AD",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "8fcf6f6cd575c0f8c643691765a7db2a4b3b104bfbff34646555f5ccffdb2895"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "7229b5becebbc51925aa2e08341ddb4bfb53f7ad"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./buildTransitive/net8.0-android34.0/Xamarin.AndroidX.ProfileInstaller.ProfileInstaller.targets",
+      "SPDXID": "SPDXRef-File--buildTransitive-net8.0-android34.0-Xamarin.AndroidX.ProfileInstaller.ProfileInstaller.targets-15499DC53B47DB2C90FE2482E0BC9AE57C2B8ED9",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "a25732d94e9ed1d8eb4399db7dc03d5573082a7c85cfe1f6e503b692a05532ae"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "15499dc53b47db2c90fe2482e0bc9ae57c2b8ed9"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./LICENSE.md",
+      "SPDXID": "SPDXRef-File--LICENSE.md-3B941EC3773572CD471F1DD124D3ABEB19A6437B",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "7f92be6c840f2584494d4986060fe7dfe8bbf02d6ab122980fa1d43ffb2ecb0f"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "3b941ec3773572cd471f1dd124d3abeb19a6437b"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./lib/net8.0-android34.0/Xamarin.AndroidX.ProfileInstaller.ProfileInstaller.dll",
+      "SPDXID": "SPDXRef-File--lib-net8.0-android34.0-Xamarin.AndroidX.ProfileInstaller.ProfileInstaller.dll-AE064F588849DA8AEEB85C3D04F61E6A9D95E244",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "0d64518186bf12e789145dc6aa67925beeaf7536c848d0b00a151086b2dc9939"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "ae064f588849da8aeeb85c3d04f61e6a9d95e244"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./readme.md",
+      "SPDXID": "SPDXRef-File--readme.md-9E883E441643D317CB5CFCB976F4CB79324AA331",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "5048ca9286d451cd48febc53beae4ea01c5f692e72b6f562676f0c25c731ebcd"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "9e883e441643d317cb5cfcb976f4cb79324aa331"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./lib/net8.0-android34.0/Xamarin.AndroidX.ProfileInstaller.ProfileInstaller.pdb",
+      "SPDXID": "SPDXRef-File--lib-net8.0-android34.0-Xamarin.AndroidX.ProfileInstaller.ProfileInstaller.pdb-5984F1DE3E882E25F8EFEF118F40058AACB76C4A",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "20f000fa495007fe9c16fac9ecbc0f9c93076a87b6ed79442983b01855263695"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "5984f1de3e882e25f8efef118f40058aacb76c4a"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./Xamarin.AndroidX.ProfileInstaller.ProfileInstaller.nuspec",
+      "SPDXID": "SPDXRef-File--Xamarin.AndroidX.ProfileInstaller.ProfileInstaller.nuspec-BA8AB4773897240BD197F696336DD7FE77938120",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "2771e2065640920923f153add6b1c52a7d6145d9bd9766d3ee5365ee33391915"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "ba8ab4773897240bd197f696336dd7fe77938120"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./package/services/metadata/core-properties/e90c29e6d2b6458f830c5f5cc9e3fa4e.psmdcp",
+      "SPDXID": "SPDXRef-File--package-services-metadata-core-properties-e90c29e6d2b6458f830c5f5cc9e3fa4e.psmdcp-F3BDCAB9D40095EAFD022C1ABF2ABA77C14A5CC4",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "ec21787c1b13d8fdec47393e42adfba83eda248cf5b72d2fa8d1be195ccff58d"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "f3bdcab9d40095eafd022c1abf2aba77c14a5cc4"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./THIRD-PARTY-NOTICES.txt",
+      "SPDXID": "SPDXRef-File--THIRD-PARTY-NOTICES.txt-571B160816F7F79B0EC258B6B0DB19C576B9FF1E",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "1a14e25264f604fca355c489c0d5877480ddb738cec665008bcf494ad1cdc787"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "571b160816f7f79b0ec258b6b0db19c576b9ff1e"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./lib/net8.0-android34.0/Xamarin.AndroidX.ProfileInstaller.ProfileInstaller.xml",
+      "SPDXID": "SPDXRef-File--lib-net8.0-android34.0-Xamarin.AndroidX.ProfileInstaller.ProfileInstaller.xml-3A87DD471E8A6CA4CEDBC5DFCAF88BC85A857922",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "8a806785184a052725e844c61deef0340e3e71b9419de1f1f34864aea1287a6c"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "3a87dd471e8a6ca4cedbc5dfcaf88bc85a857922"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./[Content_Types].xml",
+      "SPDXID": "SPDXRef-File---Content-Types-.xml-3285C27AA44BB8B33343116834649102363BF8D9",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "56ee243ea19087393b0454d1a60a4d82cd606bda5dff56561ed1c4f93b54105b"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "3285c27aa44bb8b33343116834649102363bf8d9"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./build/net8.0-android34.0/Xamarin.AndroidX.ProfileInstaller.ProfileInstaller.targets",
+      "SPDXID": "SPDXRef-File--build-net8.0-android34.0-Xamarin.AndroidX.ProfileInstaller.ProfileInstaller.targets-15499DC53B47DB2C90FE2482E0BC9AE57C2B8ED9",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "a25732d94e9ed1d8eb4399db7dc03d5573082a7c85cfe1f6e503b692a05532ae"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "15499dc53b47db2c90fe2482e0bc9ae57c2b8ed9"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./aar/androidx.profileinstaller.profileinstaller.aar",
+      "SPDXID": "SPDXRef-File--aar-androidx.profileinstaller.profileinstaller.aar-BE24AADEA661EE537836169DF5026FB8F370AF9F",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "b519f9317ded1e2c1c2993038c0692e30da326ca99097d9331ff2d3a5861a428"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "be24aadea661ee537836169df5026fb8f370af9f"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./_rels/.rels",
+      "SPDXID": "SPDXRef-File---rels-.rels-DCA483373AB685B5CF4558BA5F5149F07DE65B62",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "5f7efd13adbd2e585251df1ec4e01902e41db7ce8497ea1fbc7c412634a62309"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "dca483373ab685b5cf4558ba5f5149f07de65b62"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    }
+  ],
+  "packages": [
+    {
+      "name": "Xamarin.AndroidX.ProfileInstaller.ProfileInstaller",
+      "SPDXID": "SPDXRef-Package-95734567979DD9735903340C71807D1B4CF2C29A8FDF67661E46A5E99B2E16B8",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "1.4.1.2",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Xamarin.AndroidX.ProfileInstaller.ProfileInstaller@1.4.1.2"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Microsoft.Sbom.Targets",
+      "SPDXID": "SPDXRef-Package-7DAA0B3EDED3076AACC82E185C2A8B522D51C2079B97B13D8E6454E08E0A27CA",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "3.0.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.Sbom.Targets@3.0.0"
+        }
+      ],
+      "supplier": "NOASSERTION"
+    },
+    {
+      "name": "Microsoft.NET.ILLink.Tasks",
+      "SPDXID": "SPDXRef-Package-B84F439F5F1D8181504001808BED8E35B93D9468972E1607A04B571DD24DA920",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "8.0.11",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.NET.ILLink.Tasks@8.0.11"
+        }
+      ],
+      "supplier": "NOASSERTION"
+    },
+    {
+      "name": "Xamarin.AndroidX.ProfileInstaller.ProfileInstaller",
+      "SPDXID": "SPDXRef-RootPackage",
+      "downloadLocation": "NOASSERTION",
+      "packageVerificationCode": {
+        "packageVerificationCodeValue": "13319069f94bd1a8e7fd70c60fb31f6d7e418b37"
+      },
+      "filesAnalyzed": true,
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoFromFiles": [
+        "NOASSERTION"
+      ],
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "1.0.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:swid/Microsoft/spdx.org/Xamarin.AndroidX.ProfileInstaller.ProfileInstaller@1.0.0?tag_id=37c8982d-ac40-4ea6-890f-f8685b4b12c0"
+        }
+      ],
+      "supplier": "Organization: Microsoft",
+      "hasFiles": [
+        "SPDXRef-File--build-net8.0-android34.0-Xamarin.AndroidX.ProfileInstaller.ProfileInstaller.targets-15499DC53B47DB2C90FE2482E0BC9AE57C2B8ED9",
+        "SPDXRef-File--lib-net8.0-android34.0-Xamarin.AndroidX.ProfileInstaller.ProfileInstaller.xml-3A87DD471E8A6CA4CEDBC5DFCAF88BC85A857922",
+        "SPDXRef-File--THIRD-PARTY-NOTICES.txt-571B160816F7F79B0EC258B6B0DB19C576B9FF1E",
+        "SPDXRef-File---rels-.rels-DCA483373AB685B5CF4558BA5F5149F07DE65B62",
+        "SPDXRef-File--aar-androidx.profileinstaller.profileinstaller.aar-BE24AADEA661EE537836169DF5026FB8F370AF9F",
+        "SPDXRef-File---Content-Types-.xml-3285C27AA44BB8B33343116834649102363BF8D9",
+        "SPDXRef-File--package-services-metadata-core-properties-e90c29e6d2b6458f830c5f5cc9e3fa4e.psmdcp-F3BDCAB9D40095EAFD022C1ABF2ABA77C14A5CC4",
+        "SPDXRef-File--Xamarin.AndroidX.ProfileInstaller.ProfileInstaller.nuspec-BA8AB4773897240BD197F696336DD7FE77938120",
+        "SPDXRef-File--lib-net8.0-android34.0-Xamarin.AndroidX.ProfileInstaller.ProfileInstaller.pdb-5984F1DE3E882E25F8EFEF118F40058AACB76C4A",
+        "SPDXRef-File--readme.md-9E883E441643D317CB5CFCB976F4CB79324AA331",
+        "SPDXRef-File--lib-net8.0-android34.0-Xamarin.AndroidX.ProfileInstaller.ProfileInstaller.dll-AE064F588849DA8AEEB85C3D04F61E6A9D95E244",
+        "SPDXRef-File--LICENSE.md-3B941EC3773572CD471F1DD124D3ABEB19A6437B",
+        "SPDXRef-File--buildTransitive-net8.0-android34.0-Xamarin.AndroidX.ProfileInstaller.ProfileInstaller.targets-15499DC53B47DB2C90FE2482E0BC9AE57C2B8ED9",
+        "SPDXRef-File--icon.png-7229B5BECEBBC51925AA2E08341DDB4BFB53F7AD"
+      ]
+    }
+  ],
+  "externalDocumentRefs": [],
+  "relationships": [
+    {
+      "relationshipType": "DESCRIBES",
+      "relatedSpdxElement": "SPDXRef-RootPackage",
+      "spdxElementId": "SPDXRef-DOCUMENT"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-B84F439F5F1D8181504001808BED8E35B93D9468972E1607A04B571DD24DA920",
+      "spdxElementId": "SPDXRef-RootPackage"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-7DAA0B3EDED3076AACC82E185C2A8B522D51C2079B97B13D8E6454E08E0A27CA",
+      "spdxElementId": "SPDXRef-RootPackage"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-95734567979DD9735903340C71807D1B4CF2C29A8FDF67661E46A5E99B2E16B8",
+      "spdxElementId": "SPDXRef-RootPackage"
+    }
+  ],
+  "spdxVersion": "SPDX-2.2",
+  "dataLicense": "CC0-1.0",
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "name": "Xamarin.AndroidX.ProfileInstaller.ProfileInstaller 1.0.0",
+  "documentNamespace": "http://spdx.org/spdxdocs/Xamarin.AndroidX.ProfileInstaller.ProfileInstaller/Xamarin.AndroidX.ProfileInstaller.ProfileInstaller/1.0.0/lymaAr9thEiF1m7IxPNArw",
+  "creationInfo": {
+    "created": "2025-01-21T19:34:36Z",
+    "creators": [
+      "Organization: Microsoft",
+      "Tool: Microsoft.SBOMTool-3.0.0"
+    ]
+  },
+  "documentDescribes": [
+    "SPDXRef-RootPackage"
+  ]
+}

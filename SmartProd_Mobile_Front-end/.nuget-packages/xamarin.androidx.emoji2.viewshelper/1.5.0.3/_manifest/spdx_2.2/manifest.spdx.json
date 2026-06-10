@@ -1,0 +1,404 @@
+{
+  "files": [
+    {
+      "fileName": "./THIRD-PARTY-NOTICES.txt",
+      "SPDXID": "SPDXRef-File--THIRD-PARTY-NOTICES.txt-571B160816F7F79B0EC258B6B0DB19C576B9FF1E",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "1a14e25264f604fca355c489c0d5877480ddb738cec665008bcf494ad1cdc787"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "571b160816f7f79b0ec258b6b0db19c576b9ff1e"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./Xamarin.AndroidX.Emoji2.ViewsHelper.nuspec",
+      "SPDXID": "SPDXRef-File--Xamarin.AndroidX.Emoji2.ViewsHelper.nuspec-FF35C2FEC1E541FE23B27FE9F99B6F42C5CE4206",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "40856c112fadfa15ed71a563c734200716314e7e1a94914691c4a499da4bbe25"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "ff35c2fec1e541fe23b27fe9f99b6f42c5ce4206"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./[Content_Types].xml",
+      "SPDXID": "SPDXRef-File---Content-Types-.xml-3285C27AA44BB8B33343116834649102363BF8D9",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "56ee243ea19087393b0454d1a60a4d82cd606bda5dff56561ed1c4f93b54105b"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "3285c27aa44bb8b33343116834649102363bf8d9"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./aar/androidx.emoji2.emoji2-views-helper.aar",
+      "SPDXID": "SPDXRef-File--aar-androidx.emoji2.emoji2-views-helper.aar-E51977F664B209E3AA5677CF14EB759BEF53AF0D",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "ae6c4d0c1b4711fbbce1fa6bd94c53f8eb129c8d2cd313cffa3a76fb9e33449a"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "e51977f664b209e3aa5677cf14eb759bef53af0d"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./lib/net8.0-android34.0/Xamarin.AndroidX.Emoji2.ViewsHelper.xml",
+      "SPDXID": "SPDXRef-File--lib-net8.0-android34.0-Xamarin.AndroidX.Emoji2.ViewsHelper.xml-074AD5B2CC77C445879E982D9E3990E039A15B1F",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "28b1e1250bef23e7a17433834ad5a32c2c9e3ef169016167a5cf437ba4ddef99"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "074ad5b2cc77c445879e982d9e3990e039a15b1f"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./package/services/metadata/core-properties/975ac2cf6a1d4aad9b88c399aec4308a.psmdcp",
+      "SPDXID": "SPDXRef-File--package-services-metadata-core-properties-975ac2cf6a1d4aad9b88c399aec4308a.psmdcp-369C07D7780D596905F18160898E32BFA08A7119",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "e8026aaa63c6129b1dbe3bb33fc30bc6bc29fbb8e3f62536ea12b4c7764219fd"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "369c07d7780d596905f18160898e32bfa08a7119"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./build/net8.0-android34.0/Xamarin.AndroidX.Emoji2.ViewsHelper.targets",
+      "SPDXID": "SPDXRef-File--build-net8.0-android34.0-Xamarin.AndroidX.Emoji2.ViewsHelper.targets-43D1BE3E4FC7BB49AB8AED80AD0ED704BDAD078B",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "e691c81d48648a38d2759a77bb93fba1bbe01d49e1eee60b54190d065217e68d"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "43d1be3e4fc7bb49ab8aed80ad0ed704bdad078b"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./_rels/.rels",
+      "SPDXID": "SPDXRef-File---rels-.rels-80B33A6C4270EB70688C921138D7A01BF877F339",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "f4159b19785f8c04f57196204fce0a1dcf2102da25433744bcc3592154247b85"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "80b33a6c4270eb70688c921138d7a01bf877f339"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./icon.png",
+      "SPDXID": "SPDXRef-File--icon.png-7229B5BECEBBC51925AA2E08341DDB4BFB53F7AD",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "8fcf6f6cd575c0f8c643691765a7db2a4b3b104bfbff34646555f5ccffdb2895"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "7229b5becebbc51925aa2e08341ddb4bfb53f7ad"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./LICENSE.md",
+      "SPDXID": "SPDXRef-File--LICENSE.md-3B941EC3773572CD471F1DD124D3ABEB19A6437B",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "7f92be6c840f2584494d4986060fe7dfe8bbf02d6ab122980fa1d43ffb2ecb0f"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "3b941ec3773572cd471f1dd124d3abeb19a6437b"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./lib/net8.0-android34.0/Xamarin.AndroidX.Emoji2.ViewsHelper.dll",
+      "SPDXID": "SPDXRef-File--lib-net8.0-android34.0-Xamarin.AndroidX.Emoji2.ViewsHelper.dll-F75AAB4CED3D47B431A344479AA9F741FC24A7FE",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "5370a90a85b59a13fda89786d0b35e24261e25324948e8612391489917be892d"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "f75aab4ced3d47b431a344479aa9f741fc24a7fe"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./buildTransitive/net8.0-android34.0/Xamarin.AndroidX.Emoji2.ViewsHelper.targets",
+      "SPDXID": "SPDXRef-File--buildTransitive-net8.0-android34.0-Xamarin.AndroidX.Emoji2.ViewsHelper.targets-43D1BE3E4FC7BB49AB8AED80AD0ED704BDAD078B",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "e691c81d48648a38d2759a77bb93fba1bbe01d49e1eee60b54190d065217e68d"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "43d1be3e4fc7bb49ab8aed80ad0ed704bdad078b"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./readme.md",
+      "SPDXID": "SPDXRef-File--readme.md-5C3A2611135968CFE33936DC9A24EF914FC8E6A1",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "52650c2ac305d5b0160babf22340062f63f262c9e6f354df226a04de291ef7e6"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "5c3a2611135968cfe33936dc9a24ef914fc8e6a1"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./lib/net8.0-android34.0/Xamarin.AndroidX.Emoji2.ViewsHelper.pdb",
+      "SPDXID": "SPDXRef-File--lib-net8.0-android34.0-Xamarin.AndroidX.Emoji2.ViewsHelper.pdb-27F886FB9CC2F1A3C7DA9644B99E77E9FC005880",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "467af57d79b71db3e137e270e3e3c3ca63a3e176cc5e1f628521d493ab58945c"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "27f886fb9cc2f1a3c7da9644b99e77e9fc005880"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    }
+  ],
+  "packages": [
+    {
+      "name": "Xamarin.AndroidX.Emoji2.ViewsHelper",
+      "SPDXID": "SPDXRef-Package-D2051D8FB9300D61A8A1D1D03AB392616E8F739DCF84132B58D398DBC249253B",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "1.5.0.3",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Xamarin.AndroidX.Emoji2.ViewsHelper@1.5.0.3"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Microsoft.NET.ILLink.Tasks",
+      "SPDXID": "SPDXRef-Package-B84F439F5F1D8181504001808BED8E35B93D9468972E1607A04B571DD24DA920",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "8.0.11",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.NET.ILLink.Tasks@8.0.11"
+        }
+      ],
+      "supplier": "NOASSERTION"
+    },
+    {
+      "name": "Microsoft.Sbom.Targets",
+      "SPDXID": "SPDXRef-Package-7DAA0B3EDED3076AACC82E185C2A8B522D51C2079B97B13D8E6454E08E0A27CA",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "3.0.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.Sbom.Targets@3.0.0"
+        }
+      ],
+      "supplier": "NOASSERTION"
+    },
+    {
+      "name": "Xamarin.AndroidX.Emoji2.ViewsHelper",
+      "SPDXID": "SPDXRef-RootPackage",
+      "downloadLocation": "NOASSERTION",
+      "packageVerificationCode": {
+        "packageVerificationCodeValue": "4f7135b534adebc96b3e02b47bd3e103e3eed972"
+      },
+      "filesAnalyzed": true,
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoFromFiles": [
+        "NOASSERTION"
+      ],
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "1.0.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:swid/Microsoft/spdx.org/Xamarin.AndroidX.Emoji2.ViewsHelper@1.0.0?tag_id=940b028a-1745-4695-af7e-adb48357f6c4"
+        }
+      ],
+      "supplier": "Organization: Microsoft",
+      "hasFiles": [
+        "SPDXRef-File--lib-net8.0-android34.0-Xamarin.AndroidX.Emoji2.ViewsHelper.pdb-27F886FB9CC2F1A3C7DA9644B99E77E9FC005880",
+        "SPDXRef-File--readme.md-5C3A2611135968CFE33936DC9A24EF914FC8E6A1",
+        "SPDXRef-File--buildTransitive-net8.0-android34.0-Xamarin.AndroidX.Emoji2.ViewsHelper.targets-43D1BE3E4FC7BB49AB8AED80AD0ED704BDAD078B",
+        "SPDXRef-File--lib-net8.0-android34.0-Xamarin.AndroidX.Emoji2.ViewsHelper.dll-F75AAB4CED3D47B431A344479AA9F741FC24A7FE",
+        "SPDXRef-File--icon.png-7229B5BECEBBC51925AA2E08341DDB4BFB53F7AD",
+        "SPDXRef-File--LICENSE.md-3B941EC3773572CD471F1DD124D3ABEB19A6437B",
+        "SPDXRef-File---rels-.rels-80B33A6C4270EB70688C921138D7A01BF877F339",
+        "SPDXRef-File--build-net8.0-android34.0-Xamarin.AndroidX.Emoji2.ViewsHelper.targets-43D1BE3E4FC7BB49AB8AED80AD0ED704BDAD078B",
+        "SPDXRef-File--package-services-metadata-core-properties-975ac2cf6a1d4aad9b88c399aec4308a.psmdcp-369C07D7780D596905F18160898E32BFA08A7119",
+        "SPDXRef-File--lib-net8.0-android34.0-Xamarin.AndroidX.Emoji2.ViewsHelper.xml-074AD5B2CC77C445879E982D9E3990E039A15B1F",
+        "SPDXRef-File--aar-androidx.emoji2.emoji2-views-helper.aar-E51977F664B209E3AA5677CF14EB759BEF53AF0D",
+        "SPDXRef-File---Content-Types-.xml-3285C27AA44BB8B33343116834649102363BF8D9",
+        "SPDXRef-File--Xamarin.AndroidX.Emoji2.ViewsHelper.nuspec-FF35C2FEC1E541FE23B27FE9F99B6F42C5CE4206",
+        "SPDXRef-File--THIRD-PARTY-NOTICES.txt-571B160816F7F79B0EC258B6B0DB19C576B9FF1E"
+      ]
+    }
+  ],
+  "externalDocumentRefs": [],
+  "relationships": [
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-7DAA0B3EDED3076AACC82E185C2A8B522D51C2079B97B13D8E6454E08E0A27CA",
+      "spdxElementId": "SPDXRef-RootPackage"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-B84F439F5F1D8181504001808BED8E35B93D9468972E1607A04B571DD24DA920",
+      "spdxElementId": "SPDXRef-RootPackage"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-D2051D8FB9300D61A8A1D1D03AB392616E8F739DCF84132B58D398DBC249253B",
+      "spdxElementId": "SPDXRef-RootPackage"
+    },
+    {
+      "relationshipType": "DESCRIBES",
+      "relatedSpdxElement": "SPDXRef-RootPackage",
+      "spdxElementId": "SPDXRef-DOCUMENT"
+    }
+  ],
+  "spdxVersion": "SPDX-2.2",
+  "dataLicense": "CC0-1.0",
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "name": "Xamarin.AndroidX.Emoji2.ViewsHelper 1.0.0",
+  "documentNamespace": "http://spdx.org/spdxdocs/Xamarin.AndroidX.Emoji2.ViewsHelper/Xamarin.AndroidX.Emoji2.ViewsHelper/1.0.0/1fhzhLEz5kOQZqcQ32c1eg",
+  "creationInfo": {
+    "created": "2025-01-21T19:34:27Z",
+    "creators": [
+      "Organization: Microsoft",
+      "Tool: Microsoft.SBOMTool-3.0.0"
+    ]
+  },
+  "documentDescribes": [
+    "SPDXRef-RootPackage"
+  ]
+}

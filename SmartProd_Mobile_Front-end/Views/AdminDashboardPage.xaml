@@ -2,284 +2,287 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SmartProd_Mobile_Front_end.Views.AdminDashboardPage"
-             Title="Dashboard"
-             BackgroundColor="#F8F6F2">
-    <Grid RowDefinitions="Auto, *">
+             Title="AdminDashboardPage"
+             Shell.NavBarIsVisible="True"
+             BackgroundColor="#F5F6FA">
 
-        <!-- Header -->
-        <Grid Grid.Row="0"
-              ColumnDefinitions="Auto, *, Auto"
-              Padding="24,20"
-              BackgroundColor="White">
-
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="Auto, *, Auto"
+              Padding="0,0,12,0"
+              VerticalOptions="Center">
             <Label Grid.Column="0"
                    Text="SMARTPROD"
                    FontSize="20"
                    FontAttributes="Bold"
                    TextColor="#FF8C00"
-                   CharacterSpacing="1"
+                   CharacterSpacing="1.5"
                    VerticalOptions="Center" />
-
-            <Label Grid.Column="2"
+            <Label Grid.Column="1"
                    Text="Dashboard"
-                   FontSize="14"
-                   TextColor="#6B7280"
-                   VerticalOptions="Center" />
+                   FontSize="13"
+                   TextColor="#A0AEC0"
+                   VerticalOptions="Center"
+                   HorizontalOptions="End"
+                   Margin="0,0,8,0" />
+            <Border Grid.Column="2"
+                    HeightRequest="34"
+                    WidthRequest="34"
+                    Stroke="#FF8C00"
+                    StrokeThickness="1.5"
+                    BackgroundColor="Transparent"
+                    StrokeShape="RoundRectangle 17">
+                <Image Source="admin_avatar.png"
+                       Aspect="AspectFill" />
+            </Border>
         </Grid>
+    </Shell.TitleView>
 
-        <!-- Loading -->
-        <ActivityIndicator Grid.Row="1"
-                           IsRunning="{Binding IsLoading}"
-                           IsVisible="{Binding IsLoading}"
-                           Color="#FF8C00"
-                           VerticalOptions="Center"
-                           HorizontalOptions="Center" />
+    <Grid RowDefinitions="*, Auto">
 
         <!-- Content -->
-        <ScrollView Grid.Row="1"
-                    IsVisible="{Binding HasData}">
+        <ScrollView Grid.Row="0">
             <VerticalStackLayout Spacing="16" Padding="20,20">
 
-                <!-- Card: Produtos -->
+                <!-- KPI: Active Ops -->
                 <Border BackgroundColor="White"
-                        Stroke="#E5E7EB"
-                        StrokeThickness="1"
-                        StrokeShape="RoundRectangle 12"
-                        Padding="20">
-                    <Border.Shadow>
-                        <Shadow Brush="#000000"
-                                Offset="0,2"
-                                Radius="8"
-                                Opacity="0.04" />
-                    </Border.Shadow>
-                    <VerticalStackLayout Spacing="8">
-                        <BoxView HeightRequest="4"
-                                 BackgroundColor="#FF8C00"
-                                 CornerRadius="2"
-                                 HorizontalOptions="Start"
-                                 WidthRequest="60"
-                                 Margin="0,0,0,4" />
-                        <Label Text="PRODUTOS"
-                               FontSize="11"
-                               FontAttributes="Bold"
-                               TextColor="#6B7280"
-                               CharacterSpacing="1" />
-                        <HorizontalStackLayout Spacing="4" VerticalOptions="Center">
-                            <Label Text="{Binding TotalProducts}"
-                                   FontSize="48"
-                                   FontAttributes="Bold"
-                                   TextColor="#071E27" />
-                        </HorizontalStackLayout>
-                        <HorizontalStackLayout Spacing="12">
-                            <HorizontalStackLayout Spacing="4">
-                                <BoxView WidthRequest="8" HeightRequest="8" CornerRadius="4" Color="#FF8C00" VerticalOptions="Center" />
-                                <Label FontSize="13" TextColor="#071E27">
-                                    <Label.FormattedText>
-                                        <FormattedString>
-                                            <Span Text="MP: " />
-                                            <Span Text="{Binding MPCount}" FontAttributes="Bold" />
-                                        </FormattedString>
-                                    </Label.FormattedText>
-                                </Label>
-                            </HorizontalStackLayout>
-                            <HorizontalStackLayout Spacing="4">
-                                <BoxView WidthRequest="8" HeightRequest="8" CornerRadius="4" Color="#059669" VerticalOptions="Center" />
-                                <Label FontSize="13" TextColor="#071E27">
-                                    <Label.FormattedText>
-                                        <FormattedString>
-                                            <Span Text="PA: " />
-                                            <Span Text="{Binding PACount}" FontAttributes="Bold" />
-                                        </FormattedString>
-                                    </Label.FormattedText>
-                                </Label>
-                            </HorizontalStackLayout>
-                        </HorizontalStackLayout>
-                    </VerticalStackLayout>
-                </Border>
-
-                <!-- Card: Ordens de Produção -->
-                <Border BackgroundColor="#071E27"
                         StrokeThickness="0"
-                        StrokeShape="RoundRectangle 16"
-                        Padding="24">
+                        Padding="20"
+                        StrokeShape="RoundRectangle 12">
                     <Border.Shadow>
                         <Shadow Brush="#000000"
                                 Offset="0,4"
                                 Radius="12"
-                                Opacity="0.15" />
+                                Opacity="0.1" />
                     </Border.Shadow>
-                    <VerticalStackLayout Spacing="8">
-                        <Label Text="ORDENS DE PRODUÇÃO"
+                    <Grid RowDefinitions="Auto, Auto, Auto"
+                          ColumnDefinitions="Auto, *">
+                        <BoxView Grid.RowSpan="3"
+                                 WidthRequest="4"
+                                 BackgroundColor="#FF8C00"
+                                 HorizontalOptions="Start"
+                                 Margin="0,0,12,0" />
+                        <Label Grid.Row="0" Grid.Column="1"
+                                Text="OPS ATIVAS"
                                FontSize="11"
                                FontAttributes="Bold"
-                               TextColor="#FF8C00"
+                               TextColor="#636E72"
                                CharacterSpacing="1" />
-                        <HorizontalStackLayout Spacing="16">
-                            <VerticalStackLayout>
-                                <Label Text="{Binding TotalOrders}"
-                                       FontSize="48"
-                                       FontAttributes="Bold"
-                                       TextColor="White" />
-                                <Label Text="Total"
-                                       FontSize="13"
-                                       TextColor="#9CA3AF" />
-                            </VerticalStackLayout>
-                            <VerticalStackLayout>
-                                <Label Text="{Binding ActiveOrders}"
-                                       FontSize="48"
-                                       FontAttributes="Bold"
-                                       TextColor="#FF8C00" />
-                                <Label Text="Ativas"
-                                       FontSize="13"
-                                       TextColor="#9CA3AF" />
-                            </VerticalStackLayout>
+                        <HorizontalStackLayout Grid.Row="1" Grid.Column="1"
+                                               Spacing="4" VerticalOptions="Center">
+                            <Label Text="{Binding ActiveOps}"
+                                   FontSize="48"
+                                   FontAttributes="Bold"
+                                   TextColor="#333333" />
+                            <Label Text="{Binding TotalOps, StringFormat='/ {0}'}"
+                                   FontSize="20"
+                                   FontAttributes="Bold"
+                                   TextColor="#27AE60"
+                                   VerticalOptions="End"
+                                   Margin="0,0,0,10" />
                         </HorizontalStackLayout>
-                        <Label FontSize="13" TextColor="#9CA3AF">
-                            <Label.FormattedText>
-                                <FormattedString>
-                                    <Span Text="Total produzido: " />
-                                    <Span Text="{Binding TotalProduced}" FontAttributes="Bold" TextColor="White" />
-                                </FormattedString>
-                            </Label.FormattedText>
-                        </Label>
+                        <HorizontalStackLayout Grid.Row="2" Grid.Column="1" Spacing="8">
+                            <BoxView WidthRequest="8" HeightRequest="8"
+                                     CornerRadius="4" Color="#27AE60"
+                                     VerticalOptions="Center" />
+                            <Label Text="{Binding CurrentShift}"
+                                   FontSize="13" TextColor="#636E72"
+                                   VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                    </Grid>
+                </Border>
+
+                <!-- KPI: Efficiency -->
+                <Border BackgroundColor="White"
+                        StrokeThickness="0" Padding="20"
+                        StrokeShape="RoundRectangle 12">
+                    <Border.Shadow>
+                        <Shadow Brush="#000000"
+                                Offset="0,4"
+                                Radius="12"
+                                Opacity="0.1" />
+                    </Border.Shadow>
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="EFICIÊNCIA GLOBAL"
+                               FontSize="11" FontAttributes="Bold"
+                               TextColor="#636E72" CharacterSpacing="1" />
+                        <Label Text="{Binding Efficiency}"
+                               FontSize="48" FontAttributes="Bold"
+                               TextColor="#FF8C00" />
+                        <Label Text="{Binding EfficiencyTrend}"
+                               FontSize="13" FontAttributes="Bold"
+                               TextColor="#333333" />
                     </VerticalStackLayout>
                 </Border>
 
-                <!-- Card: Movimentações -->
+                <!-- KPI: Alerts -->
                 <Border BackgroundColor="White"
-                        Stroke="#E5E7EB"
-                        StrokeThickness="1"
-                        StrokeShape="RoundRectangle 12"
-                        Padding="20">
+                        StrokeThickness="0" Padding="20"
+                        StrokeShape="RoundRectangle 12">
                     <Border.Shadow>
                         <Shadow Brush="#000000"
-                                Offset="0,2"
-                                Radius="8"
-                                Opacity="0.04" />
+                                Offset="0,4"
+                                Radius="12"
+                                Opacity="0.1" />
                     </Border.Shadow>
-                    <VerticalStackLayout Spacing="8">
-                        <BoxView HeightRequest="4"
-                                 BackgroundColor="#3B82F6"
-                                 CornerRadius="2"
+                    <Grid RowDefinitions="Auto, Auto, Auto"
+                          ColumnDefinitions="Auto, *">
+                        <BoxView Grid.RowSpan="3"
+                                 WidthRequest="4"
+                                 BackgroundColor="#E74C3C"
                                  HorizontalOptions="Start"
-                                 WidthRequest="60"
-                                 Margin="0,0,0,4" />
-                        <Label Text="MOVIMENTAÇÕES"
-                               FontSize="11"
-                               FontAttributes="Bold"
-                               TextColor="#6B7280"
-                               CharacterSpacing="1" />
-                        <Label Text="{Binding TotalMovements}"
-                               FontSize="48"
-                               FontAttributes="Bold"
-                               TextColor="#071E27" />
-                        <Label Text="{Binding LastMovementInfo}"
-                               FontSize="12"
-                               TextColor="#6B7280" />
-                    </VerticalStackLayout>
+                                 Margin="0,0,12,0" />
+                        <Label Grid.Row="0" Grid.Column="1"
+                                Text="ALERTAS"
+                               FontSize="11" FontAttributes="Bold"
+                               TextColor="#636E72" CharacterSpacing="1" />
+                        <Label Grid.Row="1" Grid.Column="1"
+                               Text="{Binding AlertsCount}"
+                               FontSize="48" FontAttributes="Bold"
+                               TextColor="#333333" />
+                        <HorizontalStackLayout Grid.Row="2" Grid.Column="1" Spacing="8">
+                            <BoxView WidthRequest="8" HeightRequest="8"
+                                     CornerRadius="4" Color="#E74C3C"
+                                     VerticalOptions="Center" />
+                            <Label Text="{Binding AlertMessage}"
+                                   FontSize="12" FontAttributes="Bold"
+                                   TextColor="#E74C3C" VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                    </Grid>
                 </Border>
 
-                <!-- Card: Alertas de Estoque -->
+                <!-- Live Flow / Histórico Tabs -->
                 <Border BackgroundColor="White"
-                        Stroke="#E5E7EB"
-                        StrokeThickness="1"
-                        StrokeShape="RoundRectangle 12"
-                        Padding="20">
+                        StrokeThickness="0"
+                        Padding="0"
+                        StrokeShape="RoundRectangle 12">
                     <Border.Shadow>
                         <Shadow Brush="#000000"
-                                Offset="0,2"
-                                Radius="8"
-                                Opacity="0.04" />
+                                Offset="0,4"
+                                Radius="12"
+                                Opacity="0.1" />
                     </Border.Shadow>
+                    <VerticalStackLayout>
+                        <!-- Segmented Control -->
+                        <Grid ColumnDefinitions="*, *"
+                              Padding="4"
+                              ColumnSpacing="4">
+                            <Border Grid.Column="0"
+                                    BackgroundColor="{Binding LiveTabBg}"
+                                    StrokeThickness="0"
+                                    StrokeShape="RoundRectangle 8"
+                                    HeightRequest="40">
+                                <Label Text="FLUXO AO VIVO"
+                                       FontAttributes="Bold" FontSize="11"
+                                       TextColor="{Binding LiveTabColor}"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding ShowLiveViewCommand}" />
+                                    </Label.GestureRecognizers>
+                                </Label>
+                            </Border>
+                            <Border Grid.Column="1"
+                                    BackgroundColor="{Binding HistoryTabBg}"
+                                    StrokeThickness="0"
+                                    StrokeShape="RoundRectangle 8"
+                                    HeightRequest="40">
+                                <Label Text="HISTÓRICO"
+                                       FontSize="11" FontAttributes="Bold"
+                                       TextColor="{Binding HistoryTabColor}"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding ShowHistoryCommand}" />
+                                    </Label.GestureRecognizers>
+                                </Label>
+                            </Border>
+                        </Grid>
+                        <!-- Live View Content -->
+                        <Grid HeightRequest="260" Padding="16"
+                              IsVisible="{Binding IsLiveView}">
+                            <BoxView Color="#333333" Opacity="0.95" CornerRadius="8" />
+                            <VerticalStackLayout Spacing="4" VerticalOptions="Start"
+                                                 HorizontalOptions="Start" Padding="16">
+                                <Label Text="PRODUÇÃO"
+                                       FontSize="10" FontAttributes="Bold"
+                                       TextColor="#FF8C00" />
+                                <HorizontalStackLayout Spacing="4">
+                                    <Label Text="{Binding Throughput}"
+                                           FontSize="28" FontAttributes="Bold"
+                                           TextColor="White" />
+                                    <Label Text="Unid./H"
+                                           FontSize="13" TextColor="White"
+                                           Opacity="0.7"
+                                           VerticalOptions="End" Margin="0,0,0,4" />
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                        </Grid>
+                        <!-- History View Content -->
+                        <VerticalStackLayout HeightRequest="260" Padding="16"
+                                             Spacing="8"
+                                             IsVisible="{Binding IsHistoryView}">
+                            <Label Text="REGISTROS ANTERIORES"
+                                   FontSize="10" FontAttributes="Bold"
+                                   TextColor="#636E72" />
+                            <CollectionView ItemsSource="{Binding HistoricalRecords}"
+                                            HeightRequest="220">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border BackgroundColor="#F5F6FA"
+                                                StrokeThickness="0"
+                                                Padding="12,8"
+                                                Margin="0,0,0,4"
+                                                StrokeShape="RoundRectangle 6">
+                                            <Grid ColumnDefinitions="*, Auto, Auto">
+                                                <Label Text="{Binding Date}"
+                                                       FontSize="12" TextColor="#333333"
+                                                       VerticalOptions="Center" />
+                                                <Label Grid.Column="1"
+                                                       Text="{Binding Throughput, StringFormat='{0} Unid./H'}"
+                                                       FontSize="12" TextColor="#27AE60"
+                                                       VerticalOptions="Center"
+                                                       Margin="0,0,12,0" />
+                                                <Label Grid.Column="2"
+                                                       Text="{Binding Status}"
+                                                       FontSize="12" FontAttributes="Bold"
+                                                       TextColor="{Binding StatusColor}"
+                                                       VerticalOptions="Center" />
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Meta OEE -->
+                <Border BackgroundColor="#FF8C00"
+                        Padding="20"
+                        StrokeThickness="0"
+                        StrokeShape="RoundRectangle 12">
                     <VerticalStackLayout Spacing="8">
-                        <BoxView HeightRequest="4"
-                                 BackgroundColor="#DC2626"
-                                 CornerRadius="2"
-                                 HorizontalOptions="Start"
-                                 WidthRequest="60"
-                                 Margin="0,0,0,4" />
-                        <Label Text="ALERTAS DE ESTOQUE"
-                               FontSize="11"
-                               FontAttributes="Bold"
-                               TextColor="#6B7280"
+                        <Label Text="META OEE GLOBAL"
+                               FontSize="11" FontAttributes="Bold"
+                               TextColor="White" Opacity="0.8"
                                CharacterSpacing="1" />
-                        <Label Text="{Binding LowStockCount}"
-                               FontSize="48"
-                               FontAttributes="Bold"
-                               TextColor="#071E27" />
-                        <Border BackgroundColor="#FEE2E2"
-                                Padding="12,8"
-                                StrokeThickness="0"
-                                StrokeShape="RoundRectangle 8"
-                                IsVisible="{Binding HasLowStock}">
-                            <HorizontalStackLayout Spacing="8">
-                                <Label Text="⚠️" FontSize="14" VerticalOptions="Center" />
-                                <Label Text="{Binding LowStockText}"
-                                       FontSize="11"
-                                       FontAttributes="Bold"
-                                       TextColor="#DC2626"
-                                       VerticalOptions="Center" />
-                            </HorizontalStackLayout>
-                        </Border>
-                        <Label Text="{Binding LowStockText}"
-                               FontSize="12"
-                               TextColor="#059669"
-                               IsVisible="{Binding HasNormalStock}" />
+                        <Label Text="{Binding OeeMeta}"
+                               FontSize="36" FontAttributes="Bold"
+                               TextColor="White" />
+                        <ProgressBar Progress="{Binding OeeTarget}"
+                                     ProgressColor="White" />
+                        <Label Text="{Binding OeeGap}"
+                               FontSize="12" FontAttributes="Italic"
+                               TextColor="White" Opacity="0.7" />
                     </VerticalStackLayout>
                 </Border>
 
-                <!-- Card: Movimentações Recentes -->
-                <Border BackgroundColor="White"
-                        Stroke="#E5E7EB"
-                        StrokeThickness="1"
-                        StrokeShape="RoundRectangle 12"
-                        Padding="16">
-                    <Border.Shadow>
-                        <Shadow Brush="#000000"
-                                Offset="0,2"
-                                Radius="8"
-                                Opacity="0.04" />
-                    </Border.Shadow>
-                    <VerticalStackLayout Spacing="8">
-                        <Label Text="MOVIMENTAÇÕES RECENTES"
-                               FontSize="11"
-                               FontAttributes="Bold"
-                               TextColor="#6B7280"
-                               CharacterSpacing="1"
-                               Margin="0,0,0,4" />
-                        <CollectionView ItemsSource="{Binding RecentMovements}"
-                                        HeightRequest="180">
-                            <CollectionView.ItemTemplate>
-                                <DataTemplate>
-                                    <HorizontalStackLayout Spacing="8" Padding="4,6">
-                                        <BoxView WidthRequest="6" HeightRequest="6"
-                                                 CornerRadius="3" Color="#FF8C00"
-                                                 VerticalOptions="Center" />
-                                        <Label Text="{Binding .}"
-                                               FontSize="13"
-                                               TextColor="#071E27" />
-                                    </HorizontalStackLayout>
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
-                    </VerticalStackLayout>
-                </Border>
-
-                <!-- Refresh Button -->
-                <Button Text="ATUALIZAR DADOS"
-                        Command="{Binding RefreshCommand}"
-                        BackgroundColor="#FF8C00"
-                        TextColor="White"
-                        FontAttributes="Bold"
-                        FontSize="14"
-                        CornerRadius="12"
-                        HeightRequest="48"
-                        Margin="0,8,0,0" />
-
-                <BoxView HeightRequest="40" Color="Transparent" />
-
+                <BoxView HeightRequest="80" Color="Transparent" />
             </VerticalStackLayout>
         </ScrollView>
+
+        <!-- Bottom spacing for Shell TabBar -->
+        <BoxView Grid.Row="1" HeightRequest="8" Color="Transparent" />
 
     </Grid>
 </ContentPage>

@@ -10,9 +10,9 @@ public partial class LoginPage : ContentPage
         BindingContext = new Loginpage_ViewModel(apiService);
     }
 
-    protected override void OnAppearing()
+    private async void OnCriarContaTapped(object sender, EventArgs e)
     {
-        base.OnAppearing();
-        Shell.SetNavBarIsVisible(this, false);
+        var registerPage = IPlatformApplication.Current!.Services.GetRequiredService<RegistrationPage>();
+        await Navigation.PushAsync(registerPage);
     }
 }

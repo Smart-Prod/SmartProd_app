@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using SmartProd_Mobile_Front_end.Services;
 using SmartProd_Mobile_Front_end.Views;
+using ZXing.Net.Maui.Controls;
 
 namespace SmartProd_Mobile_Front_end
 {
@@ -11,6 +12,7 @@ namespace SmartProd_Mobile_Front_end
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseBarcodeReader()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");

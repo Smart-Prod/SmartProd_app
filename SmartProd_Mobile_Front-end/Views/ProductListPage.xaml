@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SmartProd_Mobile_Front_end.Views.ProductListPage"
+             Title="ProductListPage"
+             Shell.NavBarIsVisible="True"
+             BackgroundColor="#F5F6FA">
+
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="Auto, *, Auto"
+              Padding="0,0,12,0"
+              VerticalOptions="Center">
+            <Label Grid.Column="0"
+                   Text="SMARTPROD"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   TextColor="#FF8C00"
+                   CharacterSpacing="1.5"
+                   VerticalOptions="Center" />
+            <Label Grid.Column="1"
+                   Text="Produtos"
+                   FontSize="13"
+                   TextColor="#A0AEC0"
+                   VerticalOptions="Center"
+                   HorizontalOptions="End"
+                   Margin="0,0,8,0" />
+            <Border Grid.Column="2"
+                    HeightRequest="34"
+                    WidthRequest="34"
+                    Stroke="#FF8C00"
+                    StrokeThickness="1.5"
+                    BackgroundColor="Transparent"
+                    StrokeShape="RoundRectangle 17">
+                <Image Source="operator_avatar.png"
+                       Aspect="AspectFill" />
+            </Border>
+        </Grid>
+    </Shell.TitleView>
+
+    <Grid RowDefinitions="Auto, *, Auto">
+
+        <!-- Action Buttons -->
+        <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Padding="20,16,20,8" ColumnSpacing="12">
+            <Label Grid.Column="0"
+                   Text="Matérias-Primas"
+                   FontSize="28"
+                   FontAttributes="Bold"
+                   TextColor="#333333"
+                   VerticalOptions="Center" />
+            <Button Grid.Column="1"
+                    Text="EXPORTAR PDF"
+                    Command="{Binding ExportPdfCommand}"
+                    BackgroundColor="#FF8C00"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    FontSize="12"
+                    CornerRadius="8"
+                    HeightRequest="40"
+                    Padding="16,0"
+                    VerticalOptions="Center" />
+        </Grid>
+
+        <!-- Status Message -->
+        <Label Grid.Row="0"
+               Text="{Binding StatusMessage}"
+               FontSize="12"
+               TextColor="#FF8C00"
+               HorizontalTextAlignment="Center"
+               Margin="0,64,0,0"
+               IsVisible="{Binding StatusMessage, FallbackValue=False}" />
+
+        <!-- Content -->
+        <RefreshView Grid.Row="1"
+                     IsRefreshing="{Binding IsRefreshing}"
+                     Command="{Binding RefreshCommand}">
+            <ScrollView>
+                <VerticalStackLayout Spacing="0" Padding="20,8,20,24">
+
+                    <!-- Loading -->
+                    <ActivityIndicator IsRunning="{Binding IsBusy}"
+                                       IsVisible="{Binding IsBusy}"
+                                       Color="#FF8C00"
+                                       HorizontalOptions="Center"
+                                       Margin="0,0,0,12" />
+
+                    <!-- Products List -->
+                    <CollectionView ItemsSource="{Binding Products}">
+                        <CollectionView.EmptyView>
+                            <VerticalStackLayout HorizontalOptions="Center"
+                                                 VerticalOptions="Center"
+                                                 Padding="40">
+                                <Label Text="Nenhum produto cadastrado."
+                                       FontSize="16"
+                                       TextColor="#636E72"
+                                       HorizontalTextAlignment="Center" />
+                                <Label Text="Cadastre matérias-primas no sistema para gerar QR Codes."
+                                       FontSize="13"
+                                       TextColor="#A0AEC0"
+                                       HorizontalTextAlignment="Center"
+                                       Margin="0,8,0,0" />
+                            </VerticalStackLayout>
+                        </CollectionView.EmptyView>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border StrokeThickness="0"
+                                        Padding="20"
+                                        Margin="0,0,0,16"
+                                        BackgroundColor="White"
+                                        StrokeShape="RoundRectangle 12">
+                                    <Border.Shadow>
+                                        <Shadow Brush="#000000"
+                                                Offset="0,4"
+                                                Radius="12"
+                                                Opacity="0.1" />
+                                    </Border.Shadow>
+                                    <Grid ColumnDefinitions="*, Auto"
+                                          RowDefinitions="Auto, Auto, Auto">
+                                        <HorizontalStackLayout Grid.Row="0" Grid.Column="0" Spacing="8">
+                                            <Label Text="{Binding Code}"
+                                                   FontSize="11"
+                                                   FontAttributes="Bold"
+                                                   TextColor="#636E72"
+                                                   VerticalOptions="Center" />
+                                            <Label Text="|"
+                                                   FontSize="11"
+                                                   TextColor="#A0AEC0"
+                                                   VerticalOptions="Center" />
+                                            <Label Text="{Binding Tipo}"
+                                                   FontSize="11"
+                                                   FontAttributes="Bold"
+                                                   TextColor="#FF8C00"
+                                                   VerticalOptions="Center" />
+                                        </HorizontalStackLayout>
+                                        <Label Grid.Row="1" Grid.ColumnSpan="2"
+                                               Text="{Binding Name}"
+                                               FontSize="22"
+                                               FontAttributes="Bold"
+                                               TextColor="#333333"
+                                               Margin="0,8,0,20"
+                                               MaxLines="2"
+                                               LineBreakMode="TailTruncation" />
+                                        <HorizontalStackLayout Grid.Row="2" Grid.Column="0"
+                                                               Spacing="4">
+                                            <Label Text="Estoque:"
+                                                   FontSize="12"
+                                                   TextColor="#A0AEC0"
+                                                   VerticalOptions="Center" />
+                                            <Label Text="{Binding EstoqueAtual}"
+                                                   FontSize="15"
+                                                   FontAttributes="Bold"
+                                                   TextColor="#333333"
+                                                   VerticalOptions="Center" />
+                                            <Label Text="{Binding Unit}"
+                                                   FontSize="12"
+                                                   TextColor="#636E72"
+                                                   VerticalOptions="Center" />
+                                        </HorizontalStackLayout>
+                                        <Button Grid.Row="2" Grid.Column="1"
+                                                Text="QR CODE"
+                                                BackgroundColor="#FF8C00"
+                                                TextColor="White"
+                                                FontAttributes="Bold"
+                                                FontSize="11"
+                                                CornerRadius="8"
+                                                HeightRequest="36"
+                                                Padding="12,0"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ShowQrCommand}"
+                                                CommandParameter="{Binding .}" />
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                    <!-- Spacer -->
+                    <BoxView HeightRequest="80" Color="Transparent" />
+                </VerticalStackLayout>
+            </ScrollView>
+        </RefreshView>
+
+        <!-- Bottom spacing for Shell TabBar -->
+        <BoxView Grid.Row="2" HeightRequest="8" Color="Transparent" />
+
+    </Grid>
+</ContentPage>

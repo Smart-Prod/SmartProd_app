@@ -9,25 +9,14 @@ namespace SmartProd.API.Server.Controllers
     public class MovimentacaoController : ControllerBase
     {
         private readonly MovimentoEstoqueService _service;
-        public MovimentacaoController(MovimentoEstoqueService service)
+        private readonly ILogger<MovimentacaoController> _logger;
+        public MovimentacaoController(MovimentoEstoqueService service, ILogger<MovimentacaoController> logger)
         {
             _service = service;
+            _logger = logger;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateMovement([FromBody] CreateMovimentacaoDto dto)
-        {
-            try
-            {
-                var movement = await _service.CreateMovementAsync(dto);
-                return StatusCode(201, movement);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { error = ex.Message });
-            }
-        }
-
+        // Exemplo de rota: GET /api/movimentacao?search=azul&productId=1&type=ENTRADA&startDate=2024-01-01&endDate=2025-01-01
         [HttpGet]
         public async Task<IActionResult> GetAllMovements([FromQuery] MovimentacaoFilterDto filters)
         {
@@ -45,6 +34,81 @@ namespace SmartProd.API.Server.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, new { error = ex.Message });
+            }
+        }
+
+        [HttpPost("consumo")]
+        public async Task<IActionResult> RegisterConsumption([FromBody] ConsumoRequestDto dto)
+        {
+            try
+            {
+                var (movement, product) = await _service.CreateConsumptionAsync(dto);
+                return Ok(new
+                {
+                    message = "Consumo registrado com sucesso!",
+                    movement = new
+                    {
+                        movement.Id,
+                        movement.ProductId,
+                        movement.OrderId,
+                        tipo = movement.Tipo.ToString(),
+                        movement.Quantity,
+                        movement.CreatedAt
+                    },
+                    product = new
+                    {
+                        product.Id,
+                        product.Code,
+                        product.Name,
+                        product.Tipo,
+                        product.Unit,
+                        product.EstoqueAtual
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erro ao registrar consumo");
+                var msg = ex.InnerException != null
+                    ? $"{ex.Message} -> {ex.InnerException.Message}"
+                    : ex.Message;
+                return BadRequest(new { error = msg });
+            }
+        }
+
+        [HttpPost("finalizar")]
+        public async Task<IActionResult> CompleteOrder([FromBody] ConsumoRequestDto dto)
+        {
+            try
+            {
+                var (movement, product) = await _service.CompleteOrderAsync(dto);
+                return Ok(new
+                {
+                    message = "Produção finalizada com sucesso!",
+                    movement = new
+                    {
+                        movement.Id,
+                        movement.ProductId,
+                        movement.OrderId,
+                        tipo = movement.Tipo.ToString(),
+                        movement.Quantity,
+                        movement.CreatedAt
+                    },
+                    product = new
+                    {
+                        product.Id,
+                        product.Code,
+                        product.Name,
+                        product.Tipo,
+                        product.Unit,
+                        product.EstoqueAtual
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erro ao finalizar produção");
+                return BadRequest(new { error = ex.Message });
             }
         }
     }

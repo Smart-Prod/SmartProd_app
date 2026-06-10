@@ -1,132 +1,121 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="SmartProd_Mobile_Front_end.Views.ScannerPage"
-             Title="Scanner"
-             BackgroundColor="#071E27">
+      x:Class="SmartProd_Mobile_Front_end.Views.ScannerPage"
+             Title="ScannerPage"
+             Shell.NavBarIsVisible="True">
 
-    <Grid RowDefinitions="Auto, *, Auto">
-
-        <!-- Top Bar -->
-        <Grid Grid.Row="0"
-              ColumnDefinitions="Auto, *, Auto"
-              Padding="20,16"
-              BackgroundColor="Transparent">
-
-            <ImageButton Grid.Column="0"
-                         Source="menu_icon.png"
-                         WidthRequest="24"
-                         HeightRequest="24"
-                         BackgroundColor="Transparent"
-                         SemanticProperties.Description="Abrir menu" />
-
-            <Label Grid.Column="1"
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="Auto, *, Auto"
+              Padding="0,0,12,0"
+              VerticalOptions="Center">
+            <Label Grid.Column="0"
                    Text="SMARTPROD"
                    FontSize="20"
                    FontAttributes="Bold"
-                   TextColor="White"
-                   HorizontalOptions="Center"
-                   CharacterSpacing="2"
+                   TextColor="#FF8C00"
+                   CharacterSpacing="1.5"
                    VerticalOptions="Center" />
-
+            <Label Grid.Column="1"
+                   Text="Scanner"
+                   FontSize="13"
+                   TextColor="#A0AEC0"
+                   VerticalOptions="Center"
+                   HorizontalOptions="End"
+                   Margin="0,0,8,0" />
             <Border Grid.Column="2"
-                    HeightRequest="40"
-                    WidthRequest="40"
-                    StrokeThickness="0"
-                    StrokeShape="RoundRectangle 20">
-                <Image Source="operator_avatar.png" Aspect="AspectFill" />
+                    HeightRequest="34"
+                    WidthRequest="34"
+                    Stroke="#FF8C00"
+                    StrokeThickness="1.5"
+                    BackgroundColor="Transparent"
+                    StrokeShape="RoundRectangle 17">
+                <Image Source="operator_avatar.png"
+                       Aspect="AspectFill" />
             </Border>
         </Grid>
+    </Shell.TitleView>
 
-        <!-- Scanner Content -->
-        <ScrollView Grid.Row="1">
+    <Grid RowDefinitions="*, Auto">
+
+        <!-- Camera View (created programmatically in code-behind for lifecycle management) -->
+
+        <!-- Dark overlay for readability -->
+        <BoxView Grid.Row="0"
+                 Color="#000000"
+                 Opacity="0.35" />
+
+        <!-- Scanner Interface Overlay -->
+        <ScrollView Grid.Row="0">
             <VerticalStackLayout Spacing="24" VerticalOptions="Center" Padding="30">
 
-                <!-- Badge -->
-                <Border BackgroundColor="#FF8C00"
-                        Padding="14,6"
+                <Border BackgroundColor="#5A7C8A" 
+                        Padding="12,4" 
                         HorizontalOptions="Center"
                         StrokeThickness="0"
-                        StrokeShape="RoundRectangle 8">
-                    <Label Text="SCANNER ATIVO"
-                           FontSize="11"
-                           FontAttributes="Bold"
-                           TextColor="White"
-                           CharacterSpacing="1" />
+                        StrokeShape="RoundRectangle 4">
+                    <Label Text="SCANNER ATIVO" FontSize="11" FontAttributes="Bold" TextColor="White" CharacterSpacing="1" />
                 </Border>
 
-                <Label Text="Posicione o QR Code"
-                       FontSize="28"
-                       FontAttributes="Bold"
-                       TextColor="White"
-                       HorizontalOptions="Center"
-                       HorizontalTextAlignment="Center" />
+                <Label Text="ALINHE O QR CODE" 
+                       FontSize="36" 
+                       FontAttributes="Bold" 
+                       TextColor="White" 
+                       HorizontalOptions="Center" />
 
-                <Label Text="Centralize o código de barras do componente no quadro para registrar o uso da ferramenta."
-                       FontSize="14"
-                       TextColor="White"
-                       Opacity="0.7"
-                       HorizontalTextAlignment="Center" />
+                <Label Text="Posicione o código na área de leitura para registrar o uso." 
+                       FontSize="15" 
+                       TextColor="White" 
+                       HorizontalTextAlignment="Center" 
+                       Opacity="0.8" />
 
-                <!-- Scan Frame -->
-                <Grid HeightRequest="260"
-                      WidthRequest="260"
+                <!-- Scan Frame (Target Area) -->
+                <Grid HeightRequest="300" 
+                      WidthRequest="300" 
                       HorizontalOptions="Center"
-                      MaximumWidthRequest="260">
-
-                    <BoxView HorizontalOptions="Start" VerticalOptions="Start" WidthRequest="36" HeightRequest="4" Color="#FF8C00" />
-                    <BoxView HorizontalOptions="Start" VerticalOptions="Start" WidthRequest="4" HeightRequest="36" Color="#FF8C00" />
-                    <BoxView HorizontalOptions="End" VerticalOptions="Start" WidthRequest="36" HeightRequest="4" Color="#FF8C00" />
-                    <BoxView HorizontalOptions="End" VerticalOptions="Start" WidthRequest="4" HeightRequest="36" Color="#FF8C00" />
-                    <BoxView HorizontalOptions="Start" VerticalOptions="End" WidthRequest="36" HeightRequest="4" Color="#FF8C00" />
-                    <BoxView HorizontalOptions="Start" VerticalOptions="End" WidthRequest="4" HeightRequest="36" Color="#FF8C00" />
-                    <BoxView HorizontalOptions="End" VerticalOptions="End" WidthRequest="36" HeightRequest="4" Color="#FF8C00" />
-                    <BoxView HorizontalOptions="End" VerticalOptions="End" WidthRequest="4" HeightRequest="36" Color="#FF8C00" />
-
-                    <!-- Scanning Line -->
-                    <BoxView HeightRequest="2" Color="#FF8C00" VerticalOptions="Center" Opacity="0.4" />
+                      MaximumWidthRequest="300">
+                    <BoxView HorizontalOptions="Start" VerticalOptions="Start" WidthRequest="40" HeightRequest="4" Color="White" />
+                    <BoxView HorizontalOptions="Start" VerticalOptions="Start" WidthRequest="4" HeightRequest="40" Color="White" />
+                    <BoxView HorizontalOptions="End" VerticalOptions="Start" WidthRequest="40" HeightRequest="4" Color="White" />
+                    <BoxView HorizontalOptions="End" VerticalOptions="Start" WidthRequest="4" HeightRequest="40" Color="White" />
+                    <BoxView HorizontalOptions="Start" VerticalOptions="End" WidthRequest="40" HeightRequest="4" Color="White" />
+                    <BoxView HorizontalOptions="Start" VerticalOptions="End" WidthRequest="4" HeightRequest="40" Color="White" />
+                    <BoxView HorizontalOptions="End" VerticalOptions="End" WidthRequest="40" HeightRequest="4" Color="White" />
+                    <BoxView HorizontalOptions="End" VerticalOptions="End" WidthRequest="4" HeightRequest="40" Color="White" />
+                    <BoxView HeightRequest="2" Color="White" VerticalOptions="Center" Opacity="0.3" />
                 </Grid>
 
-                <!-- Stats -->
-                <Grid ColumnDefinitions="*, *" ColumnSpacing="12" Margin="0,8,0,0">
-                    <Border Grid.Column="0"
-                            BackgroundColor="#0F2E3A"
-                            Stroke="#FF8C00"
+                <!-- Status Message -->
+                <Label Text="{Binding StatusMessage}"
+                       FontSize="14"
+                       TextColor="White"
+                       HorizontalTextAlignment="Center"
+                       Opacity="0.9" />
+
+                <!-- Real-time Stats Overlay -->
+                <Grid ColumnDefinitions="*, *" ColumnSpacing="16" Margin="0,16,0,0">
+                    <Border Grid.Column="0" 
+                            BackgroundColor="#2D3748" 
+                            Stroke="#FF8C00" 
                             StrokeThickness="1"
-                            StrokeShape="RoundRectangle 12"
+                            StrokeShape="RoundRectangle 8"
                             Padding="16">
                         <VerticalStackLayout Spacing="4">
-                            <Label Text="PROGRESSO"
-                                   FontSize="10"
-                                   FontAttributes="Bold"
-                                   TextColor="#FF8C00"
-                                   CharacterSpacing="1" />
-                            <Label Text="{Binding ShiftProgress}"
-                                   FontSize="24"
-                                   FontAttributes="Bold"
-                                   TextColor="White" />
+                            <Label Text="PROGRESSO DO TURNO" FontSize="10" FontAttributes="Bold" TextColor="#FF8C00" CharacterSpacing="0.5" />
+                            <Label Text="{Binding ShiftProgress}" FontSize="24" FontAttributes="Bold" TextColor="White" />
                         </VerticalStackLayout>
                     </Border>
-
-                    <Border Grid.Column="1"
-                            BackgroundColor="#0F2E3A"
-                            Stroke="#059669"
+                    <Border Grid.Column="1" 
+                            BackgroundColor="#2D3748" 
+                            Stroke="#27AE60" 
                             StrokeThickness="1"
-                            StrokeShape="RoundRectangle 12"
+                            StrokeShape="RoundRectangle 8"
                             Padding="16">
                         <VerticalStackLayout Spacing="4">
-                            <Label Text="STATUS"
-                                   FontSize="10"
-                                   FontAttributes="Bold"
-                                   TextColor="#059669"
-                                   CharacterSpacing="1" />
+                            <Label Text="STATUS DO DISPOSITIVO" FontSize="10" FontAttributes="Bold" TextColor="#27AE60" CharacterSpacing="0.5" />
                             <HorizontalStackLayout Spacing="8">
-                                <BoxView WidthRequest="8" HeightRequest="8" CornerRadius="4" Color="#059669" VerticalOptions="Center" />
-                                <Label Text="ONLINE"
-                                       FontSize="20"
-                                       FontAttributes="Bold"
-                                       TextColor="White"
-                                       VerticalOptions="Center" />
+                                <BoxView WidthRequest="8" HeightRequest="8" CornerRadius="4" Color="#27AE60" VerticalOptions="Center" />
+                                <Label Text="{Binding DeviceStatus}" FontSize="20" FontAttributes="Bold" TextColor="White" VerticalOptions="Center" />
                             </HorizontalStackLayout>
                         </VerticalStackLayout>
                     </Border>
@@ -135,18 +124,21 @@
             </VerticalStackLayout>
         </ScrollView>
 
-        <!-- Bottom Actions -->
-        <VerticalStackLayout Grid.Row="2" Spacing="0">
-            <Button Text="REGISTRAR USO"
+        <!-- Fixed Actions & Bottom Nav -->
+        <VerticalStackLayout Grid.Row="1">
+            <Button Text="REGISTRAR USO" 
                     Command="{Binding ScanResultCommand}"
                     IsEnabled="{Binding CanRegister}"
-                    BackgroundColor="#FF8C00"
-                    TextColor="White"
-                    FontAttributes="Bold"
-                    FontSize="16"
-                    HeightRequest="56"
-                    CornerRadius="12"
-                    Margin="20,0,20,16" />
+                    BackgroundColor="#FF8C00" 
+                    TextColor="White" 
+                    FontAttributes="Bold" 
+                    FontSize="18" 
+                    HeightRequest="56" 
+                    CornerRadius="8" 
+                    Margin="20,0,20,20" />
+
+            <!-- Bottom spacing for Shell TabBar -->
+            <BoxView HeightRequest="8" Color="Transparent" />
         </VerticalStackLayout>
 
     </Grid>

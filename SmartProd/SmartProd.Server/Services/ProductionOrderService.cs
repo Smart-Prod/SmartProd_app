@@ -49,7 +49,7 @@ namespace SmartProd.API.Server.Services
 
             var materialsNeeded = bom.Materials.Select(item => new
             {
-                materialId = item.MaterialId,
+                materialId = item.ProdutosId,
                 materialName = item.Produtos?.Name ?? "Desconhecido",
                 quantityPerUnit = item.Quantidade,
                 totalQuantity = item.Quantidade * data.Quantity

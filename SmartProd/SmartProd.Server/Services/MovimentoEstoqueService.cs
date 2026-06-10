@@ -16,6 +16,52 @@ namespace SmartProd.API.Server.Services
             _context = context;
         }
 
+        public async Task<(Movimentacao movement, Produto product)> CreateConsumptionAsync(ConsumoRequestDto dto)
+        {
+            var product = await _context.Produtos.FirstOrDefaultAsync(p => p.Code == dto.Code);
+            if (product == null)
+                throw new Exception("Produto não encontrado.");
+
+            var movimentacao = new Movimentacao
+            {
+                ProductId = product.Id,
+                Tipo = TipoMovimentacao.CONSUMO,
+                Quantity = dto.Quantity,
+                OrderId = dto.OrderId,
+                CreatedAt = DateTime.UtcNow
+            };
+            _context.Movimentacoes.Add(movimentacao);
+
+            product.EstoqueAtual -= dto.Quantity;
+            product.UpdatedAt = DateTime.UtcNow;
+            await _context.SaveChangesAsync();
+
+            return (movimentacao, product);
+        }
+
+        public async Task<(Movimentacao movement, Produto product)> CompleteOrderAsync(ConsumoRequestDto dto)
+        {
+            var product = await _context.Produtos.FirstOrDefaultAsync(p => p.Code == dto.Code);
+            if (product == null)
+                throw new Exception("Produto não encontrado.");
+
+            var movimentacao = new Movimentacao
+            {
+                ProductId = product.Id,
+                Tipo = TipoMovimentacao.PRODUCAO,
+                Quantity = dto.Quantity,
+                OrderId = dto.OrderId,
+                CreatedAt = DateTime.UtcNow
+            };
+            _context.Movimentacoes.Add(movimentacao);
+
+            product.EstoqueAtual += dto.Quantity;
+            product.UpdatedAt = DateTime.UtcNow;
+            await _context.SaveChangesAsync();
+
+            return (movimentacao, product);
+        }
+
         public async Task<Movimentacao> CreateMovementAsync(CreateMovimentacaoDto dto)
         {
             var produto = await _context.Produtos.FindAsync(dto.ProductId);

@@ -1,0 +1,404 @@
+{
+  "files": [
+    {
+      "fileName": "./icon.png",
+      "SPDXID": "SPDXRef-File--icon.png-7229B5BECEBBC51925AA2E08341DDB4BFB53F7AD",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "8fcf6f6cd575c0f8c643691765a7db2a4b3b104bfbff34646555f5ccffdb2895"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "7229b5becebbc51925aa2e08341ddb4bfb53f7ad"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./LICENSE.md",
+      "SPDXID": "SPDXRef-File--LICENSE.md-3B941EC3773572CD471F1DD124D3ABEB19A6437B",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "7f92be6c840f2584494d4986060fe7dfe8bbf02d6ab122980fa1d43ffb2ecb0f"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "3b941ec3773572cd471f1dd124d3abeb19a6437b"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./readme.md",
+      "SPDXID": "SPDXRef-File--readme.md-CC6C7BC96468D56EE554CA64204C382077A9E755",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "befb8dbbf0e89469e482b49831395c74b1457931355b650610477bcd0c3501f0"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "cc6c7bc96468d56ee554ca64204c382077a9e755"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./THIRD-PARTY-NOTICES.txt",
+      "SPDXID": "SPDXRef-File--THIRD-PARTY-NOTICES.txt-571B160816F7F79B0EC258B6B0DB19C576B9FF1E",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "1a14e25264f604fca355c489c0d5877480ddb738cec665008bcf494ad1cdc787"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "571b160816f7f79b0ec258b6b0db19c576b9ff1e"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./Xamarin.AndroidX.Tracing.Tracing.Ktx.nuspec",
+      "SPDXID": "SPDXRef-File--Xamarin.AndroidX.Tracing.Tracing.Ktx.nuspec-20D5CF5F670B3593A2B06A8A37BB9FF19AF21DC0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "9c72d54e2c9765c4c1c4e85f432530b58b50f17825aaa4e0b9b75295ffa0c6ca"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "20d5cf5f670b3593a2b06a8a37bb9ff19af21dc0"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./aar/androidx.tracing.tracing-ktx.aar",
+      "SPDXID": "SPDXRef-File--aar-androidx.tracing.tracing-ktx.aar-F151F88AED5054C9DB05C90ACB6B09728D3B1D81",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "c33f9cbd931e6190ca38aa09bf8a7a8a19391d4b0fb7a7605a6b59f2d42580d1"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "f151f88aed5054c9db05c90acb6b09728d3b1d81"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./[Content_Types].xml",
+      "SPDXID": "SPDXRef-File---Content-Types-.xml-3285C27AA44BB8B33343116834649102363BF8D9",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "56ee243ea19087393b0454d1a60a4d82cd606bda5dff56561ed1c4f93b54105b"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "3285c27aa44bb8b33343116834649102363bf8d9"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./buildTransitive/net8.0-android34.0/Xamarin.AndroidX.Tracing.Tracing.Ktx.targets",
+      "SPDXID": "SPDXRef-File--buildTransitive-net8.0-android34.0-Xamarin.AndroidX.Tracing.Tracing.Ktx.targets-0FC84BA1AABCEB5608A1ECFC2440CB998F494B6E",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "a0e7363604847544eb3c55ff713e3590a3904cb0a13f76dab6a73cafa1721688"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "0fc84ba1aabceb5608a1ecfc2440cb998f494b6e"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./build/net8.0-android34.0/Xamarin.AndroidX.Tracing.Tracing.Ktx.targets",
+      "SPDXID": "SPDXRef-File--build-net8.0-android34.0-Xamarin.AndroidX.Tracing.Tracing.Ktx.targets-0FC84BA1AABCEB5608A1ECFC2440CB998F494B6E",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "a0e7363604847544eb3c55ff713e3590a3904cb0a13f76dab6a73cafa1721688"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "0fc84ba1aabceb5608a1ecfc2440cb998f494b6e"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./lib/net8.0-android34.0/Xamarin.AndroidX.Tracing.Tracing.Ktx.dll",
+      "SPDXID": "SPDXRef-File--lib-net8.0-android34.0-Xamarin.AndroidX.Tracing.Tracing.Ktx.dll-088DDA560525C29C00C322B125C93F6F83B7BF77",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "909bd8dafcc6ff8e2b70be8dbf921df3cec6d2d6a9e26c94c2919f2bfb52642c"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "088dda560525c29c00c322b125c93f6f83b7bf77"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./lib/net8.0-android34.0/Xamarin.AndroidX.Tracing.Tracing.Ktx.xml",
+      "SPDXID": "SPDXRef-File--lib-net8.0-android34.0-Xamarin.AndroidX.Tracing.Tracing.Ktx.xml-8CA1FE174F5AA06E3E9EEF0DDDDA9923D6B20651",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "cf01ee540f3ceba6e5be53479c2f28709dcefef00628295550a87225f7b69509"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "8ca1fe174f5aa06e3e9eef0dddda9923d6b20651"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./lib/net8.0-android34.0/Xamarin.AndroidX.Tracing.Tracing.Ktx.pdb",
+      "SPDXID": "SPDXRef-File--lib-net8.0-android34.0-Xamarin.AndroidX.Tracing.Tracing.Ktx.pdb-B2F4B272C13D4E3761E2E494752E1D6946ED50EC",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "0a2255e628ef9244b50d23c55d27fc3849620ac2e9c99ed20b25be9e0aa24b27"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "b2f4b272c13d4e3761e2e494752e1d6946ed50ec"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./package/services/metadata/core-properties/1c56155333a048fcb2a2ca1aa372eaaf.psmdcp",
+      "SPDXID": "SPDXRef-File--package-services-metadata-core-properties-1c56155333a048fcb2a2ca1aa372eaaf.psmdcp-8F92248704FDF6584289B9C638FCD06CED9AC63F",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "868c9623b4864713e5c4038152446d4eba9b57753e89e72e3a9a271ee9e00e84"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "8f92248704fdf6584289b9c638fcd06ced9ac63f"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./_rels/.rels",
+      "SPDXID": "SPDXRef-File---rels-.rels-2201107D06845B9B7BDF3B7211D423D8818BBE39",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "b87577d1e74ad8761725a7737635b78f6105c91f541e0220105ffcc40712ae8f"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "2201107d06845b9b7bdf3b7211d423d8818bbe39"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    }
+  ],
+  "packages": [
+    {
+      "name": "Xamarin.AndroidX.Tracing.Tracing.Ktx",
+      "SPDXID": "SPDXRef-Package-F47FE328E49773845BF6A8D2D32EF3551265E7896DEDABFD6082D3545CE14307",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "1.2.0.9",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Xamarin.AndroidX.Tracing.Tracing.Ktx@1.2.0.9"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Microsoft.NET.ILLink.Tasks",
+      "SPDXID": "SPDXRef-Package-B84F439F5F1D8181504001808BED8E35B93D9468972E1607A04B571DD24DA920",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "8.0.11",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.NET.ILLink.Tasks@8.0.11"
+        }
+      ],
+      "supplier": "NOASSERTION"
+    },
+    {
+      "name": "Microsoft.Sbom.Targets",
+      "SPDXID": "SPDXRef-Package-7DAA0B3EDED3076AACC82E185C2A8B522D51C2079B97B13D8E6454E08E0A27CA",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "3.0.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.Sbom.Targets@3.0.0"
+        }
+      ],
+      "supplier": "NOASSERTION"
+    },
+    {
+      "name": "Xamarin.AndroidX.Tracing.Tracing.Ktx",
+      "SPDXID": "SPDXRef-RootPackage",
+      "downloadLocation": "NOASSERTION",
+      "packageVerificationCode": {
+        "packageVerificationCodeValue": "2acf81ffd9a849a54a8496b6c86477d72f7cf41a"
+      },
+      "filesAnalyzed": true,
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoFromFiles": [
+        "NOASSERTION"
+      ],
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "1.0.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:swid/Microsoft/spdx.org/Xamarin.AndroidX.Tracing.Tracing.Ktx@1.0.0?tag_id=484d5d17-0a20-4593-87dc-533d310d507e"
+        }
+      ],
+      "supplier": "Organization: Microsoft",
+      "hasFiles": [
+        "SPDXRef-File---rels-.rels-2201107D06845B9B7BDF3B7211D423D8818BBE39",
+        "SPDXRef-File--package-services-metadata-core-properties-1c56155333a048fcb2a2ca1aa372eaaf.psmdcp-8F92248704FDF6584289B9C638FCD06CED9AC63F",
+        "SPDXRef-File--lib-net8.0-android34.0-Xamarin.AndroidX.Tracing.Tracing.Ktx.pdb-B2F4B272C13D4E3761E2E494752E1D6946ED50EC",
+        "SPDXRef-File--buildTransitive-net8.0-android34.0-Xamarin.AndroidX.Tracing.Tracing.Ktx.targets-0FC84BA1AABCEB5608A1ECFC2440CB998F494B6E",
+        "SPDXRef-File---Content-Types-.xml-3285C27AA44BB8B33343116834649102363BF8D9",
+        "SPDXRef-File--aar-androidx.tracing.tracing-ktx.aar-F151F88AED5054C9DB05C90ACB6B09728D3B1D81",
+        "SPDXRef-File--THIRD-PARTY-NOTICES.txt-571B160816F7F79B0EC258B6B0DB19C576B9FF1E",
+        "SPDXRef-File--LICENSE.md-3B941EC3773572CD471F1DD124D3ABEB19A6437B",
+        "SPDXRef-File--lib-net8.0-android34.0-Xamarin.AndroidX.Tracing.Tracing.Ktx.xml-8CA1FE174F5AA06E3E9EEF0DDDDA9923D6B20651",
+        "SPDXRef-File--lib-net8.0-android34.0-Xamarin.AndroidX.Tracing.Tracing.Ktx.dll-088DDA560525C29C00C322B125C93F6F83B7BF77",
+        "SPDXRef-File--build-net8.0-android34.0-Xamarin.AndroidX.Tracing.Tracing.Ktx.targets-0FC84BA1AABCEB5608A1ECFC2440CB998F494B6E",
+        "SPDXRef-File--Xamarin.AndroidX.Tracing.Tracing.Ktx.nuspec-20D5CF5F670B3593A2B06A8A37BB9FF19AF21DC0",
+        "SPDXRef-File--readme.md-CC6C7BC96468D56EE554CA64204C382077A9E755",
+        "SPDXRef-File--icon.png-7229B5BECEBBC51925AA2E08341DDB4BFB53F7AD"
+      ]
+    }
+  ],
+  "externalDocumentRefs": [],
+  "relationships": [
+    {
+      "relationshipType": "DESCRIBES",
+      "relatedSpdxElement": "SPDXRef-RootPackage",
+      "spdxElementId": "SPDXRef-DOCUMENT"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-7DAA0B3EDED3076AACC82E185C2A8B522D51C2079B97B13D8E6454E08E0A27CA",
+      "spdxElementId": "SPDXRef-RootPackage"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-B84F439F5F1D8181504001808BED8E35B93D9468972E1607A04B571DD24DA920",
+      "spdxElementId": "SPDXRef-RootPackage"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-F47FE328E49773845BF6A8D2D32EF3551265E7896DEDABFD6082D3545CE14307",
+      "spdxElementId": "SPDXRef-RootPackage"
+    }
+  ],
+  "spdxVersion": "SPDX-2.2",
+  "dataLicense": "CC0-1.0",
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "name": "Xamarin.AndroidX.Tracing.Tracing.Ktx 1.0.0",
+  "documentNamespace": "http://spdx.org/spdxdocs/Xamarin.AndroidX.Tracing.Tracing.Ktx/Xamarin.AndroidX.Tracing.Tracing.Ktx/1.0.0/wkYAShhYJ0eQxSVNDAm8NA",
+  "creationInfo": {
+    "created": "2025-01-21T19:34:12Z",
+    "creators": [
+      "Organization: Microsoft",
+      "Tool: Microsoft.SBOMTool-3.0.0"
+    ]
+  },
+  "documentDescribes": [
+    "SPDXRef-RootPackage"
+  ]
+}

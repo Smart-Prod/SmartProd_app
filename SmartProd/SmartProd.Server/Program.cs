@@ -1,5 +1,7 @@
 using System.Text;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+// Ensure JsonStringEnumConverter is imported via using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SmartProd.API.Server.Data;
@@ -20,7 +22,12 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 
 // Register services
 builder.Services.AddScoped<UsuarioService>();
@@ -29,6 +36,8 @@ builder.Services.AddScoped<ProductionOrderService>();
 builder.Services.AddScoped<MovimentoEstoqueService>();
 builder.Services.AddScoped<NotaFiscalService>();
 builder.Services.AddScoped<RelatorioService>();
+builder.Services.AddScoped<SeedService>();
+builder.Services.AddScoped<DashboardService>();
 
 // JWT Authentication
 var jwtSecret = builder.Configuration["Jwt:Secret"] ?? throw new InvalidOperationException("Jwt:Secret not configured");

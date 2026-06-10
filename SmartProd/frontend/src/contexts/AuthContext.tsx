@@ -53,39 +53,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     init();
   }, []);
 
-  const mapRole = (backendRole: string): 'admin' | 'gestor' | 'operador' => {
-    switch (backendRole?.toLowerCase()) {
-      case 'admin': return 'admin';
-      case 'operator': return 'operador';
-      case 'gestor': return 'gestor';
-      default: return 'operador';
-    }
-  };
-
   const login = async (email: string, password: string): Promise<boolean> => {
     setLoading(true);
     try {
+      // apiLogin já faz POST /users/login e retorna data.data
       const resp = await apiLogin({
         email,
-        senha: password,
+        senha: password, // sua API usa "senha"
       } as any);
 
-      const token = resp?.token ?? null;
-      const userFromResp = resp?.user ?? null;
+      // resp pode conter { user, token } ou similar
+      const token = resp?.token ?? resp?.accessToken ?? resp?.tokenAccess ?? null;
+      const userFromResp = resp?.user ?? resp?.usuario ?? resp;
 
       if (token) {
         sessionStorage.setItem('token', token);
         API.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       }
       if (userFromResp) {
-        const mappedUser: User = {
-          id: String(userFromResp.id ?? ''),
-          name: userFromResp.name ?? '',
-          email: userFromResp.email ?? '',
-          role: mapRole(userFromResp.role ?? 'operador'),
-        };
-        sessionStorage.setItem('user', JSON.stringify(mappedUser));
-        setUser(mappedUser);
+        sessionStorage.setItem('user', JSON.stringify(userFromResp));
+        setUser(userFromResp);
       }
 
       return true;

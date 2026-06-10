@@ -4,14 +4,26 @@ namespace SmartProd_Mobile_Front_end.Views;
 
 public partial class AdminDashboardPage : ContentPage
 {
-	public AdminDashboardPage(ApiService apiService)
-	{
-		InitializeComponent();
-		BindingContext = new AdminDashboardPage_ViewsModel(apiService);
-	}
-    protected override void OnAppearing()
+    private readonly AdminDashboardPage_ViewsModel _viewModel;
+
+    public AdminDashboardPage(ApiService apiService)
+    {
+        InitializeComponent();
+        _viewModel = new AdminDashboardPage_ViewsModel(apiService);
+        BindingContext = _viewModel;
+    }
+
+    protected override async void OnAppearing()
     {
         base.OnAppearing();
         Shell.SetNavBarIsVisible(this, false);
+        try
+        {
+            await _viewModel.LoadDataAsync();
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"[Dashboard] Erro: {ex.Message}");
+        }
     }
 }

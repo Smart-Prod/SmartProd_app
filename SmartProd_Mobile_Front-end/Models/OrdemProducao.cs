@@ -25,6 +25,9 @@ namespace SmartProd_Mobile_Front_end.Models
         [JsonPropertyName("createdAt")]
         public DateTime CreatedAt { get; set; }
 
+        [JsonPropertyName("startedAt")]
+        public DateTime? StartedAt { get; set; }
+
         [JsonPropertyName("finishedAt")]
         public DateTime? FinishedAt { get; set; }
 

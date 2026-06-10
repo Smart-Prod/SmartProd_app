@@ -53,6 +53,20 @@ namespace SmartProd.API.Server.Controllers
             }
         }
 
+        [HttpPost("seed")]
+        public async Task<IActionResult> Seed()
+        {
+            try
+            {
+                var created = await _usuarioService.SeedUsersAsync();
+                return Ok(new { message = $"Seed concluído. {created.Count} novos usuários criados." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = ex.Message });
+            }
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {
@@ -64,34 +78,6 @@ namespace SmartProd.API.Server.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, new { error = ex.Message });
-            }
-        }
-
-        [HttpPut("{id:int}")]
-        public async Task<IActionResult> UpdateUser(int id, [FromBody] UpdateUserDto dto)
-        {
-            try
-            {
-                var user = await _usuarioService.UpdateUserAsync(id, dto);
-                return Ok(new { message = "Usuário atualizado com sucesso!", user });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { error = ex.Message });
-            }
-        }
-
-        [HttpDelete("{id:int}")]
-        public async Task<IActionResult> DeleteUser(int id)
-        {
-            try
-            {
-                await _usuarioService.DeleteUserAsync(id);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                return NotFound(new { error = ex.Message });
             }
         }
     }

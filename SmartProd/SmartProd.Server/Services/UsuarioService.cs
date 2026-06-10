@@ -128,6 +128,46 @@ namespace SmartProd.API.Server.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task<List<UsuarioResponseDto>> SeedUsersAsync()
+        {
+            var users = new List<UsuarioResponseDto>();
+            var defaultUsers = new[]
+            {
+                new { Name = "Admin", Email = "admin@smartprod.com", Senha = "123456", Role = UserRole.Admin },
+                new { Name = "Operador", Email = "operador@smartprod.com", Senha = "123456", Role = UserRole.Operator }
+            };
+
+            foreach (var u in defaultUsers)
+            {
+                if (await _context.Usuarios.AnyAsync(x => x.Email == u.Email))
+                    continue;
+
+                var hash = BCrypt.Net.BCrypt.HashPassword(u.Senha);
+                var user = new Usuario
+                {
+                    Name = u.Name,
+                    Email = u.Email,
+                    Senha = hash,
+                    Active = true,
+                    CreatedAt = DateTime.UtcNow,
+                    Role = u.Role
+                };
+                _context.Usuarios.Add(user);
+                await _context.SaveChangesAsync();
+
+                users.Add(new UsuarioResponseDto
+                {
+                    Id = user.Id,
+                    Name = user.Name,
+                    Email = user.Email,
+                    Role = user.Role.ToString(),
+                    CreatedAt = user.CreatedAt
+                });
+            }
+
+            return users;
+        }
+
         // Gera JWT usando settings do appsettings.json
         private string BuildToken(Usuario user)
         {

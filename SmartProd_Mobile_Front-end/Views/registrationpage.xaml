@@ -2,94 +2,130 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SmartProd_Mobile_Front_end.Views.RegistrationPage"
-             Title="Registrar"
-             BackgroundColor="#F8F6F2">
+             Title="RegistrationPage"
+             BackgroundColor="#F5F6FA">
     <ScrollView>
-        <VerticalStackLayout Spacing="0" Padding="32,40">
+        <VerticalStackLayout Spacing="0" VerticalOptions="Start" Padding="30,40">
 
-            <!-- Header -->
-            <VerticalStackLayout Spacing="4" Margin="0,0,0,36">
-                <Label Text="Criar Conta"
-                       FontSize="28"
+            <!-- Logo Header -->
+            <Label Text="SMARTPROD"
+                   FontSize="28"
+                   FontAttributes="Bold"
+                   TextColor="#FF8C00"
+                   HorizontalOptions="Center"
+                   CharacterSpacing="-1"
+                   Margin="0,0,0,40" />
+
+            <!-- Title -->
+            <VerticalStackLayout Spacing="8" Margin="0,0,0,32">
+                <Label Text="Novo Operador"
+                       FontSize="36"
                        FontAttributes="Bold"
-                       TextColor="#071E27" />
-                <Label Text="Preencha os dados para se cadastrar"
+                       TextColor="#333333" />
+                <Label Text="Configure seu perfil de produção para começar."
                        FontSize="14"
-                       TextColor="#6B7280" />
+                       TextColor="#636E72"
+                       Margin="0,4,0,0" />
             </VerticalStackLayout>
 
-            <!-- Form Card -->
+            <!-- Card -->
             <Border BackgroundColor="White"
-                    Stroke="#E5E7EB"
-                    StrokeThickness="1"
-                    StrokeShape="RoundRectangle 16"
+                    StrokeThickness="0"
+                    StrokeShape="RoundRectangle 12"
                     Padding="24,32"
                     Margin="0,0,0,32">
-
                 <Border.Shadow>
                     <Shadow Brush="#000000"
-                            Offset="0,4"
-                            Radius="16"
+                            Offset="0,2"
+                            Radius="8"
                             Opacity="0.08" />
                 </Border.Shadow>
 
-                <VerticalStackLayout Spacing="20">
+                <VerticalStackLayout Spacing="24">
 
-                    <!-- Nome -->
-                    <VerticalStackLayout Spacing="6">
+                    <!-- Full Name -->
+                    <VerticalStackLayout Spacing="8">
                         <Label Text="NOME COMPLETO"
                                FontSize="11"
                                FontAttributes="Bold"
-                               TextColor="#6B7280"
-                               CharacterSpacing="1" />
-                        <Border BackgroundColor="#F3F4F6"
-                                StrokeThickness="0"
-                                StrokeShape="RoundRectangle 10"
+                               TextColor="#636E72"
+                               CharacterSpacing="0.5" />
+                        <Border BackgroundColor="White"
+                                Stroke="#E2E8F0"
+                                StrokeThickness="1"
+                                StrokeShape="RoundRectangle 8"
                                 Padding="16,12">
-                            <Entry Placeholder="Seu nome"
-                                   PlaceholderColor="#9CA3AF"
-                                   TextColor="#071E27"
-                                   Text="{Binding Name}" />
+                            <Entry Placeholder="ex: João Silva"
+                                   PlaceholderColor="#A0AEC0"
+                                   TextColor="#333333"
+                                   Text="{Binding FullName}" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Company -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="EMPRESA"
+                               FontSize="11"
+                               FontAttributes="Bold"
+                               TextColor="#636E72"
+                               CharacterSpacing="0.5" />
+                        <Border BackgroundColor="White"
+                                Stroke="#E2E8F0"
+                                StrokeThickness="1"
+                                StrokeShape="RoundRectangle 8"
+                                Padding="16,12">
+                            <Entry Placeholder="Nome da Fábrica / Entidade"
+                                   PlaceholderColor="#A0AEC0"
+                                   TextColor="#333333"
+                                   Text="{Binding Company}" />
                         </Border>
                     </VerticalStackLayout>
 
                     <!-- Email -->
-                    <VerticalStackLayout Spacing="6">
-                        <Label Text="E-MAIL"
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="E-MAIL CORPORATIVO"
                                FontSize="11"
                                FontAttributes="Bold"
-                               TextColor="#6B7280"
-                               CharacterSpacing="1" />
-                        <Border BackgroundColor="#F3F4F6"
-                                StrokeThickness="0"
-                                StrokeShape="RoundRectangle 10"
+                               TextColor="#636E72"
+                               CharacterSpacing="0.5" />
+                        <Border BackgroundColor="White"
+                                Stroke="#E2E8F0"
+                                StrokeThickness="1"
+                                StrokeShape="RoundRectangle 8"
                                 Padding="16,12">
-                            <Entry Placeholder="seu@email.com"
-                                   PlaceholderColor="#9CA3AF"
-                                   TextColor="#071E27"
+                            <Entry Placeholder="nome@empresa.com"
+                                   PlaceholderColor="#A0AEC0"
+                                   TextColor="#333333"
                                    Keyboard="Email"
                                    Text="{Binding Email}" />
                         </Border>
                     </VerticalStackLayout>
 
-                    <!-- Senha -->
-                    <VerticalStackLayout Spacing="6">
-                        <Label Text="SENHA"
+                    <!-- Password -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="SENHA DE ACESSO"
                                FontSize="11"
                                FontAttributes="Bold"
-                               TextColor="#6B7280"
-                               CharacterSpacing="1" />
-                        <Border BackgroundColor="#F3F4F6"
-                                StrokeThickness="0"
-                                StrokeShape="RoundRectangle 10"
+                               TextColor="#636E72"
+                               CharacterSpacing="0.5" />
+                        <Border BackgroundColor="White"
+                                Stroke="#E2E8F0"
+                                StrokeThickness="1"
+                                StrokeShape="RoundRectangle 8"
                                 Padding="16,12">
                             <Entry Placeholder="••••••••"
                                    IsPassword="True"
-                                   PlaceholderColor="#9CA3AF"
-                                   TextColor="#071E27"
+                                   PlaceholderColor="#A0AEC0"
+                                   TextColor="#333333"
                                    Text="{Binding Senha}" />
                         </Border>
                     </VerticalStackLayout>
+
+                    <!-- Loading -->
+                    <ActivityIndicator IsRunning="{Binding IsBusy}"
+                                       IsVisible="{Binding IsBusy}"
+                                       Color="#FF8C00"
+                                       HorizontalOptions="Center" />
 
                     <!-- Button -->
                     <Button Text="CRIAR CONTA"
@@ -97,24 +133,56 @@
                             TextColor="White"
                             FontAttributes="Bold"
                             FontSize="16"
-                            HeightRequest="52"
-                            CornerRadius="10"
-                            Margin="0,8,0,0"
-                            Command="{Binding RegisterCommand}" />
+                            HeightRequest="56"
+                            CornerRadius="8"
+                            CharacterSpacing="1"
+                            Command="{Binding RegisterCommand}"
+                            Margin="0,8,0,0" />
 
-                    <!-- Login link -->
-                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="4" Margin="0,8,0,0">
-                        <Label Text="Já tem conta?"
-                               FontSize="14"
-                               TextColor="#6B7280" />
-                        <Label Text="Faça login"
-                               FontSize="14"
+                    <!-- Footer -->
+                    <HorizontalStackLayout HorizontalOptions="Center"
+                                           Spacing="4"
+                                           Margin="0,8,0,0">
+                        <Label Text="Já possui um perfil?"
+                               FontSize="13"
+                               TextColor="#636E72" />
+                        <Label Text="Faça login aqui"
+                               FontSize="13"
                                FontAttributes="Bold"
-                               TextColor="#FF8C00" />
+                               TextColor="#FF8C00">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnSignInTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
                     </HorizontalStackLayout>
 
                 </VerticalStackLayout>
             </Border>
+
+            <!-- Certifications -->
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="24">
+                <Label Text="ISO 27001"
+                       FontSize="10"
+                       FontAttributes="Bold"
+                       TextColor="#A0AEC0" />
+                <Label Text="|"
+                       FontSize="10"
+                       TextColor="#E2E8F0" />
+                <Label Text="PONTA A PONTA"
+                       FontSize="10"
+                       FontAttributes="Bold"
+                       TextColor="#A0AEC0" />
+                <Label Text="|"
+                       FontSize="10"
+                       TextColor="#E2E8F0" />
+                <Label Text="OTIMIZADO"
+                       FontSize="10"
+                       FontAttributes="Bold"
+                       TextColor="#A0AEC0" />
+            </HorizontalStackLayout>
+
+            <!-- Bottom spacing -->
+            <BoxView HeightRequest="40" Color="Transparent" />
 
         </VerticalStackLayout>
     </ScrollView>

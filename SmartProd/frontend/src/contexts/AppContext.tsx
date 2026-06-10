@@ -7,17 +7,16 @@ export type { Product, BOM, Movimentacao, ProductionOrder, Invoice };
 interface AppContextType {
   products: Product[];
   boms: BOM[];
-  stockMovements: Movimentacao[];
+  movimentacoes: Movimentacao[];
   productionOrders: ProductionOrder[];
   invoices: Invoice[];
   addProduct: (product: Omit<Product, 'id'>) => Promise<Product>;
   updateProduct: (id: number, product: Partial<Product>) => Promise<void>;
   addProductionOrder: (order: Omit<ProductionOrder, 'id' | 'createdAt' | 'finishedAt' | 'produced'>) => Promise<ProductionOrder>;
   updateProductionOrder: (id: number, order: Partial<ProductionOrder>) => Promise<void>;
-  addStockMovement: (movement: Omit<Movimentacao, 'id' | 'createdAt'>) => Promise<Movimentacao>;
+  addMovimentacao: (movement: Omit<Movimentacao, 'id' | 'createdAt'>) => Promise<Movimentacao>;
   addInvoice: (invoice: Omit<Invoice, 'id' | 'date'>) => Promise<Invoice>;
   addBOM: (bom: Omit<BOM, 'id'>) => Promise<BOM>;
-  refreshAll: () => Promise<void>;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -35,6 +34,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [productionOrders, setProductionOrders] = useState<ProductionOrder[]>([]);
   const [invoices, setInvoices] = useState<Invoice[]>([]);
 
+  // ── Mapping: server JSON → frontend model ──────────────────────
   const mapProduct = (s: Record<string, unknown>): Product => ({
     id: s.id as number,
     code: s.code as string,
@@ -62,24 +62,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const mapProducts = (arr: unknown[]): Product[] => arr.map((p) => mapProduct(p as Record<string, unknown>));
   const mapMovimentacoes = (arr: unknown[]): Movimentacao[] => arr.map((m) => mapMovimentacao(m as Record<string, unknown>));
 
-  const mapBOM = (s: Record<string, unknown>): BOM => ({
-    id: s.id as number,
-    productId: s.produtoId ?? s.productId as number,
-    product: s.produto ? mapProduct(s.produto as Record<string, unknown>) : undefined as unknown as Product,
-    materials: ((s.materials ?? []) as Record<string, unknown>[]).map((m: Record<string, unknown>) => ({
-      id: m.id as number,
-      bomId: m.materiasId ?? m.bomId as number,
-      materialId: m.materialId as number,
-      bom: undefined as unknown as BOM,
-      material: m.produtos ? mapProduct(m.produtos as Record<string, unknown>) : undefined as unknown as Product,
-      quantity: m.quantidade ?? m.quantity as number,
-    })),
-    createdAt: s.createdAt as string,
-    updatedAt: s.updatedAt as string,
-  });
-
-  const mapBOMs = (arr: unknown[]): BOM[] => arr.map((b) => mapBOM(b as Record<string, unknown>));
-
+  // ── Mapping: frontend model → server JSON (for POST/PUT) ──────
   const toServerProduct = (p: Partial<Product>): Record<string, unknown> => {
     const out: Record<string, unknown> = {};
     if (p.code !== undefined) out.code = p.code;
@@ -92,6 +75,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return out;
   };
 
+  // Helper to extract array data from API responses
   const extractArray = (data: unknown): unknown[] => {
     if (Array.isArray(data)) return data;
     if (data && typeof data === "object") {
@@ -110,37 +94,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     } catch (err) {
       console.error('fetchProducts error:', err);
     }
-  }, []);
-
-  const fetchAll = useCallback(async () => {
-    const fetchData = async () => {
-      try {
-        const productsRes = await API.get('/api/Produto');
-        setProducts(mapProducts(extractArray(productsRes.data)));
-      } catch { /* silent */ }
-
-      try {
-        const stockRes = await API.get('/api/Movimentacao');
-        setMovimentacoes(mapMovimentacoes(extractArray(stockRes.data)));
-      } catch { /* silent */ }
-
-      try {
-        const ordersRes = await API.get('/api/ProductionOrder');
-        setProductionOrders(extractArray(ordersRes.data) as ProductionOrder[]);
-      } catch { /* silent */ }
-
-      try {
-        const invoicesRes = await API.get('/api/NotaFiscal');
-        setInvoices(extractArray(invoicesRes.data) as Invoice[]);
-      } catch { /* silent */ }
-
-      try {
-        const bomsRes = await API.get('/api/BOM');
-        setBoms(mapBOMs(extractArray(bomsRes.data)));
-      } catch { /* silent */ }
-    };
-
-    await fetchData();
   }, []);
 
   useEffect(() => {
@@ -166,92 +119,115 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         const invoicesRes = await API.get('/api/NotaFiscal');
         if (mounted) setInvoices(extractArray(invoicesRes.data) as Invoice[]);
       } catch { /* silent */ }
-
-      try {
-        const bomsRes = await API.get('/api/BOM');
-        if (mounted) setBoms(mapBOMs(extractArray(bomsRes.data)));
-      } catch { /* silent */ }
     };
 
     fetchData();
     return () => { mounted = false; };
   }, []);
 
+  const genId = () => Date.now();
+
   const addProduct = useCallback(async (product: Omit<Product, 'id'>): Promise<Product> => {
-    const res = await API.post('/api/Produto', toServerProduct(product));
-    await fetchProducts();
-    return res.data as Product;
+    try {
+      const res = await API.post('/api/Produto', toServerProduct(product));
+      await fetchProducts();
+      return res.data as Product;
+    } catch (err: any) {
+      console.error('addProduct: API failed', err.response?.data || err.message);
+      throw err;
+    }
   }, [fetchProducts]);
 
   const updateProduct = useCallback(async (id: number, product: Partial<Product>): Promise<void> => {
-    await API.put(`/api/Produto/${id}`, toServerProduct(product));
+    try {
+      await API.put(`/api/Produto/${id}`, toServerProduct(product));
+    } catch (err) {
+      console.warn('updateProduct: API failed', err);
+    }
     setProducts(prev => prev.map(p => (p.id === id ? { ...p, ...product } : p)));
   }, []);
 
   const addProductionOrder = useCallback(async (
     order: Omit<ProductionOrder, 'id' | 'createdAt' | 'finishedAt' | 'produced'>
   ): Promise<ProductionOrder> => {
-    const payload = { productId: order.productId, usuarioId: order.usuarioId, quantity: order.quantity };
-    const res = await API.post<ProductionOrder>('/api/ProductionOrder', payload);
-    await fetchAll();
-    return res.data;
-  }, [fetchAll]);
+    const payload = { ...order, createdAt: new Date().toISOString(), produced: 0 };
+    try {
+      const res = await API.post<ProductionOrder>('/api/ProductionOrder', payload);
+      setProductionOrders(prev => [...prev, res.data]);
+      return res.data;
+    } catch (err) {
+      console.warn('addProductionOrder: API failed, using local fallback', err);
+      const newOrder: ProductionOrder = { ...payload, id: genId() };
+      setProductionOrders(prev => [...prev, newOrder]);
+      return newOrder;
+    }
+  }, []);
 
   const updateProductionOrder = useCallback(async (id: number, order: Partial<ProductionOrder>): Promise<void> => {
-    const payload: Record<string, unknown> = {};
-    if (order.status) payload.status = order.status;
-    if (order.produced !== undefined) payload.produced = order.produced;
-
-    await API.put(`/api/ProductionOrder/${id}`, payload);
-    setProductionOrders(prev => prev.map(o => (o.id === id ? { ...o, ...order } : o)));
+    try {
+      await API.put(`/api/ProductionOrder/${id}`, order);
+      setProductionOrders(prev => prev.map(o => (o.id === id ? { ...o, ...order } : o)));
+    } catch (err) {
+      console.warn('updateProductionOrder: API failed, applied local update', err);
+      setProductionOrders(prev => prev.map(o => (o.id === id ? { ...o, ...order } : o)));
+    }
   }, []);
 
   const addStockMovement = useCallback(async (movement: Omit<Movimentacao, 'id' | 'createdAt'>): Promise<Movimentacao> => {
     const { type, ...rest } = movement;
-    const payload = { ...rest, tipo: type };
-    const res = await API.post<Movimentacao>('/api/Movimentacao', payload);
-    setMovimentacoes(prev => [res.data, ...prev]);
-    return res.data;
+    const payload = { ...rest, tipo: type, createdAt: new Date().toISOString() };
+    try {
+      const res = await API.post<Movimentacao>('/api/Movimentacao', payload);
+      setMovimentacoes(prev => [res.data, ...prev]);
+      return res.data;
+    } catch (err) {
+      console.warn('addMovimentacao: API failed, using local fallback', err);
+      const newMovement: Movimentacao = { ...movement, id: genId(), createdAt: new Date().toISOString() };
+      setMovimentacoes(prev => [newMovement, ...prev]);
+      return newMovement;
+    }
   }, []);
 
   const addInvoice = useCallback(async (invoice: Omit<Invoice, 'id' | 'date'>): Promise<Invoice> => {
     const payload = { ...invoice, date: new Date().toISOString() };
-    const res = await API.post<Invoice>('/api/NotaFiscal', payload);
-    setInvoices(prev => [res.data, ...prev]);
-    return res.data;
+    try {
+      const res = await API.post<Invoice>('/api/NotaFiscal', payload);
+      setInvoices(prev => [res.data, ...prev]);
+      return res.data;
+    } catch (err) {
+      console.warn('addInvoice: API failed, using local fallback', err);
+      const newInvoice: Invoice = { ...payload, id: genId() };
+      setInvoices(prev => [newInvoice, ...prev]);
+      return newInvoice;
+    }
   }, []);
 
   const addBOM = useCallback(async (bom: Omit<BOM, 'id'>): Promise<BOM> => {
-    const payload = {
-      productId: bom.productId,
-      materials: bom.materials.map(m => ({
-        materialId: m.materialId,
-        quantidade: m.quantity,
-      })),
-    };
-    const res = await API.post<BOM>('/api/BOM', payload);
-    await fetchAll();
-    return res.data;
-  }, [fetchAll]);
-
-  const refreshAll = useCallback(async () => {
-    await fetchAll();
-  }, [fetchAll]);
+    try {
+      const res = await API.post<BOM>('/api/BOM', bom);
+      setBoms(prev => [...prev, res.data]);
+      return res.data;
+    } catch (err) {
+      console.warn('addBOM: API failed, using local fallback', err);
+      const newBOM: BOM = { ...bom, id: genId() };
+      setBoms(prev => [...prev, newBOM]);
+      return newBOM;
+    }
+  }, []);
 
   const value = useMemo(() => ({
     products,
     boms,
-    stockMovements: movimentacoes,
+    movimentacoes,
     productionOrders,
     invoices,
     addProduct,
     updateProduct,
     addProductionOrder,
     updateProductionOrder,
-    addStockMovement,
+    addMovimentacao: addStockMovement,
     addInvoice,
     addBOM,
-    refreshAll,
   }), [
     products,
     boms,
@@ -265,7 +241,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     addStockMovement,
     addInvoice,
     addBOM,
-    refreshAll,
   ]);
 
   return (

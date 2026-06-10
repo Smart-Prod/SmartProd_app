@@ -85,8 +85,8 @@ namespace SmartProd.API.Server.Controllers
 
                         bom.Materials.Add(new MateriaisItems
                         {
-                            MateriasId = bom.Id,
-                            MaterialId = item.MaterialId,
+                            MateriaisId = bom.Id,
+                            ProdutosId = item.MaterialId,
                             Quantidade = item.Quantidade
                         });
                     }

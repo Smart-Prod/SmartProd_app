@@ -4,19 +4,74 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:views="clr-namespace:SmartProd_Mobile_Front_end.Views"
-    Shell.FlyoutBehavior="Disabled"
-    Title="SmartProd"
-    Shell.BackgroundColor="#FF8C00"
-    Shell.ForegroundColor="White"
-    Shell.TitleColor="White">
+    Shell.FlyoutBehavior="Flyout"
+    Shell.NavBarHasShadow="True"
+    Shell.BackgroundColor="White"
+    Shell.ForegroundColor="#FF8C00"
+    Shell.TitleColor="#FF8C00"
+    Shell.FlyoutBackgroundColor="#F5F6FA"
+    Shell.FlyoutWidth="280">
 
-    <TabBar>
-        <ShellContent Title="Login"
-            ContentTemplate="{DataTemplate views:LoginPage}"
-            Route="LoginPage" />
-        <ShellContent Title=" Registrar"
-            ContentTemplate="{DataTemplate views:RegistrationPage}"
-            Route="RegistrationPage" />
-    </TabBar>
+    <Shell.FlyoutHeader>
+        <Border HeightRequest="140"
+                BackgroundColor="#FF8C00"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 0,0,20,20">
+            <VerticalStackLayout VerticalOptions="End"
+                                 Padding="24,20"
+                                 Spacing="4">
+                <Border HeightRequest="52"
+                        WidthRequest="52"
+                        Stroke="White"
+                        StrokeThickness="2"
+                        BackgroundColor="Transparent"
+                        StrokeShape="RoundRectangle 26"
+                        HorizontalOptions="Start"
+                        Margin="0,0,0,8">
+                    <Image Source="admin_avatar.png"
+                           Aspect="AspectFill" />
+                </Border>
+                <Label Text="SMARTPROD"
+                       FontSize="22"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       CharacterSpacing="1.5" />
+                <Label Text="Sistema de Gestão Industrial"
+                       FontSize="12"
+                       TextColor="White"
+                       Opacity="0.8" />
+            </VerticalStackLayout>
+        </Border>
+    </Shell.FlyoutHeader>
+
+    <Shell.ItemTemplate>
+        <DataTemplate>
+            <Grid Padding="20,14" ColumnDefinitions="28,*">
+                <Image Source="{Binding FlyoutIcon}"
+                       HeightRequest="22"
+                       WidthRequest="22"
+                       VerticalOptions="Center" />
+                <Label Grid.Column="1"
+                       Text="{Binding Title}"
+                       TextColor="#333333"
+                       FontSize="15"
+                       VerticalOptions="Center"
+                       Margin="16,0,0,0" />
+            </Grid>
+        </DataTemplate>
+    </Shell.ItemTemplate>
+
+    <FlyoutItem Title="Dashboard" Icon="chart_icon.png">
+        <ShellContent ContentTemplate="{DataTemplate views:AdminDashboardPage}" Route="DashboardPage" />
+    </FlyoutItem>
+    <FlyoutItem Title="Produção" Icon="list_icon.png">
+        <ShellContent ContentTemplate="{DataTemplate views:ProductionPage}" Route="ProductionPage" />
+    </FlyoutItem>
+    <FlyoutItem Title="Scanner" Icon="camera_icon.png">
+        <ShellContent ContentTemplate="{DataTemplate views:ScannerPage}" Route="ScannerPage" />
+    </FlyoutItem>
+    <FlyoutItem Title="Produtos" Icon="box_icon.png">
+        <ShellContent ContentTemplate="{DataTemplate views:ProductListPage}" Route="ProductListPage" />
+    </FlyoutItem>
 
 </Shell>

@@ -16,6 +16,7 @@ namespace SmartProd.API.Server.Models
         public double Produced { get; set; } // realizado
         public OrdemProducaoStatus Status { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? StartedAt { get; set; }
         public DateTime? FinishedAt { get; set; }
     }
 }

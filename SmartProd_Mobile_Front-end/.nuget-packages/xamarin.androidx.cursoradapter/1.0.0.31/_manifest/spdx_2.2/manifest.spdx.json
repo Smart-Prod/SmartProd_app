@@ -1,0 +1,404 @@
+{
+  "files": [
+    {
+      "fileName": "./icon.png",
+      "SPDXID": "SPDXRef-File--icon.png-7229B5BECEBBC51925AA2E08341DDB4BFB53F7AD",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "8fcf6f6cd575c0f8c643691765a7db2a4b3b104bfbff34646555f5ccffdb2895"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "7229b5becebbc51925aa2e08341ddb4bfb53f7ad"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./build/net8.0-android34.0/Xamarin.AndroidX.CursorAdapter.targets",
+      "SPDXID": "SPDXRef-File--build-net8.0-android34.0-Xamarin.AndroidX.CursorAdapter.targets-2D3E1ECBD44181B5BCA4AE932A5F24310EF8B703",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "a0e2ef545b8efa11ee52f1a0c5aaee439046f5fd6bcf7ea4edd56721c88bf215"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "2d3e1ecbd44181b5bca4ae932a5f24310ef8b703"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./[Content_Types].xml",
+      "SPDXID": "SPDXRef-File---Content-Types-.xml-3285C27AA44BB8B33343116834649102363BF8D9",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "56ee243ea19087393b0454d1a60a4d82cd606bda5dff56561ed1c4f93b54105b"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "3285c27aa44bb8b33343116834649102363bf8d9"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./Xamarin.AndroidX.CursorAdapter.nuspec",
+      "SPDXID": "SPDXRef-File--Xamarin.AndroidX.CursorAdapter.nuspec-4EA7C5E18C4E1D4EBC2AF31722001845CC705C05",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "d4d2f42afa345a68f3b4e2f86e3a4f36a0e5066e74f804ac3ee992fadf3c3d31"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "4ea7c5e18c4e1d4ebc2af31722001845cc705c05"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./package/services/metadata/core-properties/f35a11b153544ea3bab633c48e9d4ca2.psmdcp",
+      "SPDXID": "SPDXRef-File--package-services-metadata-core-properties-f35a11b153544ea3bab633c48e9d4ca2.psmdcp-3540B34A835135D130CDFD4C6A907FBABD760E3F",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "3532ba9aaabaa6820b8d948d61eed1bc734271763a8c83de6b7966babc79ad6c"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "3540b34a835135d130cdfd4c6a907fbabd760e3f"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./THIRD-PARTY-NOTICES.txt",
+      "SPDXID": "SPDXRef-File--THIRD-PARTY-NOTICES.txt-571B160816F7F79B0EC258B6B0DB19C576B9FF1E",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "1a14e25264f604fca355c489c0d5877480ddb738cec665008bcf494ad1cdc787"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "571b160816f7f79b0ec258b6b0db19c576b9ff1e"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./lib/net8.0-android34.0/Xamarin.AndroidX.CursorAdapter.xml",
+      "SPDXID": "SPDXRef-File--lib-net8.0-android34.0-Xamarin.AndroidX.CursorAdapter.xml-2EC9FCD5AACE96290C533CD3DD5BC53AD847B08F",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "d860e79a78e2b6b0568f25c277f9e7f2586c9373e73b2386905cf809d98d6331"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "2ec9fcd5aace96290c533cd3dd5bc53ad847b08f"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./LICENSE.md",
+      "SPDXID": "SPDXRef-File--LICENSE.md-3B941EC3773572CD471F1DD124D3ABEB19A6437B",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "7f92be6c840f2584494d4986060fe7dfe8bbf02d6ab122980fa1d43ffb2ecb0f"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "3b941ec3773572cd471f1dd124d3abeb19a6437b"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./lib/net8.0-android34.0/Xamarin.AndroidX.CursorAdapter.dll",
+      "SPDXID": "SPDXRef-File--lib-net8.0-android34.0-Xamarin.AndroidX.CursorAdapter.dll-D8DC6C8B0550F040C886626854507FEFFD1337F6",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "6929a0d7ce526fb73666985f486fa2f8050b2a65e81e36f96654a2e99058e123"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "d8dc6c8b0550f040c886626854507feffd1337f6"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./buildTransitive/net8.0-android34.0/Xamarin.AndroidX.CursorAdapter.targets",
+      "SPDXID": "SPDXRef-File--buildTransitive-net8.0-android34.0-Xamarin.AndroidX.CursorAdapter.targets-2D3E1ECBD44181B5BCA4AE932A5F24310EF8B703",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "a0e2ef545b8efa11ee52f1a0c5aaee439046f5fd6bcf7ea4edd56721c88bf215"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "2d3e1ecbd44181b5bca4ae932a5f24310ef8b703"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./readme.md",
+      "SPDXID": "SPDXRef-File--readme.md-E663D01B02F78DE0250B3C64D20215736E5ABF17",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "03fafa1870526696b001892ebc10c4c45560236f5338fae0e3066de0fbf8628b"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "e663d01b02f78de0250b3c64d20215736e5abf17"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./aar/androidx.cursoradapter.cursoradapter.aar",
+      "SPDXID": "SPDXRef-File--aar-androidx.cursoradapter.cursoradapter.aar-74014983A86B83CBCE534DEC4E7AA9312F5F5D82",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "a81c8fe78815fa47df5b749deb52727ad11f9397da58b16017f4eb2c11e28564"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "74014983a86b83cbce534dec4e7aa9312f5f5d82"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./_rels/.rels",
+      "SPDXID": "SPDXRef-File---rels-.rels-94B7F77A9DDD5EF65DAD525923C6DD899DA4E0A2",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "58011aca5cd05bb8f264c84ebf61479b93bf1651a34a4b29ac1b97a9826c8e3c"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "94b7f77a9ddd5ef65dad525923c6dd899da4e0a2"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./lib/net8.0-android34.0/Xamarin.AndroidX.CursorAdapter.pdb",
+      "SPDXID": "SPDXRef-File--lib-net8.0-android34.0-Xamarin.AndroidX.CursorAdapter.pdb-54241FE5C5C824733EF87D4BD3A3A82755D7D037",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "13471bf87fe1ed748fa085c4c141e9ce462f738c018f76ed5ee547c256488d9f"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "54241fe5c5c824733ef87d4bd3a3a82755d7d037"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    }
+  ],
+  "packages": [
+    {
+      "name": "Xamarin.AndroidX.CursorAdapter",
+      "SPDXID": "SPDXRef-Package-08BEF8DE46AE979D94C03E75E0439BA32A49A0CB4DC0CD326CD8801A0627C4F9",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "1.0.0.31",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Xamarin.AndroidX.CursorAdapter@1.0.0.31"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Microsoft.NET.ILLink.Tasks",
+      "SPDXID": "SPDXRef-Package-B84F439F5F1D8181504001808BED8E35B93D9468972E1607A04B571DD24DA920",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "8.0.11",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.NET.ILLink.Tasks@8.0.11"
+        }
+      ],
+      "supplier": "NOASSERTION"
+    },
+    {
+      "name": "Microsoft.Sbom.Targets",
+      "SPDXID": "SPDXRef-Package-7DAA0B3EDED3076AACC82E185C2A8B522D51C2079B97B13D8E6454E08E0A27CA",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "3.0.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.Sbom.Targets@3.0.0"
+        }
+      ],
+      "supplier": "NOASSERTION"
+    },
+    {
+      "name": "Xamarin.AndroidX.CursorAdapter",
+      "SPDXID": "SPDXRef-RootPackage",
+      "downloadLocation": "NOASSERTION",
+      "packageVerificationCode": {
+        "packageVerificationCodeValue": "e1396c8761e85f75cb7d8ff144394f24eddcb9e0"
+      },
+      "filesAnalyzed": true,
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoFromFiles": [
+        "NOASSERTION"
+      ],
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "1.0.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:swid/Microsoft/spdx.org/Xamarin.AndroidX.CursorAdapter@1.0.0?tag_id=3438fd54-dbc8-43c0-bf7f-571aa49eff47"
+        }
+      ],
+      "supplier": "Organization: Microsoft",
+      "hasFiles": [
+        "SPDXRef-File--lib-net8.0-android34.0-Xamarin.AndroidX.CursorAdapter.pdb-54241FE5C5C824733EF87D4BD3A3A82755D7D037",
+        "SPDXRef-File--readme.md-E663D01B02F78DE0250B3C64D20215736E5ABF17",
+        "SPDXRef-File---rels-.rels-94B7F77A9DDD5EF65DAD525923C6DD899DA4E0A2",
+        "SPDXRef-File--aar-androidx.cursoradapter.cursoradapter.aar-74014983A86B83CBCE534DEC4E7AA9312F5F5D82",
+        "SPDXRef-File--lib-net8.0-android34.0-Xamarin.AndroidX.CursorAdapter.dll-D8DC6C8B0550F040C886626854507FEFFD1337F6",
+        "SPDXRef-File--LICENSE.md-3B941EC3773572CD471F1DD124D3ABEB19A6437B",
+        "SPDXRef-File--package-services-metadata-core-properties-f35a11b153544ea3bab633c48e9d4ca2.psmdcp-3540B34A835135D130CDFD4C6A907FBABD760E3F",
+        "SPDXRef-File--Xamarin.AndroidX.CursorAdapter.nuspec-4EA7C5E18C4E1D4EBC2AF31722001845CC705C05",
+        "SPDXRef-File--build-net8.0-android34.0-Xamarin.AndroidX.CursorAdapter.targets-2D3E1ECBD44181B5BCA4AE932A5F24310EF8B703",
+        "SPDXRef-File--buildTransitive-net8.0-android34.0-Xamarin.AndroidX.CursorAdapter.targets-2D3E1ECBD44181B5BCA4AE932A5F24310EF8B703",
+        "SPDXRef-File--lib-net8.0-android34.0-Xamarin.AndroidX.CursorAdapter.xml-2EC9FCD5AACE96290C533CD3DD5BC53AD847B08F",
+        "SPDXRef-File--THIRD-PARTY-NOTICES.txt-571B160816F7F79B0EC258B6B0DB19C576B9FF1E",
+        "SPDXRef-File---Content-Types-.xml-3285C27AA44BB8B33343116834649102363BF8D9",
+        "SPDXRef-File--icon.png-7229B5BECEBBC51925AA2E08341DDB4BFB53F7AD"
+      ]
+    }
+  ],
+  "externalDocumentRefs": [],
+  "relationships": [
+    {
+      "relationshipType": "DESCRIBES",
+      "relatedSpdxElement": "SPDXRef-RootPackage",
+      "spdxElementId": "SPDXRef-DOCUMENT"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-7DAA0B3EDED3076AACC82E185C2A8B522D51C2079B97B13D8E6454E08E0A27CA",
+      "spdxElementId": "SPDXRef-RootPackage"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-B84F439F5F1D8181504001808BED8E35B93D9468972E1607A04B571DD24DA920",
+      "spdxElementId": "SPDXRef-RootPackage"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-08BEF8DE46AE979D94C03E75E0439BA32A49A0CB4DC0CD326CD8801A0627C4F9",
+      "spdxElementId": "SPDXRef-RootPackage"
+    }
+  ],
+  "spdxVersion": "SPDX-2.2",
+  "dataLicense": "CC0-1.0",
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "name": "Xamarin.AndroidX.CursorAdapter 1.0.0",
+  "documentNamespace": "http://spdx.org/spdxdocs/Xamarin.AndroidX.CursorAdapter/Xamarin.AndroidX.CursorAdapter/1.0.0/8tNjfk3m3EiKox7fgOcSXg",
+  "creationInfo": {
+    "created": "2025-01-21T19:33:27Z",
+    "creators": [
+      "Organization: Microsoft",
+      "Tool: Microsoft.SBOMTool-3.0.0"
+    ]
+  },
+  "documentDescribes": [
+    "SPDXRef-RootPackage"
+  ]
+}

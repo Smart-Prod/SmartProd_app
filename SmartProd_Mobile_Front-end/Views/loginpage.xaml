@@ -2,109 +2,161 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SmartProd_Mobile_Front_end.Views.LoginPage"
-             Title="Login"
-             BackgroundColor="#F8F6F2">
+             Title="LoginPage"
+             BackgroundColor="#F5F6FA">
     <ScrollView>
-        <VerticalStackLayout Spacing="0" Padding="32,60">
+        <VerticalStackLayout Spacing="0" VerticalOptions="Center" Padding="30,50">
 
-            <!-- Logo -->
-            <VerticalStackLayout Spacing="4" HorizontalOptions="Center" Margin="0,0,0,48">
+            <!-- Logo Container -->
+            <VerticalStackLayout Spacing="8" Margin="0,0,0,48" HorizontalOptions="Center">
                 <Label Text="SMARTPROD"
-                       FontSize="36"
-                       FontAttributes="Bold"
-                       TextColor="#FF8C00"
-                       HorizontalOptions="Center"
-                       CharacterSpacing="2" />
-                <Label Text="Gestão Industrial Inteligente"
-                       FontSize="13"
-                       TextColor="#6B7280"
-                       HorizontalOptions="Center"
-                       HorizontalTextAlignment="Center" />
+                   FontSize="32"
+                   FontAttributes="Bold"
+                   TextColor="#FF8C00"
+                   HorizontalOptions="Center"
+                   CharacterSpacing="-1" />
             </VerticalStackLayout>
 
-            <!-- Login Card -->
+            <!-- Card Design -->
             <Border BackgroundColor="White"
-                    Stroke="#E5E7EB"
-                    StrokeThickness="1"
-                    StrokeShape="RoundRectangle 16"
-                    Padding="24,32"
-                    Margin="0,0,0,32">
+               StrokeThickness="0"
+               StrokeShape="RoundRectangle 4"
+               Padding="24,40"
+               Margin="0,0,0,40">
 
                 <Border.Shadow>
                     <Shadow Brush="#000000"
                             Offset="0,4"
-                            Radius="16"
-                            Opacity="0.08" />
+                            Radius="12"
+                            Opacity="0.15"/>
                 </Border.Shadow>
 
-                <VerticalStackLayout Spacing="24">
+                <VerticalStackLayout Spacing="32">
 
-                    <VerticalStackLayout Spacing="4">
-                        <Label Text="Acessar Sistema"
-                               FontSize="22"
-                               FontAttributes="Bold"
-                               TextColor="#071E27" />
-                        <Label Text="Insira suas credenciais para continuar"
-                               FontSize="14"
-                               TextColor="#6B7280" />
+                    <VerticalStackLayout Spacing="12" HorizontalOptions="Center">
+                        <Label Text="Autenticação do Operador"
+                           FontSize="24"
+                           FontAttributes="Bold"
+                           TextColor="#333333"
+                           HorizontalOptions="Center"
+                           HorizontalTextAlignment="Center" />
+                        <Label Text="Insira suas credenciais para iniciar sessão"
+                           FontSize="14"
+                           TextColor="#5A7C8A"
+                           HorizontalOptions="Center"
+                           HorizontalTextAlignment="Center" />
                     </VerticalStackLayout>
 
-                    <!-- Email -->
-                    <VerticalStackLayout Spacing="6">
-                        <Label Text="E-MAIL"
-                               FontSize="11"
+                    <!-- Input Fields -->
+                    <VerticalStackLayout Spacing="24">
+
+                        <!-- Email Field -->
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="E-MAIL"
+                               FontSize="12"
                                FontAttributes="Bold"
-                               TextColor="#6B7280"
+                               TextColor="#5A7C8A"
                                CharacterSpacing="1" />
-                        <Border BackgroundColor="#F3F4F6"
-                                StrokeThickness="0"
-                                StrokeShape="RoundRectangle 10"
+                            <Border BackgroundColor="White"
+                                Stroke="#E2E8F0"
+                                StrokeThickness="1"
+                                StrokeShape="RoundRectangle 8"
                                 Padding="16,12">
-                            <Entry Placeholder="seu@email.com"
-                                   PlaceholderColor="#9CA3AF"
-                                   TextColor="#071E27"
-                                   Keyboard="Email"
-                                   Text="{Binding Email}" />
-                        </Border>
-                    </VerticalStackLayout>
+                             <Entry Placeholder="operador@smartprod.io"
+                                    PlaceholderColor="#A0AEC0"
+                                TextColor="#333333"
+                                     Keyboard="Email"
+                                     Text="{Binding Email}" />
+                            </Border>
+                        </VerticalStackLayout>
 
-                    <!-- Senha -->
-                    <VerticalStackLayout Spacing="6">
-                        <Label Text="SENHA"
-                               FontSize="11"
+                        <!-- Access Key Field -->
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="SENHA DE ACESSO"
+                               FontSize="12"
                                FontAttributes="Bold"
-                               TextColor="#6B7280"
+                               TextColor="#5A7C8A"
                                CharacterSpacing="1" />
-                        <Border BackgroundColor="#F3F4F6"
-                                StrokeThickness="0"
-                                StrokeShape="RoundRectangle 10"
+                            <Border BackgroundColor="White"
+                                Stroke="#E2E8F0"
+                                StrokeThickness="1"
+                                StrokeShape="RoundRectangle 8"
                                 Padding="16,12">
-                            <Entry Placeholder="••••••••"
-                                   IsPassword="True"
-                                   PlaceholderColor="#9CA3AF"
-                                   TextColor="#071E27"
-                                   Text="{Binding Senha}" />
-                        </Border>
+                                <Entry Placeholder="••••••••••••"
+                                    IsPassword="True"
+                                     PlaceholderColor="#A0AEC0"
+                                     TextColor="#333333"
+                                     Text="{Binding Senha}" />
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <!-- Options -->
+                        <Grid ColumnDefinitions="Auto,*"
+                             ColumnSpacing="20"
+                             VerticalOptions="Center">
+                            <!-- Checkbox + Texto -->
+                            <HorizontalStackLayout Grid.Column="0" Spacing="2" VerticalOptions="Center">
+                                <CheckBox IsChecked="False" Color="#FF8C00" VerticalOptions="Center" />
+                                <Label Text="Manter Sessão"
+                                   VerticalOptions="Center"
+                                   FontSize="13"
+                                   TextColor="#5A7C8A" />
+                            </HorizontalStackLayout>
+                            <!-- Forgot Password -->
+                            <Label Grid.Column="1"
+                               Text="Esqueceu a Senha?"
+                               TextColor="#FF8C00"
+                               FontAttributes="Bold"
+                               FontSize="13"
+                               HorizontalOptions="End"
+                               VerticalOptions="Center" />
+                        </Grid>
                     </VerticalStackLayout>
 
-                    <!-- Login Button -->
+                    <!-- Primary Action -->
                     <Button Text="ENTRAR"
-                            BackgroundColor="#FF8C00"
-                            TextColor="White"
-                            FontAttributes="Bold"
-                            FontSize="16"
-                            HeightRequest="52"
-                            CornerRadius="10"
-                            Command="{Binding LoginCommand}" />
+                        BackgroundColor="#FF8C00"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        FontSize="16"
+                        HeightRequest="56"
+                        CornerRadius="4"
+                        CharacterSpacing="1"
+                        Command="{Binding LoginCommand}"/>
+
+                    <Label Text="Criar Conta"
+                           FontSize="14"
+                           FontAttributes="Bold"
+                           TextColor="#FF8C00"
+                           HorizontalOptions="Center"
+                           TextDecorations="Underline">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnCriarContaTapped" />
+                        </Label.GestureRecognizers>
+                    </Label>
+
+                    <!-- Status Footer -->
+                    <Label Text="Conexão Segura • Servidor: Linha-04"
+                           FontSize="12" TextColor="#A0AEC0"
+                           HorizontalOptions="Center" />
 
                 </VerticalStackLayout>
             </Border>
 
-            <!-- Footer -->
-            <Label Text="© 2026 SmartProd Systems"
-                   FontSize="12"
-                   TextColor="#9CA3AF"
-                   HorizontalTextAlignment="Center" />
+            <!-- Bottom Brand Info -->
+            <VerticalStackLayout Spacing="24" HorizontalOptions="Center">
+                <Label Text="© 2026 SMARTPROD SISTEMAS INDUSTRIAIS LTDA. V.4.0.2"
+                   FontSize="10"
+                   TextColor="#8BA6B1"
+                   HorizontalTextAlignment="Center"
+                   CharacterSpacing="0.5" />
+
+                <HorizontalStackLayout Spacing="24" HorizontalOptions="Center">
+                    <Label Text="PRIVACIDADE" FontSize="10" FontAttributes="Bold" TextColor="#5A7C8A" />
+                    <Label Text="STATUS DO SISTEMA" FontSize="10" FontAttributes="Bold" TextColor="#5A7C8A" />
+                    <Label Text="SUPORTE" FontSize="10" FontAttributes="Bold" TextColor="#5A7C8A" />
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
 
         </VerticalStackLayout>
     </ScrollView>

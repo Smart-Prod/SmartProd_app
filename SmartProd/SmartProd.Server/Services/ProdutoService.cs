@@ -75,6 +75,13 @@ namespace SmartProd.API.Server.Services
             return produto;
         }
 
+        public async Task<Produto?> GetProductByCodeAsync(string code)
+        {
+            return await _context.Produtos
+                .Include(p => p.Bom)
+                .FirstOrDefaultAsync(p => p.Code == code);
+        }
+
         public async Task DeleteProductAsync(int id)
         {
             var produto = await _context.Produtos.FindAsync(id);

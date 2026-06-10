@@ -2,221 +2,296 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SmartProd_Mobile_Front_end.Views.ProductionPage"
-             Title="Produção"
-             BackgroundColor="#F8F6F2">
-    <Grid RowDefinitions="Auto, *">
+             Title="ProductionPage"
+             Shell.NavBarIsVisible="True"
+             BackgroundColor="#F5F6FA">
 
-        <!-- Header -->
-        <VerticalStackLayout Grid.Row="0" Padding="24,20,24,12" BackgroundColor="White">
-            <Label Text="Minha Produção"
-                   FontSize="24"
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="Auto, *, Auto"
+              Padding="0,0,12,0"
+              VerticalOptions="Center">
+            <Label Grid.Column="0"
+                   Text="SMARTPROD"
+                   FontSize="20"
                    FontAttributes="Bold"
-                   TextColor="#071E27" />
-            <Label Text="Acompanhe suas ordens de produção"
+                   TextColor="#FF8C00"
+                   CharacterSpacing="1.5"
+                   VerticalOptions="Center" />
+            <Label Grid.Column="1"
+                   Text="Produção"
                    FontSize="13"
-                   TextColor="#6B7280" />
-        </VerticalStackLayout>
+                   TextColor="#A0AEC0"
+                   VerticalOptions="Center"
+                   HorizontalOptions="End"
+                   Margin="0,0,8,0" />
+            <Border Grid.Column="2"
+                    HeightRequest="34"
+                    WidthRequest="34"
+                    Stroke="#FF8C00"
+                    StrokeThickness="1.5"
+                    BackgroundColor="Transparent"
+                    StrokeShape="RoundRectangle 17">
+                <Image Source="operator_avatar.png"
+                       Aspect="AspectFill" />
+            </Border>
+        </Grid>
+    </Shell.TitleView>
 
-        <ScrollView Grid.Row="1">
-            <VerticalStackLayout Spacing="16" Padding="20,20">
+    <Grid RowDefinitions="*, Auto">
 
-                <!-- Search -->
-                <Border BackgroundColor="White"
-                        Stroke="#E5E7EB"
-                        StrokeThickness="1"
-                        StrokeShape="RoundRectangle 12"
-                        Padding="16,10">
+        <!-- Content -->
+        <RefreshView Grid.Row="0"
+                     IsRefreshing="{Binding IsRefreshing}"
+                     Command="{Binding RefreshCommand}">
+            <ScrollView>
+                <VerticalStackLayout Spacing="0" Padding="20,16,20,24">
 
-                    <Border.Shadow>
-                        <Shadow Brush="#000000"
-                                Offset="0,2"
-                                Radius="8"
-                                Opacity="0.04" />
-                    </Border.Shadow>
+                    <!-- Page Title -->
+                    <Label Text="Ordens de Produção"
+                           FontSize="28"
+                           FontAttributes="Bold"
+                           TextColor="#333333"
+                           Margin="0,0,0,4" />
 
-                    <HorizontalStackLayout Spacing="12">
-                        <Label Text="🔍"
-                               FontSize="16"
-                               VerticalOptions="Center" />
-                        <Entry Placeholder="Buscar ordem ou produto..."
-                               PlaceholderColor="#9CA3AF"
-                               TextColor="#071E27"
+                    <!-- Search -->
+                    <Border BackgroundColor="White"
+                            Stroke="#E2E8F0"
+                            StrokeThickness="1"
+                            Padding="12,8"
+                            Margin="0,0,0,20"
+                            StrokeShape="RoundRectangle 8">
+                        <Entry Placeholder="BUSCAR POR ID OU PRODUTO..."
+                               PlaceholderColor="#A0AEC0"
+                               TextColor="#333333"
+                               FontSize="12"
+                               FontAttributes="Bold"
+                               VerticalOptions="Center"
+                               Text="{Binding SearchText}"
+                               ReturnCommand="{Binding SearchCommand}"
+                               ReturnCommandParameter="{Binding Text, Source={RelativeSource Self}}" />
+                    </Border>
+
+                    <!-- Efficiency Card -->
+                    <Border BackgroundColor="White"
+                            StrokeThickness="0"
+                            Padding="20"
+                            Margin="0,0,0,20"
+                            StrokeShape="RoundRectangle 12">
+                        <Border.Shadow>
+                            <Shadow Brush="#000000"
+                                    Offset="0,4"
+                                    Radius="12"
+                                    Opacity="0.1" />
+                        </Border.Shadow>
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="EFICIÊNCIA DA LINHA"
+                                   FontSize="12"
+                                   FontAttributes="Bold"
+                                   TextColor="#636E72"
+                                   CharacterSpacing="0.5" />
+                            <Label Text="{Binding LineEfficiency}"
+                                   FontSize="48"
+                                   FontAttributes="Bold"
+                                   TextColor="#FF8C00"
+                                   Margin="0,-4,0,0" />
+                            <Label Text="Desempenho OEE em Tempo Real"
+                                   FontSize="12"
+                                   TextColor="#A0AEC0" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Loading Indicator -->
+                    <ActivityIndicator IsRunning="{Binding IsBusy}"
+                                       IsVisible="{Binding IsBusy}"
+                                       Color="#FF8C00"
+                                       HorizontalOptions="Center"
+                                       Margin="0,0,0,12" />
+
+                    <!-- Orders List -->
+                    <CollectionView ItemsSource="{Binding Orders}">
+                        <CollectionView.EmptyView>
+                            <VerticalStackLayout HorizontalOptions="Center"
+                                                 VerticalOptions="Center"
+                                                 Padding="40">
+                                <Label Text="Nenhuma ordem de produção encontrada."
+                                       FontSize="16"
+                                       TextColor="#636E72"
+                                       HorizontalTextAlignment="Center" />
+                                <Label Text="Puxe para recarregar."
+                                       FontSize="13"
+                                       TextColor="#A0AEC0"
+                                       HorizontalTextAlignment="Center"
+                                       Margin="0,8,0,0" />
+                            </VerticalStackLayout>
+                        </CollectionView.EmptyView>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border StrokeThickness="0"
+                                        Padding="20"
+                                        Margin="0,0,0,16"
+                                        BackgroundColor="White"
+                                        StrokeShape="RoundRectangle 12">
+                                    <Border.Shadow>
+                                        <Shadow Brush="#000000"
+                                                Offset="0,4"
+                                                Radius="12"
+                                                Opacity="0.1" />
+                                    </Border.Shadow>
+                                    <Grid ColumnDefinitions="*, Auto"
+                                          RowDefinitions="Auto, Auto, Auto, Auto">
+                                        <Label Grid.Row="0"
+                                               Grid.Column="0"
+                                               Text="{Binding Id, StringFormat='OP-{0}'}"
+                                               FontSize="11"
+                                               FontAttributes="Bold"
+                                               TextColor="#636E72" />
+                                        <Border Grid.Row="0"
+                                                Grid.Column="1"
+                                                BackgroundColor="#FF8C00"
+                                                Padding="8,4"
+                                                StrokeThickness="0"
+                                                StrokeShape="RoundRectangle 4">
+                                            <Label Text="{Binding Status}"
+                                                   FontSize="10"
+                                                   FontAttributes="Bold"
+                                                   TextColor="White" />
+                                        </Border>
+                                        <Label Grid.Row="1"
+                                               Grid.ColumnSpan="2"
+                                               Text="{Binding Product}"
+                                               FontSize="22"
+                                               FontAttributes="Bold"
+                                               TextColor="#333333"
+                                               Margin="0,8,0,20"
+                                               MaxLines="2"
+                                               LineBreakMode="TailTruncation" />
+                                        <Grid Grid.Row="2"
+                                              Grid.ColumnSpan="2"
+                                              ColumnDefinitions="*, *, *"
+                                              Margin="0,0,0,16">
+                                            <VerticalStackLayout Grid.Column="0"
+                                                                 Spacing="4">
+                                                <Label Text="ABERTURA"
+                                                       FontSize="10"
+                                                       FontAttributes="Bold"
+                                                       TextColor="#A0AEC0" />
+                                                <Label Text="{Binding CreatedAt}"
+                                                       FontSize="13"
+                                                       FontAttributes="Bold"
+                                                       TextColor="#333333" />
+                                            </VerticalStackLayout>
+                                            <VerticalStackLayout Grid.Column="1"
+                                                                 Spacing="4">
+                                                <Label Text="INÍCIO"
+                                                       FontSize="10"
+                                                       FontAttributes="Bold"
+                                                       TextColor="#A0AEC0" />
+                                                <Label Text="{Binding StartTime}"
+                                                       FontSize="13"
+                                                       FontAttributes="Bold"
+                                                       TextColor="#333333" />
+                                            </VerticalStackLayout>
+                                            <VerticalStackLayout Grid.Column="2"
+                                                                 Spacing="4">
+                                                <Label Text="TÉRMINO"
+                                                       FontSize="10"
+                                                       FontAttributes="Bold"
+                                                       TextColor="#A0AEC0" />
+                                                <Label Text="{Binding EndTime}"
+                                                       FontSize="13"
+                                                       FontAttributes="Bold"
+                                                       TextColor="#333333" />
+                                            </VerticalStackLayout>
+                                        </Grid>
+                                        <Button Grid.Row="3"
+                                                Grid.ColumnSpan="2"
+                                                Text="INICIAR PRODUÇÃO"
+                                                BackgroundColor="#FF8C00"
+                                                TextColor="White"
+                                                FontAttributes="Bold"
+                                                CornerRadius="8"
+                                                HeightRequest="48"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.StartProductionCommand}"
+                                                CommandParameter="{Binding .}" />
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                    <!-- Branding -->
+                    <VerticalStackLayout Spacing="16"
+                                         Margin="0,40,0,32">
+                        <Label Text="CONTROLE DE&#10;PRECISÃO"
+                               FontSize="36"
+                               FontAttributes="Bold"
+                               TextColor="#333333"
+                               LineHeight="1.0" />
+                        <Label Text="A interface SmartProd foi projetada para o rigor do chão de fábrica. Cada interação é feita para minimizar a carga cognitiva e maximizar a consciência operacional."
                                FontSize="14"
-                               VerticalOptions="Center" />
-                    </HorizontalStackLayout>
-                </Border>
-
-                <!-- Efficiency Card -->
-                <Border BackgroundColor="#071E27"
-                        StrokeThickness="0"
-                        StrokeShape="RoundRectangle 16"
-                        Padding="24">
-
-                    <Border.Shadow>
-                        <Shadow Brush="#000000"
-                                Offset="0,4"
-                                Radius="12"
-                                Opacity="0.15" />
-                    </Border.Shadow>
-
-                    <VerticalStackLayout Spacing="12">
-                        <Label Text="EFICIÊNCIA DA LINHA"
-                               FontSize="11"
-                               FontAttributes="Bold"
-                               TextColor="#FF8C00"
-                               CharacterSpacing="1" />
-                        <Label Text="94,2%"
-                               FontSize="48"
-                               FontAttributes="Bold"
-                               TextColor="White" />
-                        <Label Text="OEE - Desempenho em tempo real"
-                               FontSize="13"
-                               TextColor="#9CA3AF" />
+                               TextColor="#636E72"
+                               LineHeight="1.4" />
                     </VerticalStackLayout>
-                </Border>
 
-                <!-- Orders -->
-                <Label Text="ORDENS ATIVAS"
-                       FontSize="11"
-                       FontAttributes="Bold"
-                       TextColor="#6B7280"
-                       CharacterSpacing="1"
-                       Margin="4,8,0,0" />
-
-                <!-- Order 1 -->
-                <Border BackgroundColor="White"
-                        Stroke="#E5E7EB"
-                        StrokeThickness="1"
-                        StrokeShape="RoundRectangle 12"
-                        Padding="20">
-
-                    <Border.Shadow>
-                        <Shadow Brush="#000000"
-                                Offset="0,2"
-                                Radius="8"
-                                Opacity="0.04" />
-                    </Border.Shadow>
-
-                    <Grid ColumnDefinitions="*, Auto"
-                          RowDefinitions="Auto, Auto, Auto, Auto">
-
-                        <Label Grid.Row="0" Grid.Column="0"
-                               Text="OP-88294-2024"
-                               FontSize="11"
-                               FontAttributes="Bold"
-                               TextColor="#6B7280" />
-
-                        <Border Grid.Row="0" Grid.Column="1"
-                                BackgroundColor="#FFF3E0"
-                                Padding="10,4"
+                    <!-- KPI Mini Cards -->
+                    <Grid ColumnDefinitions="*, *"
+                          ColumnSpacing="16"
+                          Margin="0,0,0,40">
+                        <Border Grid.Column="0"
+                                BackgroundColor="White"
+                                Padding="16"
                                 StrokeThickness="0"
-                                StrokeShape="RoundRectangle 6">
-                            <Label Text="EM ANDAMENTO"
-                                   FontSize="10"
-                                   FontAttributes="Bold"
-                                   TextColor="#FF8C00" />
+                                StrokeShape="RoundRectangle 12">
+                            <Border.Shadow>
+                                <Shadow Brush="#000000"
+                                        Offset="0,4"
+                                        Radius="12"
+                                        Opacity="0.1" />
+                            </Border.Shadow>
+                            <VerticalStackLayout Spacing="4">
+                                <Label Text="{Binding Latency}"
+                                       FontSize="20"
+                                       FontAttributes="Bold"
+                                       TextColor="#FF8C00" />
+                                <Label Text="LATÊNCIA"
+                                       FontSize="10"
+                                       FontAttributes="Bold"
+                                       TextColor="#636E72" />
+                            </VerticalStackLayout>
                         </Border>
-
-                        <Label Grid.Row="1" Grid.ColumnSpan="2"
-                               Text="Turbina Industrial&#10;Housing A2"
-                               FontSize="20"
-                               FontAttributes="Bold"
-                               TextColor="#071E27"
-                               Margin="0,8,0,20" />
-
-                        <Grid Grid.Row="2" Grid.ColumnSpan="2"
-                              ColumnDefinitions="*, *"
-                              Margin="0,0,0,16">
-                            <VerticalStackLayout Grid.Column="0" Spacing="4">
-                                <Label Text="INÍCIO" FontSize="10" FontAttributes="Bold" TextColor="#9CA3AF" />
-                                <Label Text="06:45" FontSize="16" FontAttributes="Bold" TextColor="#071E27" />
-                            </VerticalStackLayout>
-                            <VerticalStackLayout Grid.Column="1" Spacing="4">
-                                <Label Text="TÉRMINO PREV." FontSize="10" FontAttributes="Bold" TextColor="#9CA3AF" />
-                                <Label Text="14:30" FontSize="16" FontAttributes="Bold" TextColor="#071E27" />
-                            </VerticalStackLayout>
-                        </Grid>
-
-                        <Button Grid.Row="3" Grid.ColumnSpan="2"
-                                Text="INICIAR PRODUÇÃO"
-                                BackgroundColor="#FF8C00"
-                                TextColor="White"
-                                FontAttributes="Bold"
-                                CornerRadius="10"
-                                HeightRequest="48"
-                                FontSize="14" />
-                    </Grid>
-                </Border>
-
-                <!-- Order 2 -->
-                <Border BackgroundColor="White"
-                        Stroke="#E5E7EB"
-                        StrokeThickness="1"
-                        StrokeShape="RoundRectangle 12"
-                        Padding="20">
-
-                    <Border.Shadow>
-                        <Shadow Brush="#000000"
-                                Offset="0,2"
-                                Radius="8"
-                                Opacity="0.04" />
-                    </Border.Shadow>
-
-                    <Grid ColumnDefinitions="*, Auto"
-                          RowDefinitions="Auto, Auto, Auto, Auto">
-
-                        <Label Grid.Row="0" Grid.Column="0"
-                               Text="OP-88301-2024"
-                               FontSize="11"
-                               FontAttributes="Bold"
-                               TextColor="#6B7280" />
-
-                        <Border Grid.Row="0" Grid.Column="1"
-                                BackgroundColor="#F3F4F6"
-                                Padding="10,4"
+                        <Border Grid.Column="1"
+                                BackgroundColor="White"
+                                Padding="16"
                                 StrokeThickness="0"
-                                StrokeShape="RoundRectangle 6">
-                            <Label Text="PENDENTE"
-                                   FontSize="10"
-                                   FontAttributes="Bold"
-                                   TextColor="#6B7280" />
+                                StrokeShape="RoundRectangle 12">
+                            <Border.Shadow>
+                                <Shadow Brush="#000000"
+                                        Offset="0,4"
+                                        Radius="12"
+                                        Opacity="0.1" />
+                            </Border.Shadow>
+                            <VerticalStackLayout Spacing="4">
+                                <Label Text="{Binding Traceability}"
+                                       FontSize="20"
+                                       FontAttributes="Bold"
+                                       TextColor="#FF8C00" />
+                                <Label Text="RASTREABILIDADE"
+                                       FontSize="10"
+                                       FontAttributes="Bold"
+                                       TextColor="#636E72" />
+                            </VerticalStackLayout>
                         </Border>
-
-                        <Label Grid.Row="1" Grid.ColumnSpan="2"
-                               Text="Bloco Manifold&#10;Hidráulico X7"
-                               FontSize="20"
-                               FontAttributes="Bold"
-                               TextColor="#071E27"
-                               Margin="0,8,0,20" />
-
-                        <Grid Grid.Row="2" Grid.ColumnSpan="2"
-                              ColumnDefinitions="*, *"
-                              Margin="0,0,0,16">
-                            <VerticalStackLayout Grid.Column="0" Spacing="4">
-                                <Label Text="INÍCIO" FontSize="10" FontAttributes="Bold" TextColor="#9CA3AF" />
-                                <Label Text="15:00" FontSize="16" FontAttributes="Bold" TextColor="#071E27" />
-                            </VerticalStackLayout>
-                            <VerticalStackLayout Grid.Column="1" Spacing="4">
-                                <Label Text="TÉRMINO PREV." FontSize="10" FontAttributes="Bold" TextColor="#9CA3AF" />
-                                <Label Text="21:15" FontSize="16" FontAttributes="Bold" TextColor="#071E27" />
-                            </VerticalStackLayout>
-                        </Grid>
-
-                        <Button Grid.Row="3" Grid.ColumnSpan="2"
-                                Text="INICIAR PRODUÇÃO"
-                                BackgroundColor="#F3F4F6"
-                                TextColor="#6B7280"
-                                FontAttributes="Bold"
-                                CornerRadius="10"
-                                HeightRequest="48"
-                                FontSize="14" />
                     </Grid>
-                </Border>
 
-                <BoxView HeightRequest="40" Color="Transparent" />
+                    <!-- Spacer -->
+                    <BoxView HeightRequest="80"
+                             Color="Transparent" />
+                </VerticalStackLayout>
+            </ScrollView>
+        </RefreshView>
 
-            </VerticalStackLayout>
-        </ScrollView>
+        <!-- Bottom spacing for Shell TabBar -->
+        <BoxView Grid.Row="1" HeightRequest="8" Color="Transparent" />
 
     </Grid>
 </ContentPage>

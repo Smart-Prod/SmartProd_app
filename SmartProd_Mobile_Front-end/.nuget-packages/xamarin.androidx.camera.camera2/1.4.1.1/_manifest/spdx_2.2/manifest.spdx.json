@@ -1,0 +1,424 @@
+{
+  "files": [
+    {
+      "fileName": "./icon.png",
+      "SPDXID": "SPDXRef-File--icon.png-7229B5BECEBBC51925AA2E08341DDB4BFB53F7AD",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "8fcf6f6cd575c0f8c643691765a7db2a4b3b104bfbff34646555f5ccffdb2895"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "7229b5becebbc51925aa2e08341ddb4bfb53f7ad"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./buildTransitive/net8.0-android34.0/Xamarin.AndroidX.Camera.Camera2.targets",
+      "SPDXID": "SPDXRef-File--buildTransitive-net8.0-android34.0-Xamarin.AndroidX.Camera.Camera2.targets-92429ABCBE7B0C422E8C477D58E280E2F7340977",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "48737d745e304072962aa2067b56e46abe6b8e40df759b27f98730b7ba05da6b"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "92429abcbe7b0c422e8c477d58e280e2f7340977"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./LICENSE.md",
+      "SPDXID": "SPDXRef-File--LICENSE.md-3B941EC3773572CD471F1DD124D3ABEB19A6437B",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "7f92be6c840f2584494d4986060fe7dfe8bbf02d6ab122980fa1d43ffb2ecb0f"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "3b941ec3773572cd471f1dd124d3abeb19a6437b"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./lib/net8.0-android34.0/Xamarin.AndroidX.Camera.Camera2.dll",
+      "SPDXID": "SPDXRef-File--lib-net8.0-android34.0-Xamarin.AndroidX.Camera.Camera2.dll-7D2BE21ACBDE057EBEBACFCDDD61A4E30C0255D0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "e41f6dda5fd07f47c96c228001f0b1cd5333f1c8ce9f9d03ea09120d59349be7"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "7d2be21acbde057ebebacfcddd61a4e30c0255d0"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./readme.md",
+      "SPDXID": "SPDXRef-File--readme.md-5CCD4232038ABE560BCD505D9BCFF050B119001A",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "ed78b6fed2eb6c058c1ac245796fc19374d318c25c9a249c82f4b63b2ac93219"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "5ccd4232038abe560bcd505d9bcff050b119001a"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./lib/net8.0-android34.0/Xamarin.AndroidX.Camera.Camera2.pdb",
+      "SPDXID": "SPDXRef-File--lib-net8.0-android34.0-Xamarin.AndroidX.Camera.Camera2.pdb-5665F2782F85F62937FD36DCA0BD3DA1F6B86A70",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "c02b6496304c61b60ad941b6126181289077c5ad733df7aa785b2d603de3e090"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "5665f2782f85f62937fd36dca0bd3da1f6b86a70"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./THIRD-PARTY-NOTICES.txt",
+      "SPDXID": "SPDXRef-File--THIRD-PARTY-NOTICES.txt-571B160816F7F79B0EC258B6B0DB19C576B9FF1E",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "1a14e25264f604fca355c489c0d5877480ddb738cec665008bcf494ad1cdc787"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "571b160816f7f79b0ec258b6b0db19c576b9ff1e"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./lib/net8.0-android34.0/Xamarin.AndroidX.Camera.Camera2.xml",
+      "SPDXID": "SPDXRef-File--lib-net8.0-android34.0-Xamarin.AndroidX.Camera.Camera2.xml-31695623653DEDAA23867E361B05A1CEEA58F6D7",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "3b3a5ad1fcad33cb6d5731209553242c092651fff6b02a7816a46fece80f38a7"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "31695623653dedaa23867e361b05a1ceea58f6d7"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./Xamarin.AndroidX.Camera.Camera2.nuspec",
+      "SPDXID": "SPDXRef-File--Xamarin.AndroidX.Camera.Camera2.nuspec-369A094983D41E4BF8BFB353531B15122F44D539",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "68627f7b08a49a7f9917d784579be641981935d3b20c061d7bd4f8bc4f3ae2cd"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "369a094983d41e4bf8bfb353531b15122f44d539"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./package/services/metadata/core-properties/95590d13a62f457fad560a6be781686e.psmdcp",
+      "SPDXID": "SPDXRef-File--package-services-metadata-core-properties-95590d13a62f457fad560a6be781686e.psmdcp-964001228A4E072DA96240A1BAAD1533AB706007",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "412dd3dfbe4f9c1ccec66a2f02630e00c93e22dbadcb1573c14cc586e9c15eb9"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "964001228a4e072da96240a1baad1533ab706007"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./[Content_Types].xml",
+      "SPDXID": "SPDXRef-File---Content-Types-.xml-3285C27AA44BB8B33343116834649102363BF8D9",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "56ee243ea19087393b0454d1a60a4d82cd606bda5dff56561ed1c4f93b54105b"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "3285c27aa44bb8b33343116834649102363bf8d9"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./proguard/proguard.txt",
+      "SPDXID": "SPDXRef-File--proguard-proguard.txt-B5DED8DAC45D4491C4D7719BFE40E312D5CC98F3",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "49b70f976ed7be4e16ad437939cac6639583787b8da103b0a6c6d23c6e223680"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "b5ded8dac45d4491c4d7719bfe40e312d5cc98f3"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./build/net8.0-android34.0/Xamarin.AndroidX.Camera.Camera2.targets",
+      "SPDXID": "SPDXRef-File--build-net8.0-android34.0-Xamarin.AndroidX.Camera.Camera2.targets-92429ABCBE7B0C422E8C477D58E280E2F7340977",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "48737d745e304072962aa2067b56e46abe6b8e40df759b27f98730b7ba05da6b"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "92429abcbe7b0c422e8c477d58e280e2f7340977"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./_rels/.rels",
+      "SPDXID": "SPDXRef-File---rels-.rels-19D22125BF157A2D29F9B6ACECA6C71E4B80D3E7",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "da52a58319d5d0dfed91235e4651184453417671fa16356dd28cceaeec18f792"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "19d22125bf157a2d29f9b6aceca6c71e4b80d3e7"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./aar/androidx.camera.camera-camera2.aar",
+      "SPDXID": "SPDXRef-File--aar-androidx.camera.camera-camera2.aar-CF556FEAAD7517AF11FA8EA8657FCEDF7C8218BC",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "173253ed32c2f60e77081aab72e61dbcc4e767c9fe56cbb9b88f762b7725e99b"
+        },
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "cf556feaad7517af11fa8ea8657fcedf7c8218bc"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoInFiles": [
+        "NOASSERTION"
+      ],
+      "copyrightText": "NOASSERTION"
+    }
+  ],
+  "packages": [
+    {
+      "name": "Xamarin.AndroidX.Camera.Camera2",
+      "SPDXID": "SPDXRef-Package-9AB6CADDB531D1C11B44C877F67932D9E8325700D8C3180758E83CB12844E744",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "1.4.1.1",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Xamarin.AndroidX.Camera.Camera2@1.4.1.1"
+        }
+      ],
+      "supplier": "Organization: Microsoft"
+    },
+    {
+      "name": "Microsoft.NET.ILLink.Tasks",
+      "SPDXID": "SPDXRef-Package-B84F439F5F1D8181504001808BED8E35B93D9468972E1607A04B571DD24DA920",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "8.0.11",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.NET.ILLink.Tasks@8.0.11"
+        }
+      ],
+      "supplier": "NOASSERTION"
+    },
+    {
+      "name": "Microsoft.Sbom.Targets",
+      "SPDXID": "SPDXRef-Package-7DAA0B3EDED3076AACC82E185C2A8B522D51C2079B97B13D8E6454E08E0A27CA",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "3.0.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:nuget/Microsoft.Sbom.Targets@3.0.0"
+        }
+      ],
+      "supplier": "NOASSERTION"
+    },
+    {
+      "name": "Xamarin.AndroidX.Camera.Camera2",
+      "SPDXID": "SPDXRef-RootPackage",
+      "downloadLocation": "NOASSERTION",
+      "packageVerificationCode": {
+        "packageVerificationCodeValue": "96904e4aa67b5cec1c0f9af5c9c1039f2753782e"
+      },
+      "filesAnalyzed": true,
+      "licenseConcluded": "NOASSERTION",
+      "licenseInfoFromFiles": [
+        "NOASSERTION"
+      ],
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "versionInfo": "1.0.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:swid/Microsoft/spdx.org/Xamarin.AndroidX.Camera.Camera2@1.0.0?tag_id=ac8e5536-6fd2-439e-bcb6-88516847f93e"
+        }
+      ],
+      "supplier": "Organization: Microsoft",
+      "hasFiles": [
+        "SPDXRef-File--aar-androidx.camera.camera-camera2.aar-CF556FEAAD7517AF11FA8EA8657FCEDF7C8218BC",
+        "SPDXRef-File---rels-.rels-19D22125BF157A2D29F9B6ACECA6C71E4B80D3E7",
+        "SPDXRef-File--build-net8.0-android34.0-Xamarin.AndroidX.Camera.Camera2.targets-92429ABCBE7B0C422E8C477D58E280E2F7340977",
+        "SPDXRef-File--proguard-proguard.txt-B5DED8DAC45D4491C4D7719BFE40E312D5CC98F3",
+        "SPDXRef-File---Content-Types-.xml-3285C27AA44BB8B33343116834649102363BF8D9",
+        "SPDXRef-File--package-services-metadata-core-properties-95590d13a62f457fad560a6be781686e.psmdcp-964001228A4E072DA96240A1BAAD1533AB706007",
+        "SPDXRef-File--Xamarin.AndroidX.Camera.Camera2.nuspec-369A094983D41E4BF8BFB353531B15122F44D539",
+        "SPDXRef-File--lib-net8.0-android34.0-Xamarin.AndroidX.Camera.Camera2.xml-31695623653DEDAA23867E361B05A1CEEA58F6D7",
+        "SPDXRef-File--THIRD-PARTY-NOTICES.txt-571B160816F7F79B0EC258B6B0DB19C576B9FF1E",
+        "SPDXRef-File--lib-net8.0-android34.0-Xamarin.AndroidX.Camera.Camera2.pdb-5665F2782F85F62937FD36DCA0BD3DA1F6B86A70",
+        "SPDXRef-File--readme.md-5CCD4232038ABE560BCD505D9BCFF050B119001A",
+        "SPDXRef-File--lib-net8.0-android34.0-Xamarin.AndroidX.Camera.Camera2.dll-7D2BE21ACBDE057EBEBACFCDDD61A4E30C0255D0",
+        "SPDXRef-File--LICENSE.md-3B941EC3773572CD471F1DD124D3ABEB19A6437B",
+        "SPDXRef-File--buildTransitive-net8.0-android34.0-Xamarin.AndroidX.Camera.Camera2.targets-92429ABCBE7B0C422E8C477D58E280E2F7340977",
+        "SPDXRef-File--icon.png-7229B5BECEBBC51925AA2E08341DDB4BFB53F7AD"
+      ]
+    }
+  ],
+  "externalDocumentRefs": [],
+  "relationships": [
+    {
+      "relationshipType": "DESCRIBES",
+      "relatedSpdxElement": "SPDXRef-RootPackage",
+      "spdxElementId": "SPDXRef-DOCUMENT"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-B84F439F5F1D8181504001808BED8E35B93D9468972E1607A04B571DD24DA920",
+      "spdxElementId": "SPDXRef-RootPackage"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-7DAA0B3EDED3076AACC82E185C2A8B522D51C2079B97B13D8E6454E08E0A27CA",
+      "spdxElementId": "SPDXRef-RootPackage"
+    },
+    {
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-9AB6CADDB531D1C11B44C877F67932D9E8325700D8C3180758E83CB12844E744",
+      "spdxElementId": "SPDXRef-RootPackage"
+    }
+  ],
+  "spdxVersion": "SPDX-2.2",
+  "dataLicense": "CC0-1.0",
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "name": "Xamarin.AndroidX.Camera.Camera2 1.0.0",
+  "documentNamespace": "http://spdx.org/spdxdocs/Xamarin.AndroidX.Camera.Camera2/Xamarin.AndroidX.Camera.Camera2/1.0.0/9lLWXAIm5U6qDpMkBRlAgg",
+  "creationInfo": {
+    "created": "2025-01-21T19:35:41Z",
+    "creators": [
+      "Organization: Microsoft",
+      "Tool: Microsoft.SBOMTool-3.0.0"
+    ]
+  },
+  "documentDescribes": [
+    "SPDXRef-RootPackage"
+  ]
+}
