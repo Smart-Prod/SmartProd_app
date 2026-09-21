@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SmartProd.API.Server.DTOs;
 using SmartProd.API.Server.Services;
 using System.Security.Claims;
@@ -7,6 +8,7 @@ namespace SmartProd.API.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class NotaFiscalController : ControllerBase
     {
         private readonly NotaFiscalService _service;
@@ -20,7 +22,6 @@ namespace SmartProd.API.Server.Controllers
         {
             try
             {
-                // UsuarioId via JWT, se aplicável
                 var usuarioIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 if (usuarioIdClaim == null) return Unauthorized();
 

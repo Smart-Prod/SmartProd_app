@@ -41,7 +41,10 @@ namespace SmartProd.API.Server.Services
                     throw new Exception($"Produto {prod.Name} não é PA. Somente PA aparece em nota de saída.");
             }
 
-            // 3️⃣ Atualizar estoque
+            // 3️⃣ Iniciar transação ANTES de alterar estoque (garante atomicidade)
+            using var transaction = await _context.Database.BeginTransactionAsync();
+
+            // 4️⃣ Atualizar estoque dentro da transação
             foreach (var item in data.Items)
             {
                 var prod = products.First(p => p.Id == item.ProductId);
@@ -66,8 +69,7 @@ namespace SmartProd.API.Server.Services
                 _context.Produtos.Update(prod);
             }
 
-            // 4️⃣ Criar a nota fiscal + items (numa transação)
-            using var transaction = await _context.Database.BeginTransactionAsync();
+            // 5️⃣ Criar a nota fiscal + items
             try
             {
                 // Validar campos obrigatórios

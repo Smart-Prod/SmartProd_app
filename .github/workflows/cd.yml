@@ -1,0 +1,70 @@
+name: CD - Deploy to Staging/Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target environment'
+        required: true
+        type: choice
+        options:
+          - staging
+          - production
+      version:
+        description: 'Version tag (optional, uses latest if empty)'
+        required: false
+        type: string
+
+  push:
+    tags:
+      - 'v*'
+    branches: []
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  deploy-staging:
+    name: Deploy to Staging
+    if: github.event.inputs.environment == 'staging' || github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy to Staging
+        run: |
+          echo "Deploying to staging environment..."
+          # Add your staging deployment commands here
+          # e.g., kubectl apply -f k8s/staging/
+          # or docker-compose -f docker-compose.staging.yml up -d
+
+  deploy-production:
+    name: Deploy to Production
+    if: github.event.inputs.environment == 'production' || startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy to Production
+        run: |
+          echo "Deploying to production environment..."
+          # Add your production deployment commands here
+          # e.g., kubectl apply -f k8s/production/
+          # or docker-compose -f docker-compose.production.yml up -d
+
+  notify:
+    name: Notify Deployment
+    needs: [deploy-staging, deploy-production]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send notification
+        run: |
+          STATUS=${{ needs.deploy-staging.result }}${needs.deploy-production.result}
+          echo "Deployment completed with status: $STATUS"
+          # Add Slack/Discord/Email notification here

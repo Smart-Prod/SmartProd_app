@@ -94,5 +94,5 @@ export interface Movimentacao {
   type: MovementType;
   quantity: number;
   createdAt: string;
-  produto: Product;
+  produto?: Product;
 }

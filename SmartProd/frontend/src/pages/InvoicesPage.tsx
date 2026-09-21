@@ -64,7 +64,6 @@ export const InvoicesPage: React.FC = () => {
               productId: item.productId,
               type: invoiceType,
               quantity: item.quantity,
-              product: product
             });
           }
         });
@@ -115,7 +114,6 @@ export const InvoicesPage: React.FC = () => {
           productId: item.productId,
           type: invoiceType,
           quantity: item.quantity,
-          product: product
         });
       }
     });

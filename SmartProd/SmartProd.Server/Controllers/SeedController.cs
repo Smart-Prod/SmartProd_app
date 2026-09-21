@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartProd.API.Server.Data;
 using SmartProd.API.Server.Services;
@@ -6,6 +7,7 @@ namespace SmartProd.API.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "Admin")]
     public class SeedController : ControllerBase
     {
         private readonly SeedService _seedService;

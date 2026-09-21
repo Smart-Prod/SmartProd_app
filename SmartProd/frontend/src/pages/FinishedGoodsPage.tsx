@@ -44,7 +44,6 @@ export const FinishedGoodsPage: React.FC = () => {
       productId: formData.productId,
       type: 'SAIDA',
       quantity: formData.quantity,
-      product: product
     });
 
     toast.success('Expedição registrada com sucesso!');

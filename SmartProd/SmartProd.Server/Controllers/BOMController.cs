@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SmartProd.API.Server.Data;
@@ -7,6 +8,7 @@ namespace SmartProd.API.Server.Controllers
 {
     [ApiController]
     [Route("api/BOM")]
+    [Authorize]
     public class BOMController : ControllerBase
     {
         private readonly AppDbContext _context;

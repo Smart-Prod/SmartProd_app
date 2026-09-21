@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SmartProd.API.Server.DTOs;
 using SmartProd.API.Server.Enum;
 using SmartProd.API.Server.Services;
@@ -7,6 +8,7 @@ namespace SmartProd.API.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class ProductionOrderController : ControllerBase
     {
         private readonly ProductionOrderService _service;

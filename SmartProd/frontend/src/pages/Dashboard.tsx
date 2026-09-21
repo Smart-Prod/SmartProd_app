@@ -39,7 +39,7 @@ function isStatus(value: unknown): value is ProductionStatus {
 }
 
 export const Dashboard: React.FC = () => {
-  const { products, productionOrders, movimentacoes: stockMovements } = useApp();
+  const { products, productionOrders, stockMovements } = useApp();
 
   // Calculate metrics
   const mpProducts = products.filter(p => p.type === 'MP');

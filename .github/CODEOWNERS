@@ -1,0 +1,24 @@
+# CODEOWNERS
+# These users/teams will be requested for review when someone opens a PR modifying these files
+
+# Global owners
+* @Smart-Prod/owners
+
+# Backend
+/SmartProd/SmartProd.Server/ @Smart-Prod/backend-team
+
+# Frontend
+/SmartProd/frontend/ @Smart-Prod/frontend-team
+
+# Infrastructure/DevOps
+/.github/ @Smart-Prod/devops-team
+/docker-compose*.yml @Smart-Prod/devops-team
+/Dockerfile* @Smart-Prod/devops-team
+
+# Documentation
+/docs/ @Smart-Prod/docs-team
+/*.md @Smart-Prod/docs-team
+
+# Security-sensitive files
+/**/appsettings*.json @Smart-Prod/security-team
+/**/secrets* @Smart-Prod/security-team

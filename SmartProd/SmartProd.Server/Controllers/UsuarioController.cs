@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SmartProd.API.Server.DTOs;
 using SmartProd.API.Server.Services;
 
@@ -6,6 +7,7 @@ namespace SmartProd.API.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class UsuarioController : ControllerBase
     {
         private readonly UsuarioService _usuarioService;
@@ -15,6 +17,7 @@ namespace SmartProd.API.Server.Controllers
         }
 
         [HttpPost("register")]
+        [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] RegisterDto dto)
         {
             if (string.IsNullOrWhiteSpace(dto.Name) || string.IsNullOrWhiteSpace(dto.Email) || string.IsNullOrWhiteSpace(dto.Senha))
@@ -32,6 +35,7 @@ namespace SmartProd.API.Server.Controllers
         }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
             if (string.IsNullOrWhiteSpace(dto.Email) || string.IsNullOrWhiteSpace(dto.Senha))
@@ -54,6 +58,7 @@ namespace SmartProd.API.Server.Controllers
         }
 
         [HttpPost("seed")]
+        [AllowAnonymous]
         public async Task<IActionResult> Seed()
         {
             try

@@ -7,7 +7,7 @@ export type { Product, BOM, Movimentacao, ProductionOrder, Invoice };
 interface AppContextType {
   products: Product[];
   boms: BOM[];
-  movimentacoes: Movimentacao[];
+  stockMovements: Movimentacao[];
   productionOrders: ProductionOrder[];
   invoices: Invoice[];
   addProduct: (product: Omit<Product, 'id'>) => Promise<Product>;
@@ -15,6 +15,7 @@ interface AppContextType {
   addProductionOrder: (order: Omit<ProductionOrder, 'id' | 'createdAt' | 'finishedAt' | 'produced'>) => Promise<ProductionOrder>;
   updateProductionOrder: (id: number, order: Partial<ProductionOrder>) => Promise<void>;
   addMovimentacao: (movement: Omit<Movimentacao, 'id' | 'createdAt'>) => Promise<Movimentacao>;
+  addStockMovement: (movement: Omit<Movimentacao, 'id' | 'createdAt'>) => Promise<Movimentacao>;
   addInvoice: (invoice: Omit<Invoice, 'id' | 'date'>) => Promise<Invoice>;
   addBOM: (bom: Omit<BOM, 'id'>) => Promise<BOM>;
 }
@@ -30,7 +31,7 @@ export const useApp = () => {
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [boms, setBoms] = useState<BOM[]>([]);
-  const [movimentacoes, setMovimentacoes] = useState<Movimentacao[]>([]);
+  const [stockMovements, setStockMovements] = useState<Movimentacao[]>([]);
   const [productionOrders, setProductionOrders] = useState<ProductionOrder[]>([]);
   const [invoices, setInvoices] = useState<Invoice[]>([]);
 
@@ -60,7 +61,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   });
 
   const mapProducts = (arr: unknown[]): Product[] => arr.map((p) => mapProduct(p as Record<string, unknown>));
-  const mapMovimentacoes = (arr: unknown[]): Movimentacao[] => arr.map((m) => mapMovimentacao(m as Record<string, unknown>));
+  const mapStockMovements = (arr: unknown[]): Movimentacao[] => arr.map((m) => mapMovimentacao(m as Record<string, unknown>));
 
   // ── Mapping: frontend model → server JSON (for POST/PUT) ──────
   const toServerProduct = (p: Partial<Product>): Record<string, unknown> => {
@@ -107,7 +108,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
       try {
         const stockRes = await API.get('/api/Movimentacao');
-        if (mounted) setMovimentacoes(mapMovimentacoes(extractArray(stockRes.data)));
+        if (mounted) setStockMovements(mapStockMovements(extractArray(stockRes.data)));
       } catch { /* silent */ }
 
       try {
@@ -178,12 +179,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const payload = { ...rest, tipo: type, createdAt: new Date().toISOString() };
     try {
       const res = await API.post<Movimentacao>('/api/Movimentacao', payload);
-      setMovimentacoes(prev => [res.data, ...prev]);
+      setStockMovements(prev => [res.data, ...prev]);
       return res.data;
     } catch (err) {
       console.warn('addMovimentacao: API failed, using local fallback', err);
       const newMovement: Movimentacao = { ...movement, id: genId(), createdAt: new Date().toISOString() };
-      setMovimentacoes(prev => [newMovement, ...prev]);
+      setStockMovements(prev => [newMovement, ...prev]);
       return newMovement;
     }
   }, []);
@@ -218,7 +219,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const value = useMemo(() => ({
     products,
     boms,
-    movimentacoes,
+    stockMovements,
     productionOrders,
     invoices,
     addProduct,
@@ -226,12 +227,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     addProductionOrder,
     updateProductionOrder,
     addMovimentacao: addStockMovement,
+    addStockMovement,
     addInvoice,
     addBOM,
   }), [
     products,
     boms,
-    movimentacoes,
+    stockMovements,
     productionOrders,
     invoices,
     addProduct,
