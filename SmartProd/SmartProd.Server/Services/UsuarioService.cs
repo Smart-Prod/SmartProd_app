@@ -114,6 +114,7 @@ namespace SmartProd.API.Server.Services
         public async Task<List<UsuarioResponseDto>> GetAllUsersAsync()
         {
             return await _context.Usuarios
+                .Where(user => user.Role != UserRole.SuperAdmin)
                 .Select(user => new UsuarioResponseDto
                 {
                     Id = user.Id,
@@ -130,6 +131,12 @@ namespace SmartProd.API.Server.Services
             var user = await _context.Usuarios.FindAsync(id);
             if (user == null)
                 throw new NotFoundException("Usuário não encontrado.");
+            if (user.Role == UserRole.SuperAdmin)
+                throw new UnauthorizedAccessException("Contas de administração da plataforma não podem ser alteradas por administradores do tenant.");
+            if (dto.Role == UserRole.SuperAdmin)
+                throw new UnauthorizedAccessException("Administradores de tenant não podem conceder o papel SuperAdmin.");
+            if (dto.Role.HasValue && !System.Enum.IsDefined(dto.Role.Value))
+                throw new ValidationException("Papel de usuário inválido para administração do tenant.");
 
             if (!string.IsNullOrWhiteSpace(dto.Name))
                 user.Name = dto.Name;
@@ -162,6 +169,8 @@ namespace SmartProd.API.Server.Services
             var user = await _context.Usuarios.FindAsync(id);
             if (user == null)
                 throw new NotFoundException("Usuário não encontrado.");
+            if (user.Role == UserRole.SuperAdmin)
+                throw new UnauthorizedAccessException("Contas de administração da plataforma não podem ser removidas por administradores do tenant.");
 
             _context.Usuarios.Remove(user);
             await _context.SaveChangesAsync();

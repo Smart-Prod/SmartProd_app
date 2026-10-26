@@ -59,30 +59,14 @@ public sealed class UsuarioController : ControllerBase
 
     [HttpPut("{id:int}")]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> UpdateUser(int id, [FromBody] UpdateUserDto dto)
-    {
-        try
-        {
-            return Ok(await _usuarioService.UpdateUserAsync(id, dto));
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new { error = ex.Message });
-        }
-    }
+    public async Task<IActionResult> UpdateUser(int id, [FromBody] UpdateUserDto dto) =>
+        Ok(await _usuarioService.UpdateUserAsync(id, dto));
 
     [HttpDelete("{id:int}")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteUser(int id)
     {
-        try
-        {
-            await _usuarioService.DeleteUserAsync(id);
-            return NoContent();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new { error = ex.Message });
-        }
+        await _usuarioService.DeleteUserAsync(id);
+        return NoContent();
     }
 }

@@ -1,4 +1,5 @@
 using System.Net;
+using System.Net.Http.Json;
 using Xunit;
 
 namespace SmartProd.Tests.Integration;
@@ -23,6 +24,39 @@ public sealed class BackendSmokeTests(SmartProdApiFactory factory) : IClassFixtu
         using var response = await client.PostAsync("/api/v1/Seed/kaixote", content: null);
 
         Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task TenantProvisioning_RequiresPlatformAdministrator()
+    {
+        using var client = CreateAuthenticatedClient("admin");
+        using var response = await client.PostAsJsonAsync("/api/v1/tenants", new
+        {
+            name = "Factory One",
+            slug = "factory-one",
+            adminName = "Tenant Admin",
+            adminEmail = "admin@factory-one.test",
+            adminPassword = "a-strong-password-123"
+        });
+
+        Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task PlatformAdministrator_CanProvisionTenantAndInitialAdmin()
+    {
+        using var client = CreateAuthenticatedClient("superadmin");
+        using var response = await client.PostAsJsonAsync("/api/v1/tenants", new
+        {
+            name = "Factory One",
+            slug = "factory-one",
+            adminName = "Tenant Admin",
+            adminEmail = "admin@factory-one.test",
+            adminPassword = "a-strong-password-123"
+        });
+
+        Assert.True(response.StatusCode == HttpStatusCode.Created,
+            $"Expected Created, received {(int)response.StatusCode}: {await response.Content.ReadAsStringAsync()}");
     }
 
     [Fact]

@@ -63,6 +63,7 @@ builder.Services.AddScoped<ReportExportService>();
 builder.Services.AddScoped<SeedService>();
 builder.Services.AddScoped<DashboardService>();
 builder.Services.AddScoped<IndustrialOperationsService>();
+builder.Services.AddScoped<TenantProvisioningService>();
 
 // JWT Authentication
 var jwtSecret = builder.Configuration["JWT_SECRET"]
@@ -138,6 +139,39 @@ if (builder.Configuration.GetValue("Database:ApplyMigrations", true))
             Role = UserRole.Admin
         });
         await dbContext.SaveChangesAsync();
+    }
+
+    var platformAdminEmail = builder.Configuration["PLATFORM_ADMIN_EMAIL"];
+    var platformAdminPassword = builder.Configuration["PLATFORM_ADMIN_PASSWORD"];
+    if (!string.IsNullOrWhiteSpace(platformAdminEmail) || !string.IsNullOrWhiteSpace(platformAdminPassword))
+    {
+        if (string.IsNullOrWhiteSpace(platformAdminEmail) ||
+            !new System.ComponentModel.DataAnnotations.EmailAddressAttribute().IsValid(platformAdminEmail) ||
+            string.IsNullOrWhiteSpace(platformAdminPassword) ||
+            platformAdminPassword.Length < 12)
+        {
+            throw new InvalidOperationException(
+                "Configure both PLATFORM_ADMIN_EMAIL and PLATFORM_ADMIN_PASSWORD (at least 12 characters) to bootstrap the platform administrator.");
+        }
+
+        if (!await dbContext.Usuarios.IgnoreQueryFilters().AnyAsync(user => user.Role == UserRole.SuperAdmin))
+        {
+            if (await dbContext.Usuarios.IgnoreQueryFilters().AnyAsync(user => user.Email == platformAdminEmail))
+                throw new InvalidOperationException(
+                    "PLATFORM_ADMIN_EMAIL is already assigned to another user. Use a new email; existing accounts are never silently promoted.");
+
+            dbContext.Usuarios.Add(new Usuario
+            {
+                TenantId = 1,
+                Name = "Platform Administrator",
+                Email = platformAdminEmail,
+                Senha = BCrypt.Net.BCrypt.HashPassword(platformAdminPassword),
+                Active = true,
+                CreatedAt = DateTime.UtcNow,
+                Role = UserRole.SuperAdmin
+            });
+            await dbContext.SaveChangesAsync();
+        }
     }
 }
 

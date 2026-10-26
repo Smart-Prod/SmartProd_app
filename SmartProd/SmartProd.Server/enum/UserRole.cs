@@ -4,6 +4,7 @@
     {
         Admin = 1,
         Operator = 2,
-        Owner = 3
+        Owner = 3,
+        SuperAdmin = 4
     }
 }

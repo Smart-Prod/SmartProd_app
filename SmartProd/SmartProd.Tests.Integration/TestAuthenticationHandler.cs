@@ -24,6 +24,7 @@ public sealed class TestAuthenticationHandler(
         var role = identity switch
         {
             "admin" => "Admin",
+            "superadmin" => "SuperAdmin",
             "member" => "User",
             _ => null
         };

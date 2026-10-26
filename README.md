@@ -27,7 +27,7 @@ Requer Docker Desktop com Docker Compose v2.
    Copy-Item .env.example .env
    ```
 
-   Edite `.env`. `JWT_SECRET` deve ter pelo menos 32 bytes; `ADMIN_INITIAL_PASSWORD` deve ter pelo menos 12 caracteres. O administrador inicial só é criado quando o banco ainda não contém usuários.
+   Edite `.env`. `JWT_SECRET` deve ter pelo menos 32 bytes; `ADMIN_INITIAL_PASSWORD` deve ter pelo menos 12 caracteres. O administrador inicial só é criado quando o banco ainda não contém usuários. Para habilitar o provisionamento de organizações, configure também `PLATFORM_ADMIN_EMAIL` e `PLATFORM_ADMIN_PASSWORD` com credenciais distintas das do administrador de tenant.
 2. Inicie os serviços:
 
    ```powershell
@@ -35,7 +35,7 @@ Requer Docker Desktop com Docker Compose v2.
    ```
 3. Acesse a interface em `http://localhost` (ou na porta configurada por `FRONTEND_PORT`). A API fica disponível em `http://localhost:5481` por padrão.
 
-As migrações do Entity Framework são aplicadas na inicialização da API. Os dados do PostgreSQL persistem no volume `smartprod-postgres`. O seed de demonstração (`POST /api/v1/Seed/kaixote`) exige papel Admin e só opera em uma base sem produtos.
+As migrações do Entity Framework são aplicadas na inicialização da API. Os dados do PostgreSQL persistem no volume `smartprod-postgres`. O seed de demonstração (`POST /api/v1/Seed/kaixote`) exige papel Admin e só opera em uma base sem produtos. O endpoint `POST /api/v1/tenants` é restrito ao papel `SuperAdmin` e cria o tenant junto ao seu primeiro administrador.
 
 ## Executar localmente
 
@@ -91,6 +91,7 @@ As rotas da API usam o prefixo `/api/v1`. Login e registro ficam em `/api/v1/Usu
 - Não adicione `.env`, senhas, JWTs ou connection strings reais ao Git.
 - A autenticação usa JWT; refresh tokens são opacos, armazenados somente como hash e rotacionados a cada uso.
 - O primeiro administrador é provisionado a partir de `ADMIN_INITIAL_EMAIL` e `ADMIN_INITIAL_PASSWORD` apenas se não houver usuários cadastrados.
+- O `SuperAdmin` é criado somente quando `PLATFORM_ADMIN_EMAIL` e `PLATFORM_ADMIN_PASSWORD` são configurados; contas existentes nunca são promovidas automaticamente. O `SuperAdmin` cria organizações e seu administrador inicial por `POST /api/v1/tenants`.
 - O seed de demonstração não apaga registros existentes e só pode ser executado por um administrador.
 - Consulte [SECURITY.md](./SECURITY.md) para reportar vulnerabilidades.
 

@@ -326,7 +326,8 @@ namespace SmartProd.API.Server.Data
 
         private void AssignTenantToNewEntities()
         {
-            foreach (var entry in ChangeTracker.Entries<ITenantOwned>().Where(entry => entry.State == EntityState.Added))
+            foreach (var entry in ChangeTracker.Entries<ITenantOwned>()
+                         .Where(entry => entry.State == EntityState.Added && entry.Entity.TenantId == 0))
                 entry.Entity.TenantId = CurrentTenantId;
         }
 
