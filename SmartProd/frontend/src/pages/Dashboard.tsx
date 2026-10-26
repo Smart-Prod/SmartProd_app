@@ -9,14 +9,9 @@ import {
   Factory,
   AlertTriangle,
   TrendingUp,
-  Clock,
-  CheckCircle,
-  XCircle
 } from 'lucide-react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
 import { ProductionStatus } from '../models';
-
-const COLORS = ['#FE924F', '#535353', '#FFA66F', '#10B981'];
 
 const statusColors: Record<ProductionStatus, string> = {
   PLANEJADA: 'bg-info',
@@ -26,7 +21,7 @@ const statusColors: Record<ProductionStatus, string> = {
   CANCELADA: 'bg-danger'
 };
 
-// runtime guard to narrow unknown/any status values to the ProductionStatus union
+// runtime guard to narrow unknown status values to the ProductionStatus union
 function isStatus(value: unknown): value is ProductionStatus {
   return (
     typeof value === 'string' &&
@@ -39,7 +34,7 @@ function isStatus(value: unknown): value is ProductionStatus {
 }
 
 export const Dashboard: React.FC = () => {
-  const { products, productionOrders, stockMovements } = useApp();
+  const { products, productionOrders, movimentacoes } = useApp();
 
   // Calculate metrics
   const mpProducts = products.filter(p => p.type === 'MP');
@@ -68,7 +63,7 @@ export const Dashboard: React.FC = () => {
     tipo: product.type
   }));
 
-  const movementData = stockMovements.slice(0, 7).reverse().map((movement) => {
+  const movementData = movimentacoes.slice(0, 7).reverse().map((movement) => {
     return {
       data: new Date(movement.createdAt).toLocaleDateString('pt-BR').slice(0, 5),
       entradas: movement.type === 'ENTRADA' ? movement.quantity : 0,
@@ -141,7 +136,7 @@ export const Dashboard: React.FC = () => {
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl">{stockMovements.length}</div>
+            <div className="text-2xl">{movimentacoes.length}</div>
             <p className="text-xs text-muted-foreground">
               Total de movimentações registradas
             </p>
@@ -205,7 +200,7 @@ export const Dashboard: React.FC = () => {
                 const product = products.find(p => p.id === order.productId);
                 const progress = Math.round((order.produced / order.quantity) * 100);
 
-                // isStatus can now narrow because order.status is unknown (not any)
+                // isStatus safely narrows an untrusted API status value.
                 const badgeClass = isStatus(order.status) ? statusColors[order.status] : 'bg-gray-400';
                 const statusLabel = isStatus(order.status) ? order.status.replace('_', ' ') : String(order.status);
 

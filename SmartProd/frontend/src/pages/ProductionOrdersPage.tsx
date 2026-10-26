@@ -12,6 +12,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Progress } from '@/components/ui/progress';
 import { Plus, Play, Pause, CheckCircle, XCircle, Clock, Factory } from 'lucide-react';
 import { toast } from 'sonner';
+import type { ProductionOrder, ProductionStatus } from '../models';
 
 export const ProductionOrdersPage: React.FC = () => {
   const { user } = useAuth();
@@ -62,10 +63,9 @@ export const ProductionOrdersPage: React.FC = () => {
 
     addProductionOrder({
       productId: formData.productId,
-      usuarioId: parseInt(user?.id || '0'),
+      usuarioId: user?.id ?? 0,
       quantity: formData.quantity,
-      status: 'PLANEJADA',
-    } as any);
+    });
 
     toast.success('Ordem de produção criada com sucesso!');
     setIsDialogOpen(false);
@@ -102,14 +102,10 @@ export const ProductionOrdersPage: React.FC = () => {
     const newProducedTotal = order.produced + producedQuantity;
     const isFullyCompleted = newProducedTotal >= order.quantity;
     
-    const updateData: any = { 
+    const updateData: Pick<ProductionOrder, 'status' | 'produced'> = {
       status: isFullyCompleted ? 'CONCLUIDA' : 'PAUSADA',
       produced: newProducedTotal
     };
-
-    if (isFullyCompleted) {
-      updateData.completedAt = new Date();
-    }
 
     // Add to finished goods stock
     const product = products.find(p => p.id === order.productId);
@@ -118,13 +114,12 @@ export const ProductionOrdersPage: React.FC = () => {
         currentStock: product.currentStock + producedQuantity
       });
 
-      const statusText = isFullyCompleted ? 'concluída' : 'pausada';
       addStockMovement({
         productId: order.productId,
         type: 'PRODUCAO',
         quantity: producedQuantity,
         orderId: order.id,
-      } as any);
+      });
     }
 
     // Consume raw materials proportionally
@@ -147,7 +142,7 @@ export const ProductionOrdersPage: React.FC = () => {
             type: 'CONSUMO',
             quantity: consumed,
             orderId: order.id,
-          } as any);
+          });
         }
       });
     }
@@ -165,16 +160,13 @@ export const ProductionOrdersPage: React.FC = () => {
     setProducedQuantity(0);
   };
 
-  const handleStatusChange = (orderId: number, newStatus: 'PLANEJADA' | 'EM_PRODUCAO' | 'PAUSADA' | 'CONCLUIDA' | 'CANCELADA') => {
+  const handleStatusChange = (orderId: number, newStatus: ProductionStatus) => {
     const order = productionOrders.find(o => o.id === orderId);
     if (!order) return;
 
-    const updateData: any = { status: newStatus };
+    const updateData: Pick<ProductionOrder, 'status'> = { status: newStatus };
 
     if (newStatus === 'EM_PRODUCAO' && (order.status === 'PLANEJADA' || order.status === 'PAUSADA')) {
-      if (order.status === 'PLANEJADA') {
-        updateData.startedAt = new Date();
-      }
       updateProductionOrder(orderId, updateData);
       toast.success(`Ordem ${order.status === 'PAUSADA' ? 'retomada' : 'iniciada'} com sucesso!`);
       return;
@@ -210,7 +202,7 @@ export const ProductionOrdersPage: React.FC = () => {
     }
   };
 
-  const getStatusColor = (status: string) => {
+  const getStatusColor = (status: ProductionStatus): React.ComponentProps<typeof Badge>['variant'] => {
     switch (status) {
       case 'PLANEJADA': return 'secondary';
       case 'EM_PRODUCAO': return 'default';
@@ -221,7 +213,7 @@ export const ProductionOrdersPage: React.FC = () => {
     }
   };
 
-  const getProgress = (order: any) => {
+  const getProgress = (order: ProductionOrder) => {
     return Math.round((order.produced / order.quantity) * 100);
   };
 
@@ -491,7 +483,7 @@ export const ProductionOrdersPage: React.FC = () => {
                       </div>
                     </TableCell>
                     <TableCell>
-                      <Badge variant={getStatusColor(order.status) as any} className="flex items-center space-x-1">
+                      <Badge variant={getStatusColor(order.status)} className="flex items-center space-x-1">
                         {getStatusIcon(order.status)}
                         <span>{order.status.replace('_', ' ')}</span>
                       </Badge>

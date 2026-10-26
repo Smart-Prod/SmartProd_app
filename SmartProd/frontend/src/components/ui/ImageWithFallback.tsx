@@ -21,7 +21,7 @@ export const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
       alt={alt}
       onError={(e) => {
         setHasError(true);
-        onError?.(e as any);
+        onError?.(e);
       }}
       {...props}
     />

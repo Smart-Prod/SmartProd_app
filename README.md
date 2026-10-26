@@ -1,154 +1,86 @@
-# SmartProd - Smart Production Management System
+# SmartProd
 
-[![CI](https://github.com/Smart-Prod/SmartProd_app/actions/workflows/ci.yml/badge.svg)](https://github.com/Smart-Prod/SmartProd_app/actions/workflows/ci.yml)
-[![Security Scan](https://github.com/Smart-Prod/SmartProd_app/actions/workflows/ci.yml/badge.svg?event=security-scan)](https://github.com/Smart-Prod/SmartProd_app/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+Sistema de gestão de produção com controle de estoque, ordens de produção, estruturas de produto (BOM), notas fiscais e relatórios.
 
-SmartProd is a comprehensive production management system for manufacturing operations, featuring inventory control, production orders, bill of materials, fiscal notes, and real-time dashboards.
+## Estrutura
 
-## Architecture
-
-```
+```text
 SmartProd_app/
 ├── SmartProd/
-│   ├── SmartProd.Server/          # ASP.NET Core 8 Web API
-│   │   ├── Controllers/           # API endpoints
-│   │   ├── Services/              # Business logic
-│   │   ├── Models/                # Entity Framework entities
-│   │   ├── DTOs/                  # Data transfer objects
-│   │   └── Data/                  # DbContext & migrations
-│   ├── SmartProd.AppHost/         # .NET Aspire orchestration
-│   └── frontend/                  # React 18 + TypeScript + Vite
-│       ├── src/
-│       │   ├── components/        # Reusable UI components
-│       │   ├── contexts/          # React Context providers
-│       │   ├── pages/             # Page components
-│       │   ├── services/          # API client
-│       │   └── utils/             # Helpers & validators
-│       └── package.json
-├── SmartProd_Mobile_Front-end/    # .NET MAUI mobile app
-├── .github/                       # GitHub Actions, templates, configs
-└── docs/                          # Documentation
+│   ├── SmartProd.Server/       # ASP.NET Core Web API (.NET 10), EF Core e PostgreSQL
+│   ├── SmartProd.AppHost/      # Orquestração local com .NET Aspire
+│   └── frontend/               # React, TypeScript, Vite e React Query
+├── SmartProd_Mobile_Front-end/ # Aplicativo .NET MAUI
+├── db-init/                    # Inicialização do PostgreSQL no Docker
+└── docker-compose.yml          # PostgreSQL, API e frontend
 ```
 
-## Features
+## Executar com Docker Compose
 
-- **Inventory Management**: Raw materials (MP) & finished goods (PA) with stock levels, reservations, minimums
-- **Production Orders**: Plan, track, and complete production with BOM consumption
-- **Bill of Materials**: Define product recipes with material quantities
-- **Stock Movements**: Track all entradas, saídas, produção, consumo with full audit trail
-- **Fiscal Notes**: Entrada/saída notes with automatic stock updates (transactional)
-- **Real-time Dashboard**: KPIs, charts, alerts for low stock
-- **Reports**: Production efficiency, stock levels, sales, material consumption
-- **Authentication**: JWT-based with roles (Admin, Operator, Owner)
-- **Mobile App**: .NET MAUI for shop floor operations
+Requer Docker Desktop com Docker Compose v2.
 
-## Quick Start
+1. Copie o exemplo de configuração e defina senhas/segredos exclusivos:
 
-### Prerequisites
-- .NET 8 SDK
-- Node.js 20+
-- PostgreSQL 15+
+   ```powershell
+   Copy-Item .env.example .env
+   ```
 
-### Development
+   Edite `.env`. `JWT_SECRET` deve ter pelo menos 32 bytes; `ADMIN_INITIAL_PASSWORD` deve ter pelo menos 12 caracteres. O administrador inicial só é criado quando o banco ainda não contém usuários.
+2. Inicie os serviços:
 
-```bash
-# 1. Clone
-git clone https://github.com/Smart-Prod/SmartProd_app.git
-cd SmartProd_app
+   ```powershell
+   docker compose up --build
+   ```
+3. Acesse a interface em `http://localhost` (ou na porta configurada por `FRONTEND_PORT`). A API fica disponível em `http://localhost:5481` por padrão.
 
-# 2. Backend setup
-cd SmartProd/SmartProd.Server
-dotnet user-secrets init
-dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Host=localhost;Port=5432;Database=SmartProd;Username=postgres;Password=your_password"
-dotnet user-secrets set "Jwt:Secret" "$(openssl rand -base64 64)"
+As migrações do Entity Framework são aplicadas na inicialização da API. Os dados do PostgreSQL persistem no volume `smartprod-postgres`. O seed de demonstração (`POST /api/v1/Seed/kaixote`) exige papel Admin e só opera em uma base sem produtos.
 
-# 3. Database (Docker)
-docker run -d --name smartprod-db \
-  -e POSTGRES_DB=SmartProd \
-  -e POSTGRES_USER=postgres \
-  -e POSTGRES_PASSWORD=your_password \
-  -p 5432:5432 postgres:15
+## Executar localmente
 
-# 4. Run backend
-dotnet run
+Requer .NET 10 SDK, Node.js 20+, npm e PostgreSQL 15. Crie um banco PostgreSQL e configure as variáveis de ambiente no terminal do backend. O ASP.NET Core não carrega arquivos `.env` diretamente; para desenvolvimento local use variáveis do processo ou `dotnet user-secrets`. O arquivo `.env` da raiz é carregado pelo Docker Compose.
 
-# 5. Run frontend (new terminal)
-cd SmartProd/frontend
-npm install
+Exemplo PowerShell:
+
+```powershell
+$env:DB_CONNECTION_STRING = "Host=localhost;Port=5432;Database=SmartProd;Username=postgres;Password=<sua-senha>"
+$env:JWT_SECRET = "<segredo-aleatorio-com-pelo-menos-32-bytes>"
+$env:ADMIN_INITIAL_EMAIL = "admin@localhost"
+$env:ADMIN_INITIAL_PASSWORD = "<senha-inicial-com-pelo-menos-12-caracteres>"
+$env:CORS_ORIGINS = "http://localhost:5173"
+dotnet run --project SmartProd\SmartProd.Server\SmartProd.Server.csproj
+```
+
+Em outro terminal:
+
+```powershell
+Set-Location SmartProd\frontend
+npm ci
 npm run dev
 ```
 
-### Environment Variables
+O Vite encaminha `/api` para a API local em `http://localhost:5481`. Para apontar o frontend a outro servidor, configure `VITE_API_URL` no ambiente de build. Para exemplos adicionais de configuração, consulte [CONFIGURATION.md](./SmartProd/SmartProd.Server/CONFIGURATION.md).
 
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `SMARTPROD_DB_CONNECTION` | PostgreSQL connection string | Yes |
-| `SMARTPROD_JWT_SECRET` | JWT signing key (64+ chars) | Yes |
-| `SMARTPROD_JWT_ISSUER` | JWT issuer (default: SmartProd) | No |
-| `SMARTPROD_JWT_EXPIRES_IN_DAYS` | Token expiry (default: 7) | No |
+## Verificações
 
-See [CONFIGURATION.md](SmartProd/SmartProd.Server/CONFIGURATION.md) for details.
-
-## API Endpoints
-
-| Module | Endpoints |
-|--------|-----------|
-| **Auth** | `POST /api/Usuario/register`, `POST /api/Usuario/login` |
-| **Products** | `GET/POST /api/Produto`, `GET /api/Produto/{id}`, `GET /api/Produto/{code}/qrcode` |
-| **Production Orders** | `GET/POST /api/ProductionOrder`, `PUT /api/ProductionOrder/{id}` |
-| **Stock Movements** | `GET /api/Movimentacao`, `POST /api/Movimentacao/consumo`, `POST /api/Movimentacao/finalizar` |
-| **Fiscal Notes** | `GET/POST /api/NotaFiscal` |
-| **BOM** | `GET/POST /api/BOM` |
-| **Dashboard** | `GET /api/Dashboard` |
-| **Reports** | `GET /api/Relatorio/producao`, `GET /api/Relatorio/consumo-mp` |
-| **Seed (Admin)** | `POST /api/Seed/kaixote` |
-
-## Deployment
-
-### Docker Compose (Local/Staging)
-```bash
-docker-compose up -d
+```powershell
+dotnet build SmartProd\SmartProd.Server\SmartProd.Server.csproj
+Set-Location SmartProd\frontend
+npm run build
+npm run lint
 ```
 
-### Kubernetes (Production)
-```bash
-kubectl apply -f k8s/production/
-```
+## Rotas
 
-### GitHub Actions CI/CD
-- **CI**: Runs on every push/PR (tests, lint, security scan, Docker build)
-- **CD**: Manual or tag-triggered deployments to staging/production
-- **Environments**: `staging` (auto from develop), `production` (manual approval)
+As rotas da API usam o prefixo `/api/v1`. Login e registro ficam em `/api/v1/Usuario/login` e `/api/v1/Usuario/register`; a renovação rotativa de sessão fica em `/api/v1/auth/refresh`. Os demais controladores exigem autenticação. A administração de usuários e o seed exigem o papel `Admin`.
 
-## Security
+## Segurança
 
-- All API endpoints require JWT authentication (except login/register)
-- Role-based access control (Admin, Operator, Owner)
-- Seed endpoint protected with Admin role
-- Secrets managed via environment variables/GitHub Secrets
-- Dependency scanning via Dependabot + Trivy
+- Não adicione `.env`, senhas, JWTs ou connection strings reais ao Git.
+- A autenticação usa JWT; refresh tokens são opacos, armazenados somente como hash e rotacionados a cada uso.
+- O primeiro administrador é provisionado a partir de `ADMIN_INITIAL_EMAIL` e `ADMIN_INITIAL_PASSWORD` apenas se não houver usuários cadastrados.
+- O seed de demonstração não apaga registros existentes e só pode ser executado por um administrador.
+- Consulte [SECURITY.md](./SECURITY.md) para reportar vulnerabilidades.
 
-See [SECURITY.md](SECURITY.md) for vulnerability reporting.
+## Licença
 
-## Contributing
-
-1. Read [CONTRIBUTING.md](CONTRIBUTING.md)
-2. Check [good first issues](https://github.com/Smart-Prod/SmartProd_app/labels/good%20first%20issue)
-3. Follow [branch protection rules](.github/BRANCH_PROTECTION.md)
-4. Use conventional commits
-
-## License
-
-MIT License - see [LICENSE](LICENSE) for details.
-
-## Support
-
-- **Issues**: [GitHub Issues](https://github.com/Smart-Prod/SmartProd_app/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/Smart-Prod/SmartProd_app/discussions)
-- **Security**: [SECURITY.md](SECURITY.md)
-
----
-
-**Organization**: [Smart-Prod](https://github.com/Smart-Prod)  
-**Maintainers**: @Smart-Prod/maintainers
+MIT — consulte [LICENSE](./LICENSE).

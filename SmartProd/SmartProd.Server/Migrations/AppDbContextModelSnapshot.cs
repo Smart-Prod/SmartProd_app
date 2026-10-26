@@ -33,9 +33,6 @@ namespace SmartProd.Server.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("ProdutoId")
-                        .HasColumnType("integer");
-
                     b.Property<double>("Quantity")
                         .HasColumnType("double precision");
 
@@ -45,7 +42,7 @@ namespace SmartProd.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProdutoId");
+                    b.HasIndex("ProductId");
 
                     b.ToTable("Estoque");
                 });
@@ -84,12 +81,6 @@ namespace SmartProd.Server.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("MateriaisId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("MaterialId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("MateriasId")
                         .HasColumnType("integer");
 
                     b.Property<int>("ProdutosId")
@@ -164,7 +155,7 @@ namespace SmartProd.Server.Migrations
                     b.Property<int>("Type")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("UsuarioId")
+                    b.Property<int>("UsuarioId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -226,11 +217,11 @@ namespace SmartProd.Server.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("ProdutoId")
-                        .HasColumnType("integer");
-
                     b.Property<double>("Quantity")
                         .HasColumnType("double precision");
+
+                    b.Property<DateTime?>("StartedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("Status")
                         .HasColumnType("integer");
@@ -240,7 +231,7 @@ namespace SmartProd.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProdutoId");
+                    b.HasIndex("ProductId");
 
                     b.HasIndex("UsuarioId");
 
@@ -323,6 +314,12 @@ namespace SmartProd.Server.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<DateTime?>("RefreshTokenExpiresAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("RefreshTokenHash")
+                        .HasColumnType("text");
+
                     b.Property<int>("Role")
                         .HasColumnType("integer");
 
@@ -331,6 +328,12 @@ namespace SmartProd.Server.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("RefreshTokenHash")
+                        .IsUnique();
 
                     b.ToTable("Usuarios");
                 });
@@ -349,9 +352,6 @@ namespace SmartProd.Server.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("ProdutoId")
-                        .HasColumnType("integer");
-
                     b.Property<double>("Quantity")
                         .HasColumnType("double precision");
 
@@ -360,7 +360,7 @@ namespace SmartProd.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProdutoId");
+                    b.HasIndex("ProductId");
 
                     b.ToTable("Vendas");
                 });
@@ -369,7 +369,7 @@ namespace SmartProd.Server.Migrations
                 {
                     b.HasOne("SmartProd.API.Server.Models.Produto", "Produto")
                         .WithMany()
-                        .HasForeignKey("ProdutoId")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -419,9 +419,13 @@ namespace SmartProd.Server.Migrations
 
             modelBuilder.Entity("SmartProd.API.Server.Models.NotaFiscal", b =>
                 {
-                    b.HasOne("SmartProd.API.Server.Models.Usuario", null)
+                    b.HasOne("SmartProd.API.Server.Models.Usuario", "Usuario")
                         .WithMany("NotaFiscal")
-                        .HasForeignKey("UsuarioId");
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("SmartProd.API.Server.Models.NotaFiscalItem", b =>
@@ -447,7 +451,7 @@ namespace SmartProd.Server.Migrations
                 {
                     b.HasOne("SmartProd.API.Server.Models.Produto", "Produto")
                         .WithMany("ProductionOrders")
-                        .HasForeignKey("ProdutoId")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -477,7 +481,7 @@ namespace SmartProd.Server.Migrations
                 {
                     b.HasOne("SmartProd.API.Server.Models.Produto", "Produto")
                         .WithMany()
-                        .HasForeignKey("ProdutoId")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

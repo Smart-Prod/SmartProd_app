@@ -7,7 +7,7 @@ using SmartProd.API.Server.Services;
 namespace SmartProd.API.Server.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [Authorize]
     public class ProductionOrderController : ControllerBase
     {

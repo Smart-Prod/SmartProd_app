@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Alert } from '@/components/ui/alert';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { CheckCircle, AlertTriangle, Info, XCircle, RefreshCw, Wifi, WifiOff } from 'lucide-react';
@@ -68,7 +68,7 @@ export const NotificationCard: React.FC<NotificationProps> = ({ notification, on
   };
 
   return (
-    <Alert variant={getVariant() as any} className="mb-4">
+    <Alert variant={getVariant()} className="mb-4">
       {getIcon()}
       <div className="flex-1">
         <div className="flex items-start justify-between">

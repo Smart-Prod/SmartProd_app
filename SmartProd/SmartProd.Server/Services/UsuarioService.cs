@@ -6,11 +6,12 @@ using SmartProd.API.Server.Enum;
 using SmartProd.API.Server.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace SmartProd.API.Server.Services
 {
-    public class UsuarioService
+    public class UsuarioService : IUsuarioService
     {
         private readonly AppDbContext _context;
         private readonly IConfiguration _configuration;
@@ -47,31 +48,65 @@ namespace SmartProd.API.Server.Services
                 Name = user.Name,
                 Email = user.Email,
                 Role = user.Role.ToString(),
+                Active = user.Active,
                 CreatedAt = user.CreatedAt
             };
         }
 
-        public async Task<(UsuarioResponseDto user, string token)> LoginUserAsync(LoginDto dto)
+        public async Task<(UsuarioResponseDto user, string token, string refreshToken)> LoginUserAsync(LoginDto dto)
         {
             var user = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == dto.Email);
 
-            if (user == null)
-                throw new Exception("Usuário não encontrado.");
+            if (user == null || !user.Active)
+                throw new UnauthorizedAccessException("Credenciais inválidas.");
 
             if (!BCrypt.Net.BCrypt.Verify(dto.Senha, user.Senha))
-                throw new Exception("Senha incorreta.");
+                throw new UnauthorizedAccessException("Credenciais inválidas.");
 
             var token = BuildToken(user);
+            var refreshToken = CreateRefreshToken();
+            user.RefreshTokenHash = HashRefreshToken(refreshToken);
+            user.RefreshTokenExpiresAt = DateTime.UtcNow.AddDays(30);
+            await _context.SaveChangesAsync();
+
             var userResponse = new UsuarioResponseDto
             {
                 Id = user.Id,
                 Name = user.Name,
                 Email = user.Email,
                 Role = user.Role.ToString(),
+                Active = user.Active,
                 CreatedAt = user.CreatedAt
             };
 
-            return (userResponse, token);
+            return (userResponse, token, refreshToken);
+        }
+
+        public async Task<(UsuarioResponseDto user, string token, string refreshToken)?> RefreshTokenAsync(string refreshToken)
+        {
+            var tokenHash = HashRefreshToken(refreshToken);
+            var user = await _context.Usuarios.FirstOrDefaultAsync(candidate =>
+                candidate.RefreshTokenHash == tokenHash &&
+                candidate.RefreshTokenExpiresAt > DateTime.UtcNow &&
+                candidate.Active);
+
+            if (user == null)
+                return null;
+
+            var rotatedRefreshToken = CreateRefreshToken();
+            user.RefreshTokenHash = HashRefreshToken(rotatedRefreshToken);
+            user.RefreshTokenExpiresAt = DateTime.UtcNow.AddDays(30);
+            await _context.SaveChangesAsync();
+
+            return (new UsuarioResponseDto
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Email = user.Email,
+                Role = user.Role.ToString(),
+                Active = user.Active,
+                CreatedAt = user.CreatedAt
+            }, BuildToken(user), rotatedRefreshToken);
         }
 
         public async Task<List<UsuarioResponseDto>> GetAllUsersAsync()
@@ -83,6 +118,7 @@ namespace SmartProd.API.Server.Services
                     Name = user.Name,
                     Email = user.Email,
                     Role = user.Role.ToString(),
+                    Active = user.Active,
                     CreatedAt = user.CreatedAt
                 }).ToListAsync();
         }
@@ -114,6 +150,7 @@ namespace SmartProd.API.Server.Services
                 Name = user.Name,
                 Email = user.Email,
                 Role = user.Role.ToString(),
+                Active = user.Active,
                 CreatedAt = user.CreatedAt
             };
         }
@@ -128,50 +165,12 @@ namespace SmartProd.API.Server.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<UsuarioResponseDto>> SeedUsersAsync()
-        {
-            var users = new List<UsuarioResponseDto>();
-            var defaultUsers = new[]
-            {
-                new { Name = "Admin", Email = "admin@smartprod.com", Senha = "123456", Role = UserRole.Admin },
-                new { Name = "Operador", Email = "operador@smartprod.com", Senha = "123456", Role = UserRole.Operator }
-            };
-
-            foreach (var u in defaultUsers)
-            {
-                if (await _context.Usuarios.AnyAsync(x => x.Email == u.Email))
-                    continue;
-
-                var hash = BCrypt.Net.BCrypt.HashPassword(u.Senha);
-                var user = new Usuario
-                {
-                    Name = u.Name,
-                    Email = u.Email,
-                    Senha = hash,
-                    Active = true,
-                    CreatedAt = DateTime.UtcNow,
-                    Role = u.Role
-                };
-                _context.Usuarios.Add(user);
-                await _context.SaveChangesAsync();
-
-                users.Add(new UsuarioResponseDto
-                {
-                    Id = user.Id,
-                    Name = user.Name,
-                    Email = user.Email,
-                    Role = user.Role.ToString(),
-                    CreatedAt = user.CreatedAt
-                });
-            }
-
-            return users;
-        }
-
-        // Gera JWT usando settings do appsettings.json
         private string BuildToken(Usuario user)
         {
-            var jwtSecret = _configuration["Jwt:Secret"] ?? throw new InvalidOperationException("Jwt:Secret não configurado");
+            var jwtSecret = _configuration["JWT_SECRET"]
+                ?? _configuration["SMARTPROD_JWT_SECRET"]
+                ?? _configuration["Jwt:Secret"]
+                ?? throw new InvalidOperationException("JWT_SECRET não configurado");
             var jwtIssuer = _configuration["Jwt:Issuer"] ?? throw new InvalidOperationException("Jwt:Issuer não configurado");
 
             var claims = new[]
@@ -187,7 +186,7 @@ namespace SmartProd.API.Server.Services
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var expires = DateTime.UtcNow.AddDays(
-                double.TryParse(_configuration["Jwt:ExpiresInDays"], out var days) ? days : 1);
+                double.TryParse(_configuration["Jwt:ExpiresInDays"], out var days) ? days : 7);
 
             var token = new JwtSecurityToken(
                 jwtIssuer,
@@ -199,5 +198,11 @@ namespace SmartProd.API.Server.Services
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+        private static string CreateRefreshToken() =>
+            Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
+
+        private static string HashRefreshToken(string refreshToken) =>
+            Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(refreshToken)));
     }
 }

@@ -1,5 +1,5 @@
 ﻿using SmartProd.API.Server.Enum;
-using System.Runtime.ConstrainedExecution;
+using System.Text.Json.Serialization;
 
 namespace SmartProd.API.Server.Models
 {
@@ -8,7 +8,12 @@ namespace SmartProd.API.Server.Models
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
+        [JsonIgnore]
         public string Senha { get; set; } = string.Empty;
+        [JsonIgnore]
+        public string? RefreshTokenHash { get; set; }
+        [JsonIgnore]
+        public DateTime? RefreshTokenExpiresAt { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public bool Active { get; set; }
         public string? Department { get; set; }

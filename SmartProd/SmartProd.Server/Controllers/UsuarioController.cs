@@ -1,89 +1,88 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using SmartProd.API.Server.DTOs;
 using SmartProd.API.Server.Services;
 
-namespace SmartProd.API.Server.Controllers
+namespace SmartProd.API.Server.Controllers;
+
+[ApiController]
+[Route("api/v1/[controller]")]
+[Authorize]
+public sealed class UsuarioController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    [Authorize]
-    public class UsuarioController : ControllerBase
+    private readonly IUsuarioService _usuarioService;
+
+    public UsuarioController(IUsuarioService usuarioService) => _usuarioService = usuarioService;
+
+    [HttpPost("register")]
+    [AllowAnonymous]
+    public async Task<IActionResult> Register([FromBody] RegisterDto dto)
     {
-        private readonly UsuarioService _usuarioService;
-        public UsuarioController(UsuarioService usuarioService)
+        try
         {
-            _usuarioService = usuarioService;
+            var user = await _usuarioService.CreateUserAsync(dto);
+            return Created(string.Empty, new { message = "Usuário criado com sucesso!", user });
         }
-
-        [HttpPost("register")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Register([FromBody] RegisterDto dto)
+        catch (Exception ex)
         {
-            if (string.IsNullOrWhiteSpace(dto.Name) || string.IsNullOrWhiteSpace(dto.Email) || string.IsNullOrWhiteSpace(dto.Senha))
-                return BadRequest(new { error = "Nome, email e senha são obrigatórios." });
-
-            try
-            {
-                var user = await _usuarioService.CreateUserAsync(dto);
-                return Created(string.Empty, new { message = "Usuário criado com sucesso!", user });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { error = ex.Message });
-            }
+            return BadRequest(new { error = ex.Message });
         }
+    }
 
-        [HttpPost("login")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Login([FromBody] LoginDto dto)
+    [HttpPost("login")]
+    [AllowAnonymous]
+    [EnableRateLimiting("login")]
+    public async Task<IActionResult> Login([FromBody] LoginDto dto)
+    {
+        try
         {
-            if (string.IsNullOrWhiteSpace(dto.Email) || string.IsNullOrWhiteSpace(dto.Senha))
-                return BadRequest(new { error = "Email e senha são obrigatórios." });
-
-            try
+            var result = await _usuarioService.LoginUserAsync(dto);
+            return Ok(new
             {
-                var result = await _usuarioService.LoginUserAsync(dto);
-                return Ok(new
-                {
-                    message = "Login realizado com sucesso!",
-                    user = result.user,
-                    token = result.token
-                });
-            }
-            catch (Exception ex)
-            {
-                return Unauthorized(new { error = ex.Message });
-            }
+                message = "Login realizado com sucesso!",
+                user = result.user,
+                token = result.token,
+                refreshToken = result.refreshToken
+            });
         }
-
-        [HttpPost("seed")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Seed()
+        catch (UnauthorizedAccessException ex)
         {
-            try
-            {
-                var created = await _usuarioService.SeedUsersAsync();
-                return Ok(new { message = $"Seed concluído. {created.Count} novos usuários criados." });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { error = ex.Message });
-            }
+            return Unauthorized(new { error = ex.Message });
         }
+    }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllUsers()
+    [HttpGet]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> GetAllUsers() =>
+        Ok(new { message = "Usuários listados com sucesso!", users = await _usuarioService.GetAllUsersAsync() });
+
+    [HttpPut("{id:int}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> UpdateUser(int id, [FromBody] UpdateUserDto dto)
+    {
+        try
         {
-            try
-            {
-                var users = await _usuarioService.GetAllUsersAsync();
-                return Ok(new { message = "Usuários listados com sucesso!", users });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { error = ex.Message });
-            }
+            return Ok(await _usuarioService.UpdateUserAsync(id, dto));
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
+    }
+
+    [HttpDelete("{id:int}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> DeleteUser(int id)
+    {
+        try
+        {
+            await _usuarioService.DeleteUserAsync(id);
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { error = ex.Message });
         }
     }
 }

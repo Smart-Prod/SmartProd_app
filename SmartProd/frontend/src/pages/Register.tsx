@@ -33,26 +33,14 @@ const Register: React.FC = () => {
     }
 
     try {
-      // Assumimos que register devolve Promise<boolean>
-      const ok = await register(name, email, senha);
-
-      if (ok) {
-        setSuccessMsg('Cadastro realizado com sucesso. Você já pode entrar.');
-        setName('');
-        setEmail('');
-        setSenha('');
-        setSenhaConfirm('');
-      } else {
-        // register devolve false em caso de falha — exiba mensagem genérica
-        setError('Não foi possível completar o cadastro.');
-      }
-    } catch (err: any) {
-      // Se register lançar um erro com informação da API, mostre-a
-      const apiMsg =
-        err?.response?.data?.message ||
-        err?.message ||
-        'Erro ao registrar. Tente novamente.';
-      setError(String(apiMsg));
+      await register(name, email, senha);
+      setSuccessMsg('Cadastro realizado com sucesso. Você já pode entrar.');
+      setName('');
+      setEmail('');
+      setSenha('');
+      setSenhaConfirm('');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Erro ao registrar. Tente novamente.');
     }
   };
 
@@ -78,6 +66,7 @@ const Register: React.FC = () => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Seu nome completo"
+                maxLength={100}
                 required
               />
             </div>
@@ -89,6 +78,7 @@ const Register: React.FC = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="seu@email.com"
+                maxLength={254}
                 required
               />
             </div>
@@ -99,7 +89,9 @@ const Register: React.FC = () => {
                 type="password"
                 value={senha}
                 onChange={(e) => setSenha(e.target.value)}
-                placeholder="Sua senha"
+                placeholder="Mínimo de 8 caracteres"
+                minLength={8}
+                maxLength={128}
                 required
               />
             </div>
@@ -111,6 +103,8 @@ const Register: React.FC = () => {
                 value={senhaConfirm}
                 onChange={(e) => setSenhaConfirm(e.target.value)}
                 placeholder="Repita a senha"
+                minLength={8}
+                maxLength={128}
                 required
               />
             </div>

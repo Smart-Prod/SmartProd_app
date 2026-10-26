@@ -30,7 +30,7 @@ export interface Product {
   materialsUsed?: BOMItem[];
   productionOrders?: ProductionOrder[];
   invoiceItems?: InvoiceItem[];
-  stockMovements?: Movimentacao[];
+  movimentacoes?: Movimentacao[];
   createdAt: string;
   updatedAt: string;
 }
@@ -38,7 +38,7 @@ export interface Product {
 export interface BOM {
   id: number;
   productId: number;
-  product: Product;
+  product?: Product;
   materials: BOMItem[];
   createdAt: string;
   updatedAt: string;
@@ -48,8 +48,8 @@ export interface BOMItem {
   id: number;
   bomId: number;
   materialId: number;
-  bom: BOM;
-  material: Product;
+  bom?: BOM;
+  material?: Product;
   quantity: number;
 }
 

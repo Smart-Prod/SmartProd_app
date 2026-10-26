@@ -44,34 +44,26 @@ namespace SmartProd.API.Server.Services
             // 3️⃣ Iniciar transação ANTES de alterar estoque (garante atomicidade)
             using var transaction = await _context.Database.BeginTransactionAsync();
 
-            // 4️⃣ Atualizar estoque dentro da transação
-            foreach (var item in data.Items)
-            {
-                var prod = products.First(p => p.Id == item.ProductId);
-
-                var current = prod.EstoqueAtual;
-
-                if (data.Type == NotaFiscalTipo.ENTRADA)
-                {
-                    prod.EstoqueAtual = current + item.Quantity;
-                }
-
-                if (data.Type == NotaFiscalTipo.SAIDA)
-                {
-                    if (current < item.Quantity)
-                        throw new Exception(
-                            $"Estoque insuficiente do produto {prod.Name}. Atual: {current} | Necessário: {item.Quantity}"
-                        );
-
-                    prod.EstoqueAtual = current - item.Quantity;
-                }
-
-                _context.Produtos.Update(prod);
-            }
-
-            // 5️⃣ Criar a nota fiscal + items
             try
             {
+                // 4️⃣ Atualizar estoque dentro da transação
+                foreach (var item in data.Items)
+                {
+                    var prod = products.First(p => p.Id == item.ProductId);
+                    if (data.Type == NotaFiscalTipo.ENTRADA)
+                        prod.EstoqueAtual += item.Quantity;
+                    else if (data.Type == NotaFiscalTipo.SAIDA)
+                    {
+                        if (prod.EstoqueAtual < item.Quantity)
+                            throw new InvalidOperationException(
+                                $"Estoque insuficiente do produto {prod.Name}. Atual: {prod.EstoqueAtual} | Necessário: {item.Quantity}");
+                        prod.EstoqueAtual -= item.Quantity;
+                    }
+
+                    _context.Produtos.Update(prod);
+                }
+
+                // 5️⃣ Criar a nota fiscal + items
                 // Validar campos obrigatórios
                 if (string.IsNullOrWhiteSpace(data.Number))
                     throw new Exception("O número da nota é obrigatório.");
@@ -110,7 +102,7 @@ namespace SmartProd.API.Server.Services
 
                 return notaFiscal;
             }
-            catch (DbUpdateException ex) when (ex.InnerException?.Message.Contains("duplicate key") == true)
+            catch (DbUpdateException ex) when (ex.InnerException?.Message.Contains("duplicate key", StringComparison.OrdinalIgnoreCase) == true)
             {
                 await transaction.RollbackAsync();
                 throw new Exception("O número da nota já existe.");

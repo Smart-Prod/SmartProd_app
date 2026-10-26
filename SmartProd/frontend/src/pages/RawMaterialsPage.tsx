@@ -7,11 +7,12 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Plus, Package, AlertTriangle, TrendingUp, ArrowUp, ArrowDown } from 'lucide-react';
+import { Package, AlertTriangle, TrendingUp, ArrowUp, ArrowDown } from 'lucide-react';
 import { toast } from 'sonner';
+import type { Product } from '../models';
 
 export const RawMaterialsPage: React.FC = () => {
-  const { products, addStockMovement, updateProduct, stockMovements } = useApp();
+  const { products, addStockMovement, updateProduct, movimentacoes } = useApp();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [movementType, setMovementType] = useState<'ENTRADA' | 'SAIDA'>('ENTRADA');
   const [formData, setFormData] = useState({
@@ -45,14 +46,14 @@ export const RawMaterialsPage: React.FC = () => {
       productId: formData.productId,
       type: movementType,
       quantity: formData.quantity,
-    } as any);
+    });
 
     toast.success(`${movementType === 'ENTRADA' ? 'Entrada' : 'Saída'} registrada com sucesso!`);
     setIsDialogOpen(false);
     setFormData({ productId: 0, quantity: 0, notes: '' });
   };
 
-  const getStockStatus = (product: any) => {
+  const getStockStatus = (product: Product) => {
     const available = product.currentStock - product.reservedStock;
     if (available <= 0) {
       return { label: 'Sem Estoque', variant: 'destructive' as const, icon: AlertTriangle };
@@ -67,7 +68,7 @@ export const RawMaterialsPage: React.FC = () => {
   };
 
   const getRecentMovements = (productId: number) => {
-    return stockMovements
+    return movimentacoes
       .filter(m => m.productId === productId)
       .slice(0, 3);
   };

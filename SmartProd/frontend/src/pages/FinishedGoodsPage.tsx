@@ -9,9 +9,10 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Package, Truck, AlertTriangle, TrendingUp, ArrowDown, Factory } from 'lucide-react';
 import { toast } from 'sonner';
+import type { Product } from '../models';
 
 export const FinishedGoodsPage: React.FC = () => {
-  const { products, addStockMovement, updateProduct, stockMovements, productionOrders } = useApp();
+  const { products, addStockMovement, updateProduct, movimentacoes, productionOrders } = useApp();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [formData, setFormData] = useState({
     productId: 0,
@@ -51,7 +52,7 @@ export const FinishedGoodsPage: React.FC = () => {
     setFormData({ productId: 0, quantity: 0, notes: '', customer: '' });
   };
 
-  const getStockStatus = (product: any) => {
+  const getStockStatus = (product: Product) => {
     const available = product.currentStock - product.reservedStock;
     if (available <= 0) {
       return { label: 'Sem Estoque', variant: 'destructive' as const };
@@ -74,7 +75,7 @@ export const FinishedGoodsPage: React.FC = () => {
   };
 
   const getRecentShipments = (productId: number) => {
-    return stockMovements
+    return movimentacoes
       .filter(m => m.productId === productId && m.type === 'SAIDA')
       .slice(0, 3);
   };

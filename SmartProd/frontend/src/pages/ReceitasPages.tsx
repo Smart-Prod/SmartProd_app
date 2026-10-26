@@ -7,19 +7,13 @@ import { Input } from '@/components/ui/input';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { LoadingSpinner } from '../components/common/LoadingSpinner';
 import { toast } from 'sonner';
-import { ClipboardList, AlertCircle, Plus, Trash2, Package } from 'lucide-react';
+import { ClipboardList, AlertCircle, Plus, Trash2 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import type { Product } from '../models';
 
 interface BOMItem {
   materialId: number;
   quantity: number;
-}
-
-interface BOM {
-  id: number;
-  productId: number;
-  materials: BOMItem[];
 }
 
 export const BOMRegister: React.FC = () => {
@@ -57,7 +51,7 @@ export const BOMRegister: React.FC = () => {
     if (!selectedProductId) return 'Selecione um produto acabado';
     
     // Verifica se já existe BOM para este produto
-    const bomExists = boms.some((b: any) => b.productId === selectedProductId);
+    const bomExists = boms.some(bom => bom.productId === selectedProductId);
     if (bomExists) return 'Já existe uma receita cadastrada para este produto';
     
     // Valida materiais
@@ -90,9 +84,6 @@ export const BOMRegister: React.FC = () => {
     setLoading(true);
 
     try {
-      // Simula delay de API
-      await new Promise(resolve => setTimeout(resolve, 500));
-
       const newBOM = {
         productId: selectedProductId,
         materials: materials.map(m => ({
@@ -101,7 +92,7 @@ export const BOMRegister: React.FC = () => {
         }))
       };
 
-      await addBOM(newBOM as any);
+      await addBOM(newBOM);
 
       const product = products.find((p: Product) => p.id === selectedProductId);
       toast.success('Receita cadastrada com sucesso!', {
@@ -112,15 +103,12 @@ export const BOMRegister: React.FC = () => {
       setSelectedProductId(0);
       setMaterials([{ materialId: 0, quantity: 0 }]);
     } catch (err) {
-      setError('Erro ao cadastrar receita. Tente novamente.');
-      toast.error('Erro ao cadastrar receita');
+      const message = err instanceof Error ? err.message : 'Erro ao cadastrar receita.';
+      setError(message);
+      toast.error(message);
     } finally {
       setLoading(false);
     }
-  };
-
-  const getProductName = (productId: number) => {
-    return products.find((p: Product) => p.id === productId)?.name || 'Produto não encontrado';
   };
 
   const getProductUnit = (productId: number) => {

@@ -6,7 +6,7 @@ import { DayPicker } from "react-day-picker"
 import type { CustomComponents } from "react-day-picker"
 
 import { cn } from "@/lib/utils"
-import { Button, buttonVariants } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
 
 function Calendar({
   className,

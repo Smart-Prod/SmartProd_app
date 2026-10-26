@@ -7,10 +7,10 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { ArrowUp, ArrowDown, Factory, Truck, Filter, Download, Calendar } from 'lucide-react';
+import { ArrowUp, ArrowDown, Factory, Truck, Filter, Download } from 'lucide-react';
 
 export const MovementsPage: React.FC = () => {
-  const { stockMovements, products } = useApp();
+  const { movimentacoes, products } = useApp();
   const [filters, setFilters] = useState({
     productId: 0,
     type: '',
@@ -18,7 +18,7 @@ export const MovementsPage: React.FC = () => {
     endDate: '',
   });
 
-  const filteredMovements = stockMovements.filter(movement => {
+  const filteredMovements = movimentacoes.filter(movement => {
     if (filters.productId && movement.productId !== filters.productId) return false;
     if (filters.type && movement.type !== filters.type) return false;
     if (filters.startDate && new Date(movement.createdAt) < new Date(filters.startDate)) return false;
@@ -46,7 +46,7 @@ export const MovementsPage: React.FC = () => {
     }
   };
 
-  const getMovementTypeColor = (type: string) => {
+  const getMovementTypeColor = (type: string): React.ComponentProps<typeof Badge>['variant'] => {
     switch (type) {
       case 'ENTRADA': return 'default';
       case 'SAIDA': return 'destructive';
@@ -251,7 +251,7 @@ export const MovementsPage: React.FC = () => {
         <CardContent className="pt-6">
           <div className="flex items-center justify-between">
             <p className="text-sm text-gray-600">
-              Mostrando {filteredMovements.length} de {stockMovements.length} movimentações
+              Mostrando {filteredMovements.length} de {movimentacoes.length} movimentações
             </p>
             <p className="text-sm text-gray-600">
               Saldo líquido: <span className={totalEntradas + totalProducao > totalSaidas + totalConsumo ? 'text-green-600' : 'text-red-600'}>
@@ -312,7 +312,7 @@ export const MovementsPage: React.FC = () => {
                           </div>
                         </TableCell>
                         <TableCell>
-                          <Badge variant={getMovementTypeColor(movement.type) as any} className="flex items-center space-x-1 w-fit">
+                          <Badge variant={getMovementTypeColor(movement.type)} className="flex items-center space-x-1 w-fit">
                             {getMovementIcon(movement.type)}
                             <span>{getMovementTypeLabel(movement.type)}</span>
                           </Badge>

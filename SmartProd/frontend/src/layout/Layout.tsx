@@ -1,10 +1,10 @@
 "use client"
 
-import React, { useState } from "react"
-import { useLocation, useNavigate } from "react-router-dom"
+import { useState } from "react"
+import { Outlet } from "react-router-dom"
 import { useAuth } from "../contexts/AuthContext"
 import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetDescription, SheetTrigger } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Badge } from "@/components/ui/badge"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
@@ -12,7 +12,6 @@ import {
   Menu,
   Home,
   Package,
-  Factory,
   Truck,
   FileText,
   BarChart3,
@@ -31,12 +30,11 @@ import logoFull from "@/assets/logo-full.png"
 import logoIcon from "@/assets/logo-icon.png"
 
 interface LayoutProps {
-  children: React.ReactNode;
   currentPage: string;
   onNavigate: (page: string) => void;
 }
 
-export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onNavigate }) => {
+export const Layout: React.FC<LayoutProps> = ({ currentPage, onNavigate }) => {
   const { user, logout } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [desktopCollapsed, setDesktopCollapsed] = useState(false);
@@ -44,6 +42,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onNavigat
   const menuItems = [
     { id: "/dashboard", label: "Dashboard", icon: Home },
     { id: "/bom", label: "Cadastros", icon: FilePlus },
+    { id: "/bom-list", label: "Estruturas de Produtos", icon: Boxes },
     { id: "/products", label: "Produtos", icon: Package },
     { id: "/raw-materials", label: "Matéria-Prima", icon: Boxes },
     { id: "/finished-goods", label: "Produtos Acabados", icon: Archive },
@@ -53,9 +52,13 @@ export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onNavigat
     { id: "/reports", label: "Relatórios", icon: BarChart3 },
   ];
 
-  const adminItems = [{ id: "admin", label: "Administração", icon: Settings }];
+  const adminItems = [{ id: "/admin", label: "Administração", icon: Settings }];
 
   const handleLogout = () => logout();
+  const handleNavigation = (page: string) => {
+    onNavigate(page);
+    setSidebarOpen(false);
+  };
 
   // Sidebar component
   const Sidebar = ({ collapsed = false, showToggle = false }: { collapsed?: boolean; showToggle?: boolean }) => (
@@ -100,7 +103,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onNavigat
                     <Button
                       variant={currentPage === item.id ? "secondary" : "ghost"}
                       className="w-full justify-center px-2"
-                      onClick={() => onNavigate(item.id)}
+                      onClick={() => handleNavigation(item.id)}
                     >
                       <item.icon className={`h-4 w-4 ${currentPage === item.id ? "text-primary" : ""}`} />
                     </Button>
@@ -112,7 +115,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onNavigat
                   key={item.id}
                   variant={currentPage === item.id ? "secondary" : "ghost"}
                   className="w-full justify-start"
-                  onClick={() => onNavigate(item.id)}
+                  onClick={() => handleNavigation(item.id)}
                 >
                   <item.icon className="h-4 w-4 mr-2" />
                   {item.label}
@@ -133,7 +136,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onNavigat
                         <Button
                           variant={currentPage === item.id ? "secondary" : "ghost"}
                           className="w-full justify-center px-2"
-                          onClick={() => onNavigate(item.id)}
+                          onClick={() => handleNavigation(item.id)}
                         >
                           <item.icon className={`h-4 w-4 ${currentPage === item.id ? "text-primary" : ""}`} />
                         </Button>
@@ -145,7 +148,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onNavigat
                       key={item.id}
                       variant={currentPage === item.id ? "secondary" : "ghost"}
                       className="w-full justify-start"
-                      onClick={() => onNavigate(item.id)}
+                      onClick={() => handleNavigation(item.id)}
                     >
                       <item.icon className="h-4 w-4 mr-2" />
                       {item.label}
@@ -221,7 +224,9 @@ export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onNavigat
 
       {/* Main Content */}
       <div className={`flex-1 transition-all duration-300 ${desktopCollapsed ? "lg:pl-20" : "lg:pl-64"}`}>
-        <main className="p-6">{children}</main>
+        <main className="p-6">
+          <Outlet key={currentPage} />
+        </main>
       </div>
     </div>
   );

@@ -1,59 +1,51 @@
-# SmartProd Server - Configuration Guide
+# Configuração do SmartProd Server
 
-## ⚠️ Security: Never Commit Secrets!
+Nunca versione valores reais de senhas, tokens JWT ou connection strings. `.env` é ignorado pelo Git; `.env.example` contém apenas valores de exemplo.
 
-This project uses **environment variables** and **User Secrets** for sensitive configuration.
+## Variáveis
 
-## Required Environment Variables
+| Variável | Uso | Obrigatória |
+| --- | --- | --- |
+| `DB_CONNECTION_STRING` | Connection string PostgreSQL. `SMARTPROD_DB_CONNECTION` e `ConnectionStrings__DefaultConnection` também são aceitas para compatibilidade. | Sim |
+| `JWT_SECRET` | Chave de assinatura JWT com pelo menos 32 bytes. `SMARTPROD_JWT_SECRET` e `Jwt__Secret` são aliases legados. | Sim |
+| `Jwt__Issuer` | Issuer do JWT. Padrão `SmartProd`. | Não |
+| `Jwt__ExpiresInDays` | Validade do access token. Padrão 7 dias. | Não |
+| `CORS_ORIGINS` | Origens web permitidas, separadas por vírgula. Padrão local: `http://localhost:5173`. | Não |
+| `ADMIN_INITIAL_EMAIL` | E-mail do primeiro administrador; usado somente com banco sem usuários. | Sim para base vazia |
+| `ADMIN_INITIAL_PASSWORD` | Senha do primeiro administrador, mínimo de 12 caracteres; nunca é registrada em log. | Sim para base vazia |
+| `VITE_API_URL` | URL base do frontend; deixe vazia para API no mesmo domínio. | Não |
 
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `SMARTPROD_DB_CONNECTION` | PostgreSQL connection string | `Host=localhost;Port=5432;Database=SmartProd;Username=postgres;Password=secure_pass` |
-| `SMARTPROD_JWT_SECRET` | JWT signing key (min 32 chars, base64 recommended) | `openssl rand -base64 64` |
-| `SMARTPROD_JWT_ISSUER` | JWT issuer (optional, default: SmartProd) | `SmartProd` |
-| `SMARTPROD_JWT_EXPIRES_IN_DAYS` | Token expiration in days (optional, default: 7) | `7` |
+O backend aplica migrações ao iniciar. Um banco vazio exige as duas variáveis de administrador inicial; contas de usuário não são criadas com senha padrão ou pública. O administrador inicial não é recriado nem substituído em bases com usuários.
 
-## Setup Options
+## Docker Compose
 
-### Option 1: Environment Variables (Production/Containers)
-```bash
-export SMARTPROD_DB_CONNECTION="Host=db;Port=5432;Database=SmartProd;Username=smartprod;Password=xxx"
-export SMARTPROD_JWT_SECRET="$(openssl rand -base64 64)"
+Na raiz do repositório, copie `.env.example` para `.env`, substitua todos os valores de exemplo e execute:
+
+```powershell
+docker compose up --build
 ```
 
-### Option 2: User Secrets (Local Development)
-```bash
-cd SmartProd/SmartProd.Server
+O Compose lê `.env` para interpolação e injeta as variáveis necessárias nos containers. O PostgreSQL usa o volume nomeado `smartprod-postgres` e executa scripts da pasta `db-init` somente na inicialização de um volume novo.
+
+## Execução local no PowerShell
+
+ASP.NET Core não interpreta `.env` automaticamente. Defina variáveis no terminal ou use User Secrets para valores de desenvolvimento:
+
+```powershell
+Set-Location SmartProd\SmartProd.Server
 dotnet user-secrets init
-dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Host=localhost;Port=5432;Database=SmartProd;Username=postgres;Password=your_pass"
-dotnet user-secrets set "Jwt:Secret" "$(openssl rand -base64 64)"
+dotnet user-secrets set "DB_CONNECTION_STRING" "Host=localhost;Port=5432;Database=SmartProd;Username=postgres;Password=<sua-senha>"
+dotnet user-secrets set "JWT_SECRET" "<segredo-aleatorio-com-pelo-menos-32-bytes>"
+dotnet user-secrets set "ADMIN_INITIAL_EMAIL" "admin@localhost"
+dotnet user-secrets set "ADMIN_INITIAL_PASSWORD" "<senha-inicial-com-pelo-menos-12-caracteres>"
+$env:CORS_ORIGINS = "http://localhost:5173"
+dotnet run
 ```
 
-### Option 3: .env File (Docker Compose)
-```bash
-cp .env.example .env
-# Edit .env with your values
-docker-compose up
+Para gerar um valor aleatório localmente:
+
+```powershell
+[Convert]::ToBase64String([Security.Cryptography.RandomNumberGenerator]::GetBytes(64))
 ```
 
-## Configuration Priority (Highest Wins)
-1. Environment Variables
-2. User Secrets (Development only)
-3. appsettings.Development.json
-4. appsettings.json
-
-## Generate JWT Secret
-```bash
-# Linux/macOS
-openssl rand -base64 64
-
-# PowerShell
-[Convert]::ToBase64String((1..64 | ForEach-Object { Get-Random -Maximum 256 }))
-```
-
-## Verify Configuration
-```bash
-cd SmartProd/SmartProd.Server
-dotnet run --environment Development
-# Check logs for "Configuration loaded" messages
-```
+O frontend pode usar `VITE_API_URL` em seu ambiente de build. No desenvolvimento Vite, as chamadas `/api` são encaminhadas para a API local.

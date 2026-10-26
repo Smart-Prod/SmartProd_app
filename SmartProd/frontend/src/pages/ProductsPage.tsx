@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useApp } from '../contexts/AppContext';
-import { useAuth } from '../contexts/AuthContext';
+import type { Product } from '../models';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -16,7 +16,6 @@ import { Plus, Edit, Package, AlertTriangle, Search, X, Filter } from 'lucide-re
 import { toast } from 'sonner';
 
 export const ProductsPage: React.FC = () => {
-  const { user } = useAuth();
   const { products, addProduct, updateProduct } = useApp();
   const { error, handleError, clearError } = useErrorHandler();
   const { isLoading, withLoading } = useLoading();
@@ -101,11 +100,8 @@ export const ProductsPage: React.FC = () => {
           throw new Error('Já existe um produto com este código');
         }
 
-        // Simulate API delay
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
         if (editingProduct) {
-          updateProduct(editingProduct, formData);
+          await updateProduct(editingProduct, formData);
           toast.success('Produto atualizado com sucesso!');
         } else {
           const productData = {
@@ -116,9 +112,8 @@ export const ProductsPage: React.FC = () => {
             currentStock: formData.currentStock,
             reservedStock: formData.reservedStock,
             minStock: formData.minStock,
-            usuarioId: user?.id || '1'
           };
-          await addProduct(productData as any);
+          await addProduct(productData);
           toast.success('Produto criado com sucesso!');
         }
         
@@ -139,7 +134,7 @@ export const ProductsPage: React.FC = () => {
     }
   };
 
-  const handleEdit = (product: any) => {
+  const handleEdit = (product: Product) => {
     setEditingProduct(product.id);
     setFormData({
       code: product.code,
@@ -167,7 +162,7 @@ export const ProductsPage: React.FC = () => {
     setIsDialogOpen(true);
   };
 
-  const getStockStatus = (product: any) => {
+  const getStockStatus = (product: Product) => {
     if (product.currentStock <= product.minStock) {
       return { label: 'Baixo', variant: 'destructive' as const };
     }

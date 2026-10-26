@@ -3,7 +3,6 @@
 import * as React from "react"
 import * as SheetPrimitive from "@radix-ui/react-dialog"
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden"
-import { cva, type VariantProps } from "class-variance-authority"
 import { XIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -58,7 +57,7 @@ function SheetContent({
   const generatedDescriptionId = React.useId()
 
   // copy props so we can set a default aria-describedby only when it's missing
-  const contentProps = { ...(props as Record<string, any>) }
+  const contentProps: React.ComponentProps<typeof SheetPrimitive.Content> = { ...props }
 
   // Only set aria-describedby if consumer didn't provide it (null or undefined)
   if (contentProps["aria-describedby"] == null) {

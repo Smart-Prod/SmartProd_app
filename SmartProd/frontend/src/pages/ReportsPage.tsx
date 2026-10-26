@@ -1,31 +1,34 @@
 import React, { useState } from 'react';
 import { useApp } from '../contexts/AppContext';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts';
-import { Download, Calendar, TrendingUp, Package, Factory, Truck } from 'lucide-react';
+import { Download, Calendar, TrendingUp, Package, Factory } from 'lucide-react';
+
+interface MovementReportPoint {
+  data: string;
+  entrada: number;
+  saida: number;
+  producao: number;
+  consumo: number;
+}
 
 export const ReportsPage: React.FC = () => {
-  const { products, stockMovements, productionOrders, invoices } = useApp();
+  const { products, movimentacoes, productionOrders } = useApp();
   const [dateRange, setDateRange] = useState({
     start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
     end: new Date().toISOString().split('T')[0],
   });
 
-  const filteredMovements = stockMovements.filter(
+  const filteredMovements = movimentacoes.filter(
     m => new Date(m.createdAt) >= new Date(dateRange.start) && new Date(m.createdAt) <= new Date(dateRange.end)
   );
 
   const filteredOrders = productionOrders.filter(
     o => new Date(o.createdAt) >= new Date(dateRange.start) && new Date(o.createdAt) <= new Date(dateRange.end)
-  );
-
-  const filteredInvoices = invoices.filter(
-    i => new Date(i.date) >= new Date(dateRange.start) && new Date(i.date) <= new Date(dateRange.end)
   );
 
   // Production Report Data
@@ -57,12 +60,17 @@ export const ReportsPage: React.FC = () => {
   }));
 
   // Movement Analysis Data
-  const movementData = filteredMovements.reduce((acc, movement) => {
+  const movementData = filteredMovements.reduce<MovementReportPoint[]>((acc, movement) => {
     const date = new Date(movement.createdAt).toLocaleDateString('pt-BR');
     const existing = acc.find(item => item.data === date);
     
     if (existing) {
-      existing[movement.type] = (existing[movement.type] || 0) + movement.quantity;
+      switch (movement.type) {
+        case 'ENTRADA': existing.entrada += movement.quantity; break;
+        case 'SAIDA': existing.saida += movement.quantity; break;
+        case 'PRODUCAO': existing.producao += movement.quantity; break;
+        case 'CONSUMO': existing.consumo += movement.quantity; break;
+      }
     } else {
       acc.push({
         data: date,
@@ -74,7 +82,11 @@ export const ReportsPage: React.FC = () => {
     }
     
     return acc;
-  }, [] as any[]).sort((a, b) => new Date(a.data.split('/').reverse().join('-')).getTime() - new Date(b.data.split('/').reverse().join('-')).getTime());
+  }, []).sort((a, b) => {
+    const [dayA, monthA, yearA] = a.data.split('/').map(Number);
+    const [dayB, monthB, yearB] = b.data.split('/').map(Number);
+    return new Date(yearA, monthA - 1, dayA).getTime() - new Date(yearB, monthB - 1, dayB).getTime();
+  });
 
   // Sales/Output Report Data
   const salesData = products
@@ -121,7 +133,7 @@ export const ReportsPage: React.FC = () => {
   ];
 
   const exportReport = (reportType: string) => {
-    let data: any[] = [];
+    let data: Array<Record<string, string | number>> = [];
     let filename = '';
 
     switch (reportType) {

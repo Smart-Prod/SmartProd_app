@@ -27,6 +27,7 @@ namespace SmartProd.API.Server.Data
             {
                 entity.HasKey(u => u.Id);
                 entity.HasIndex(u => u.Email).IsUnique();
+                entity.HasIndex(u => u.RefreshTokenHash).IsUnique();
             });
 
             // --- Produto ---

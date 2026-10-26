@@ -1,6 +1,6 @@
 import React, { JSX, Suspense, lazy } from "react"
-import { BrowserRouter, Routes, Route, Navigate, Outlet, useLocation, useNavigate } from "react-router-dom"
-import { AuthProvider, useAuth } from "./contexts/AuthContext"
+import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate } from "react-router-dom"
+import { useAuth } from "./contexts/AuthContext"
 import { ErrorBoundary } from "./utils/ErrorBoundary"
 import { Toaster } from "./components/ui/sonner"
 import { LoadingSpinner } from "./components/common/LoadingSpinner"
@@ -12,6 +12,7 @@ const Layout = lazy(() => import("./layout/Layout").then(m => ({ default: m.Layo
 const Dashboard = lazy(() => import("./pages/Dashboard").then(m => ({ default: m.Dashboard })))
 const ProductsPage = lazy(() => import("./pages/ProductsPage").then(m => ({ default: m.ProductsPage })))
 const ReceitasPage = lazy(() => import("./pages/ReceitasPages").then(m => ({ default: m.BOMRegister })))
+const BomList = lazy(() => import("./pages/BomList").then(m => ({ default: m.BomList })))
 const RawMaterialsPage = lazy(() => import("./pages/RawMaterialsPage").then(m => ({ default: m.RawMaterialsPage })))
 const FinishedGoodsPage = lazy(() => import("./pages/FinishedGoodsPage").then(m => ({ default: m.FinishedGoodsPage })))
 const ProductionOrdersPage = lazy(() => import("./pages/ProductionOrdersPage").then(m => ({ default: m.ProductionOrdersPage })))
@@ -65,12 +66,17 @@ function AppLayoutWrapper() {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const onNavigate = (page: string) => navigate(page)
+  const onNavigate = (page: string) => {
+    if (location.pathname === "/movements") {
+      window.location.assign(page)
+      return
+    }
+
+    navigate(page)
+  }
 
   return (
-    <Layout currentPage={location.pathname} onNavigate={onNavigate}>
-      <Outlet />
-    </Layout>
+    <Layout currentPage={location.pathname} onNavigate={onNavigate} />
   )
 }
 
@@ -84,60 +90,66 @@ function Loader() {
   )
 }
 
+function AppRoutes() {
+  const location = useLocation()
+
+  return (
+    <Suspense fallback={<Loader />}>
+      <Routes key={location.pathname}>
+        {/* Público */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+
+        {/* Redirect raiz */}
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+
+        {/* Rotas protegidas + layout */}
+        <Route
+          element={
+            <RequireAuth>
+              <AppLayoutWrapper />
+            </RequireAuth>
+          }
+        >
+          <Route index element={<Navigate to="/dashboard" replace />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="bom" element={<ReceitasPage />} />
+          <Route path="bom-list" element={<BomList />} />
+          <Route path="products" element={<ProductsPage />} />
+          <Route path="products/:id" element={<ProductsPage />} />
+          <Route path="raw-materials" element={<RawMaterialsPage />} />
+          <Route path="finished-goods" element={<FinishedGoodsPage />} />
+          <Route path="production-orders" element={<ProductionOrdersPage />} />
+          <Route path="invoices" element={<InvoicesPage />} />
+          <Route path="movements" element={<MovementsPage />} />
+          <Route path="reports" element={<ReportsPage />} />
+
+          {/* Admin */}
+          <Route
+            path="admin"
+            element={
+              <RequireRole role="admin">
+                <AdminPage />
+              </RequireRole>
+            }
+          />
+        </Route>
+
+        {/* Catch-all */}
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      </Routes>
+    </Suspense>
+  )
+}
+
 /** App Principal */
 export default function App(): JSX.Element {
   return (
     <ErrorBoundary>
-      <AuthProvider>
-        <BrowserRouter>
-          <Suspense fallback={<Loader />}>
-            <Routes>
-              {/* Público */}
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-
-              {/* Redirect raiz */}
-              <Route path="/" element={<Navigate to="/dashboard" replace />} />
-
-                {/* Rotas protegidas + layout */}
-                <Route
-                  element={
-                    <RequireAuth>
-                      <AppLayoutWrapper />
-                    </RequireAuth>
-                  }
-                >
-                  <Route index element={<Navigate to="/dashboard" replace />} />
-                  <Route path="dashboard" element={<Dashboard />} />
-                  <Route path="bom" element={<ReceitasPage />} />
-                  <Route path="products" element={<ProductsPage />} />
-                  <Route path="products/:id" element={<ProductsPage />} />
-                  <Route path="raw-materials" element={<RawMaterialsPage />} />
-                  <Route path="finished-goods" element={<FinishedGoodsPage />} />
-                  <Route path="production-orders" element={<ProductionOrdersPage />} />
-                  <Route path="invoices" element={<InvoicesPage />} />
-                  <Route path="movements" element={<MovementsPage />} />
-                  <Route path="reports" element={<ReportsPage />} />
-
-                  {/* Admin */}
-                  <Route
-                    path="admin"
-                    element={
-                      <RequireRole role="admin">
-                        <AdminPage />
-                      </RequireRole>
-                    }
-                  />
-                </Route>
-
-                {/* Catch-all */}
-                <Route path="*" element={<Navigate to="/dashboard" replace />} />
-              </Routes>
-            </Suspense>
-
-            <Toaster />
-          </BrowserRouter>
-        </AuthProvider>
+      <BrowserRouter>
+        <AppRoutes />
+        <Toaster />
+      </BrowserRouter>
       </ErrorBoundary>
   )
 }

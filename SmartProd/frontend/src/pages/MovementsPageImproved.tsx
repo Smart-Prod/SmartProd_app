@@ -9,13 +9,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Pagination, usePagination } from '../components/common/Pagination';
 import { DateRangeValidator, useDateRangeValidation } from '../utils/DateRangeValidator';
-import { LoadingSpinner, LoadingOverlay, TableSkeleton, useLoading } from '../components/common/LoadingSpinner';
+import { LoadingOverlay, TableSkeleton, useLoading } from '../components/common/LoadingSpinner';
 import { ErrorMessage, useErrorHandler } from '../utils/ErrorBoundary';
-import { ArrowUp, ArrowDown, Factory, Truck, Filter, Download, Calendar, RefreshCw, Search, X } from 'lucide-react';
+import { ArrowUp, ArrowDown, Factory, Truck, Filter, Download, RefreshCw, Search, X } from 'lucide-react';
 import { toast } from 'sonner';
 
 export const MovementsPageImproved: React.FC = () => {
-  const { stockMovements, products } = useApp();
+  const { movimentacoes, products } = useApp();
   const { error, handleError, clearError } = useErrorHandler();
   const { isLoading, withLoading } = useLoading();
 
@@ -33,7 +33,6 @@ export const MovementsPageImproved: React.FC = () => {
     setStartDate,
     setEndDate,
     isValid: isDateRangeValid,
-    errors: dateErrors,
     resetToDefaults
   } = useDateRangeValidation(
     new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
@@ -48,11 +47,11 @@ export const MovementsPageImproved: React.FC = () => {
   // Filtered data with error handling
   const filteredMovements = useMemo(() => {
     try {
-      if (!stockMovements || stockMovements.length === 0) {
+      if (!movimentacoes || movimentacoes.length === 0) {
         return [];
       }
 
-      return stockMovements.filter(movement => {
+      return movimentacoes.filter(movement => {
         // Product filter
         if (filters.productId && movement.productId !== filters.productId) return false;
         
@@ -90,7 +89,7 @@ export const MovementsPageImproved: React.FC = () => {
       handleError(err instanceof Error ? err : 'Erro ao filtrar movimentações');
       return [];
     }
-  }, [stockMovements, products, filters, startDate, endDate, isDateRangeValid, handleError]);
+  }, [movimentacoes, products, filters, startDate, endDate, isDateRangeValid, handleError]);
 
   // Pagination
   const {
@@ -194,7 +193,7 @@ export const MovementsPageImproved: React.FC = () => {
     }
   };
 
-  const getMovementTypeColor = (type: string) => {
+  const getMovementTypeColor = (type: string): React.ComponentProps<typeof Badge>['variant'] => {
     switch (type) {
       case 'ENTRADA': return 'default';
       case 'SAIDA': return 'destructive';
@@ -415,7 +414,7 @@ export const MovementsPageImproved: React.FC = () => {
               Mostrando {paginationInfo.startIndex} a {paginationInfo.endIndex} de{' '}
               {paginationInfo.totalItems} movimentações
               {hasActiveFilters && (
-                <span className="text-blue-600"> (filtradas de {stockMovements.length} total)</span>
+                <span className="text-blue-600"> (filtradas de {movimentacoes.length} total)</span>
               )}
             </p>
             <p className="text-sm text-gray-600">
@@ -463,7 +462,7 @@ export const MovementsPageImproved: React.FC = () => {
                     {paginatedData.length === 0 ? (
                       <TableRow>
                         <TableCell colSpan={7} className="text-center py-8 text-gray-500">
-                          {filteredMovements.length === 0 && stockMovements.length > 0 
+                          {filteredMovements.length === 0 && movimentacoes.length > 0
                             ? 'Nenhuma movimentação encontrada com os filtros aplicados' 
                             : 'Nenhuma movimentação registrada'}
                         </TableCell>
@@ -489,7 +488,7 @@ export const MovementsPageImproved: React.FC = () => {
                               </div>
                             </TableCell>
                             <TableCell>
-                              <Badge variant={getMovementTypeColor(movement.type) as any} className="flex items-center space-x-1 w-fit">
+                              <Badge variant={getMovementTypeColor(movement.type)} className="flex items-center space-x-1 w-fit">
                                 {getMovementIcon(movement.type)}
                                 <span>{getMovementTypeLabel(movement.type)}</span>
                               </Badge>

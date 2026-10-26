@@ -5,7 +5,7 @@ using SmartProd.API.Server.Models;
 
 namespace SmartProd.API.Server.Services
 {
-    public class SeedService
+    public class SeedService : ISeedService
     {
         private readonly AppDbContext _context;
 
@@ -16,13 +16,8 @@ namespace SmartProd.API.Server.Services
 
         public async Task<string> SeedKaixoteAsync()
         {
-            _context.Estoque.RemoveRange(_context.Estoque);
-            _context.Movimentacoes.RemoveRange(_context.Movimentacoes);
-            _context.OrdensProducao.RemoveRange(_context.OrdensProducao);
-            _context.MateriaisItems.RemoveRange(_context.MateriaisItems);
-            _context.Materiais.RemoveRange(_context.Materiais);
-            _context.Produtos.RemoveRange(_context.Produtos);
-            await _context.SaveChangesAsync();
+            if (await _context.Produtos.AnyAsync())
+                throw new InvalidOperationException("O seed de demonstração só pode ser executado em uma base sem produtos.");
 
             var admin = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == "admin@smartprod.com")
                 ?? await _context.Usuarios.FirstAsync();

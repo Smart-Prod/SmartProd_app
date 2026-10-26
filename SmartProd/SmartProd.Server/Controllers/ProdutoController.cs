@@ -11,13 +11,13 @@ using QuestPDF.Infrastructure;
 namespace SmartProd.API.Server.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [Authorize]
     public class ProdutoController : ControllerBase
     {
-        private readonly ProdutoService _produtoService;
+        private readonly IProdutoService _produtoService;
 
-        public ProdutoController(ProdutoService produtoService)
+        public ProdutoController(IProdutoService produtoService)
         {
             _produtoService = produtoService;
         }
@@ -68,7 +68,20 @@ namespace SmartProd.API.Server.Controllers
             }
         }
 
-        [HttpGet("{code}")]
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> UpdateProduct(int id, [FromBody] ProdutoCreateDto dto)
+        {
+            try
+            {
+                return Ok(await _produtoService.UpdateProductAsync(id, dto));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
+        [HttpGet("by-code/{code}")]
         public async Task<IActionResult> GetProductByCode(string code)
         {
             try

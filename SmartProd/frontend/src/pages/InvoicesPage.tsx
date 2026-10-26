@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useApp } from '../contexts/AppContext';
-import { useAuth } from '../contexts/AuthContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,8 +13,7 @@ import { toast } from 'sonner';
 import { InvoiceType } from '../models';
 
 export const InvoicesPage: React.FC = () => {
-  const { invoices, products, addInvoice, addStockMovement, updateProduct } = useApp();
-  const { user } = useAuth();
+  const { invoices, products, addInvoice } = useApp();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [invoiceType, setInvoiceType] = useState<InvoiceType>('ENTRADA');
   const [formData, setFormData] = useState({
@@ -28,65 +26,21 @@ export const InvoicesPage: React.FC = () => {
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file && file.name.endsWith('.xml')) {
-      // Simulate XML parsing
-      setTimeout(() => {
-        const mockInvoice = {
-          usuarioId: parseInt(user?.id || '1'),
-          usuario: user as any,
-          type: invoiceType,
-          number: `NF-${Date.now()}`,
-          supplier: invoiceType === 'ENTRADA' ? 'Fornecedor Simulado' : undefined,
-          customer: invoiceType === 'SAIDA' ? 'Cliente Simulado' : undefined,
-          items: [
-            { productId: products[0]?.id || 0, quantity: 10, value: 100.00 },
-            { productId: products[1]?.id || 0, quantity: 5, value: 50.00 },
-          ] as any,
-          status: 'PROCESSADA' as const,
-        };
-        
-        addInvoice(mockInvoice);
-        
-        // Process stock movements
-        mockInvoice.items.forEach((item: { productId: number; quantity: number; value: number }) => {
-          const product = products.find(p => p.id === item.productId);
-          if (product) {
-            if (invoiceType === 'ENTRADA') {
-              updateProduct(item.productId, {
-                currentStock: product.currentStock + item.quantity
-              });
-            } else {
-              updateProduct(item.productId, {
-                currentStock: product.currentStock - item.quantity
-              });
-            }
-            
-            addStockMovement({
-              productId: item.productId,
-              type: invoiceType,
-              quantity: item.quantity,
-            });
-          }
-        });
-        
-        toast.success('Nota fiscal processada com sucesso!');
-      }, 2000);
+      toast.error('A importação de XML ainda não está disponível. Use o cadastro manual.');
     } else {
       toast.error('Por favor, selecione um arquivo XML válido');
     }
   };
 
-  const handleManualSubmit = (e: React.FormEvent) => {
+  const handleManualSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     const invoice = {
-      usuarioId: parseInt(user?.id || '1'),
-      usuario: user as any,
       type: invoiceType,
       number: formData.number,
       supplier: invoiceType === 'ENTRADA' ? formData.supplier : undefined,
       customer: invoiceType === 'SAIDA' ? formData.customer : undefined,
-      items: formData.items.filter(item => item.productId && item.quantity > 0) as any,
-      status: 'PROCESSADA' as const,
+      items: formData.items.filter(item => item.productId > 0 && item.quantity > 0),
     };
     
     if (invoice.items.length === 0) {
@@ -94,38 +48,19 @@ export const InvoicesPage: React.FC = () => {
       return;
     }
     
-    addInvoice(invoice);
-    
-    // Process stock movements
-    invoice.items.forEach((item: { productId: number; quantity: number; value: number }) => {
-      const product = products.find(p => p.id === item.productId);
-      if (product) {
-        if (invoiceType === 'ENTRADA') {
-          updateProduct(item.productId, {
-            currentStock: product.currentStock + item.quantity
-          });
-        } else {
-          updateProduct(item.productId, {
-            currentStock: product.currentStock - item.quantity
-          });
-        }
-        
-        addStockMovement({
-          productId: item.productId,
-          type: invoiceType,
-          quantity: item.quantity,
-        });
-      }
-    });
-    
-    toast.success('Nota fiscal criada com sucesso!');
-    setIsDialogOpen(false);
-    setFormData({
-      number: '',
-      supplier: '',
-      customer: '',
-      items: [{ productId: 0, quantity: 0, value: 0 }],
-    });
+    try {
+      await addInvoice(invoice);
+      toast.success('Nota fiscal criada com sucesso!');
+      setIsDialogOpen(false);
+      setFormData({
+        number: '',
+        supplier: '',
+        customer: '',
+        items: [{ productId: 0, quantity: 0, value: 0 }],
+      });
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Não foi possível criar a nota fiscal.');
+    }
   };
 
   const addItem = () => {
@@ -142,7 +77,7 @@ export const InvoicesPage: React.FC = () => {
     });
   };
 
-  const updateItem = (index: number, field: string, value: any) => {
+  const updateItem = (index: number, field: 'productId' | 'quantity' | 'value', value: number) => {
     const newItems = [...formData.items];
     newItems[index] = { ...newItems[index], [field]: value };
     setFormData({ ...formData, items: newItems });

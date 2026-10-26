@@ -5,7 +5,7 @@ using SmartProd.API.Server.Models;
 
 namespace SmartProd.API.Server.Services
 {
-    public class ProdutoService
+    public class ProdutoService : IProdutoService
     {
         private readonly AppDbContext _context;
 
