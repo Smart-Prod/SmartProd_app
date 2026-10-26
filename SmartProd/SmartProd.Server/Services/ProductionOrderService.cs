@@ -3,6 +3,7 @@ using SmartProd.API.Server.Data;
 using SmartProd.API.Server.DTOs;
 using SmartProd.API.Server.Enum;
 using SmartProd.API.Server.Models;
+using SmartProd.API.Server.Utils;
 
 namespace SmartProd.API.Server.Services
 {
@@ -18,7 +19,7 @@ namespace SmartProd.API.Server.Services
         {
             var product = await _context.Produtos.FindAsync(data.ProductId);
             if (product == null)
-                throw new System.Exception("Produto não encontrado.");
+                throw new NotFoundException("Produto não encontrado.");
 
             var order = new OrdemProducao
             {
@@ -77,7 +78,7 @@ namespace SmartProd.API.Server.Services
                 .FirstOrDefaultAsync(o => o.Id == id);
 
             if (order == null)
-                throw new Exception("Ordem de produção não encontrada.");
+                throw new NotFoundException("Ordem de produção não encontrada.");
 
             order.Status = status;
 

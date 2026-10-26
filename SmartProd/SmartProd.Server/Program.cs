@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Threading.RateLimiting;
 using SmartProd.API.Server.Data;
 using SmartProd.API.Server.Enum;
+using SmartProd.API.Server.Middlewares;
 using SmartProd.API.Server.Models;
 using SmartProd.API.Server.Services;
 using SmartProd.API.Server.Utils;
@@ -56,6 +57,7 @@ builder.Services.AddScoped<ProductionOrderService>();
 builder.Services.AddScoped<MovimentoEstoqueService>();
 builder.Services.AddScoped<NotaFiscalService>();
 builder.Services.AddScoped<RelatorioService>();
+builder.Services.AddScoped<ReportExportService>();
 builder.Services.AddScoped<SeedService>();
 builder.Services.AddScoped<DashboardService>();
 
@@ -98,13 +100,16 @@ builder.Services.AddRateLimiter(options =>
 });
 
 builder.AddServiceDefaults();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
+builder.Services.AddHealthChecks().AddCheck<PostgresHealthCheck>("postgresql", tags: ["ready"]);
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-await using (var scope = app.Services.CreateAsyncScope())
+if (builder.Configuration.GetValue("Database:ApplyMigrations", true))
 {
+    await using var scope = app.Services.CreateAsyncScope();
     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     await dbContext.Database.MigrateAsync();
     if (!await dbContext.Usuarios.AnyAsync())
@@ -133,6 +138,7 @@ await using (var scope = app.Services.CreateAsyncScope())
     }
 }
 
+app.UseMiddleware<RequestLoggingMiddleware>();
 app.UseExceptionHandler();
 
 if (app.Environment.IsDevelopment())
@@ -151,7 +157,6 @@ app.MapControllers();
 
 app.Run();
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
+public partial class Program
 {
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 }

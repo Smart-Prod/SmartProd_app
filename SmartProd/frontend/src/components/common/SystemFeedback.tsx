@@ -1,8 +1,8 @@
-import React from 'react';
-import { Alert } from '@/components/ui/alert';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { CheckCircle, AlertTriangle, Info, XCircle, RefreshCw, Wifi, WifiOff } from 'lucide-react';
+import React from "react"
+import { Alert } from "@/components/ui/alert"
+import { Card, CardContent } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { CheckCircle, AlertTriangle, Info, XCircle, RefreshCw, Wifi, WifiOff } from "lucide-react"
 
 // Component for connection status
 export const ConnectionStatus: React.FC<{ isOnline: boolean }> = ({ isOnline }) => {
@@ -20,52 +20,52 @@ export const ConnectionStatus: React.FC<{ isOnline: boolean }> = ({ isOnline }) 
         </>
       )}
     </div>
-  );
-};
+  )
+}
 
 // Component for system notifications
 export interface SystemNotification {
-  id: string;
-  type: 'success' | 'warning' | 'error' | 'info';
-  title: string;
-  message: string;
-  timestamp: Date;
+  id: string
+  type: "success" | "warning" | "error" | "info"
+  title: string
+  message: string
+  timestamp: Date
   actions?: Array<{
-    label: string;
-    action: () => void;
-    variant?: 'default' | 'outline' | 'destructive';
-  }>;
+    label: string
+    action: () => void
+    variant?: "default" | "outline" | "destructive"
+  }>
 }
 
 interface NotificationProps {
-  notification: SystemNotification;
-  onDismiss: (id: string) => void;
+  notification: SystemNotification
+  onDismiss: (id: string) => void
 }
 
 export const NotificationCard: React.FC<NotificationProps> = ({ notification, onDismiss }) => {
   const getIcon = () => {
     switch (notification.type) {
-      case 'success':
-        return <CheckCircle className="h-5 w-5 text-green-600" />;
-      case 'warning':
-        return <AlertTriangle className="h-5 w-5 text-yellow-600" />;
-      case 'error':
-        return <XCircle className="h-5 w-5 text-red-600" />;
-      case 'info':
-        return <Info className="h-5 w-5 text-blue-600" />;
+      case "success":
+        return <CheckCircle className="h-5 w-5 text-green-600" />
+      case "warning":
+        return <AlertTriangle className="h-5 w-5 text-yellow-600" />
+      case "error":
+        return <XCircle className="h-5 w-5 text-red-600" />
+      case "info":
+        return <Info className="h-5 w-5 text-blue-600" />
       default:
-        return <Info className="h-5 w-5" />;
+        return <Info className="h-5 w-5" />
     }
-  };
+  }
 
   const getVariant = () => {
     switch (notification.type) {
-      case 'error':
-        return 'destructive';
+      case "error":
+        return "destructive"
       default:
-        return 'default';
+        return "default"
     }
-  };
+  }
 
   return (
     <Alert variant={getVariant()} className="mb-4">
@@ -76,12 +76,12 @@ export const NotificationCard: React.FC<NotificationProps> = ({ notification, on
             <h4 className="text-sm font-medium">{notification.title}</h4>
             <p className="text-sm text-muted-foreground mt-1">{notification.message}</p>
             <p className="text-xs text-muted-foreground mt-2">
-              {notification.timestamp.toLocaleString('pt-BR')}
+              {notification.timestamp.toLocaleString("pt-BR")}
             </p>
           </div>
-          <Button 
-            variant="ghost" 
-            size="sm" 
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={() => onDismiss(notification.id)}
             className="ml-4"
           >
@@ -94,7 +94,7 @@ export const NotificationCard: React.FC<NotificationProps> = ({ notification, on
               <Button
                 key={index}
                 size="sm"
-                variant={action.variant || 'outline'}
+                variant={action.variant || "outline"}
                 onClick={action.action}
               >
                 {action.label}
@@ -104,147 +104,139 @@ export const NotificationCard: React.FC<NotificationProps> = ({ notification, on
         )}
       </div>
     </Alert>
-  );
-};
+  )
+}
 
 // Component for empty states
 interface EmptyStateProps {
-  icon?: React.ReactNode;
-  title: string;
-  description: string;
+  icon?: React.ReactNode
+  title: string
+  description: string
   action?: {
-    label: string;
-    onClick: () => void;
-  };
+    label: string
+    onClick: () => void
+  }
 }
 
-export const EmptyState: React.FC<EmptyStateProps> = ({ 
-  icon, 
-  title, 
-  description, 
-  action 
-}) => {
+export const EmptyState: React.FC<EmptyStateProps> = ({ icon, title, description, action }) => {
   return (
     <Card>
       <CardContent className="flex flex-col items-center justify-center py-12 text-center">
-        <div className="mb-4 text-gray-400">
-          {icon || <Info className="h-12 w-12" />}
-        </div>
+        <div className="mb-4 text-gray-400">{icon || <Info className="h-12 w-12" />}</div>
         <h3 className="text-lg font-medium text-gray-900 mb-2">{title}</h3>
         <p className="text-gray-500 mb-4 max-w-sm">{description}</p>
-        {action && (
-          <Button onClick={action.onClick}>
-            {action.label}
-          </Button>
-        )}
+        {action && <Button onClick={action.onClick}>{action.label}</Button>}
       </CardContent>
     </Card>
-  );
-};
+  )
+}
 
 // Hook for managing system notifications
 export const useNotifications = () => {
-  const [notifications, setNotifications] = React.useState<SystemNotification[]>([]);
-
-  const addNotification = React.useCallback((
-    type: SystemNotification['type'],
-    title: string,
-    message: string,
-    actions?: SystemNotification['actions']
-  ) => {
-    const notification: SystemNotification = {
-      id: Date.now().toString(),
-      type,
-      title,
-      message,
-      timestamp: new Date(),
-      actions,
-    };
-    
-    setNotifications(prev => [notification, ...prev.slice(0, 4)]); // Keep max 5 notifications
-    
-    // Auto-dismiss success and info notifications after 5 seconds
-    if (type === 'success' || type === 'info') {
-      setTimeout(() => {
-        dismissNotification(notification.id);
-      }, 5000);
-    }
-  }, []);
+  const [notifications, setNotifications] = React.useState<SystemNotification[]>([])
 
   const dismissNotification = React.useCallback((id: string) => {
-    setNotifications(prev => prev.filter(n => n.id !== id));
-  }, []);
+    setNotifications((prev) => prev.filter((n) => n.id !== id))
+  }, [])
+
+  const addNotification = React.useCallback(
+    (
+      type: SystemNotification["type"],
+      title: string,
+      message: string,
+      actions?: SystemNotification["actions"],
+    ) => {
+      const notification: SystemNotification = {
+        id: Date.now().toString(),
+        type,
+        title,
+        message,
+        timestamp: new Date(),
+        actions,
+      }
+
+      setNotifications((prev) => [notification, ...prev.slice(0, 4)]) // Keep max 5 notifications
+
+      // Auto-dismiss success and info notifications after 5 seconds
+      if (type === "success" || type === "info") {
+        setTimeout(() => {
+          dismissNotification(notification.id)
+        }, 5000)
+      }
+    },
+    [dismissNotification],
+  )
 
   const clearAllNotifications = React.useCallback(() => {
-    setNotifications([]);
-  }, []);
+    setNotifications([])
+  }, [])
 
   return {
     notifications,
     addNotification,
     dismissNotification,
     clearAllNotifications,
-  };
-};
+  }
+}
 
 // Component for data quality indicators
 interface DataQualityProps {
-  totalRecords: number;
-  validRecords: number;
-  lastUpdated?: Date;
+  totalRecords: number
+  validRecords: number
+  lastUpdated?: Date
 }
 
-export const DataQuality: React.FC<DataQualityProps> = ({ 
-  totalRecords, 
-  validRecords, 
-  lastUpdated 
+export const DataQuality: React.FC<DataQualityProps> = ({
+  totalRecords,
+  validRecords,
+  lastUpdated,
 }) => {
-  const quality = totalRecords > 0 ? (validRecords / totalRecords) * 100 : 0;
-  
+  const quality = totalRecords > 0 ? (validRecords / totalRecords) * 100 : 0
+
   const getQualityColor = () => {
-    if (quality >= 95) return 'text-green-600';
-    if (quality >= 80) return 'text-yellow-600';
-    return 'text-red-600';
-  };
+    if (quality >= 95) return "text-green-600"
+    if (quality >= 80) return "text-yellow-600"
+    return "text-red-600"
+  }
 
   return (
     <div className="flex items-center space-x-4 text-sm text-gray-600">
       <div className="flex items-center space-x-1">
         <span>Qualidade dos dados:</span>
-        <span className={`font-medium ${getQualityColor()}`}>
-          {quality.toFixed(1)}%
-        </span>
+        <span className={`font-medium ${getQualityColor()}`}>{quality.toFixed(1)}%</span>
       </div>
       <div className="flex items-center space-x-1">
         <span>Registros válidos:</span>
-        <span>{validRecords.toLocaleString('pt-BR')} de {totalRecords.toLocaleString('pt-BR')}</span>
+        <span>
+          {validRecords.toLocaleString("pt-BR")} de {totalRecords.toLocaleString("pt-BR")}
+        </span>
       </div>
       {lastUpdated && (
         <div className="flex items-center space-x-1">
           <RefreshCw className="h-3 w-3" />
-          <span>Atualizado: {lastUpdated.toLocaleString('pt-BR')}</span>
+          <span>Atualizado: {lastUpdated.toLocaleString("pt-BR")}</span>
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
 // Hook for online status
 export const useOnlineStatus = () => {
-  const [isOnline, setIsOnline] = React.useState(navigator.onLine);
+  const [isOnline, setIsOnline] = React.useState(navigator.onLine)
 
   React.useEffect(() => {
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
+    const handleOnline = () => setIsOnline(true)
+    const handleOffline = () => setIsOnline(false)
 
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    window.addEventListener("online", handleOnline)
+    window.addEventListener("offline", handleOffline)
 
     return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-    };
-  }, []);
+      window.removeEventListener("online", handleOnline)
+      window.removeEventListener("offline", handleOffline)
+    }
+  }, [])
 
-  return isOnline;
-};
+  return isOnline
+}

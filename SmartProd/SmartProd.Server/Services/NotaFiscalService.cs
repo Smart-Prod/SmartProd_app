@@ -1,8 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 using SmartProd.API.Server.DTOs;
 using SmartProd.API.Server.Enum;
 using SmartProd.API.Server.Models;
 using SmartProd.API.Server.Data;
+using SmartProd.API.Server.Utils;
 
 namespace SmartProd.API.Server.Services
 {
@@ -17,7 +19,7 @@ namespace SmartProd.API.Server.Services
         public async Task<NotaFiscal> CreateInvoiceAsync(NotaFiscalCreateDto data, int usuarioId)
         {
             if (data.Items == null || data.Items.Count == 0)
-                throw new Exception("A nota precisa ter ao menos 1 item.");
+                throw new ValidationException("A nota precisa ter ao menos 1 item.");
 
             // 1️⃣ Buscar produtos usados na nota
             var productIds = data.Items.Select(x => x.ProductId).ToList();
@@ -27,7 +29,7 @@ namespace SmartProd.API.Server.Services
                 .ToListAsync();
 
             if (products.Count != data.Items.Count)
-                throw new Exception("Algum produto informado não existe.");
+                throw new NotFoundException("Algum produto informado não existe.");
 
             // 2️⃣ Validar regras MP/PA
             foreach (var item in data.Items)
@@ -35,10 +37,10 @@ namespace SmartProd.API.Server.Services
                 var prod = products.First(p => p.Id == item.ProductId);
 
                 if (data.Type == NotaFiscalTipo.ENTRADA && prod.Tipo != TipoProduto.MP)
-                    throw new Exception($"Produto {prod.Name} não é MP. Somente MP aparece em nota de entrada.");
+                    throw new ValidationException($"Produto {prod.Name} não é MP. Somente MP aparece em nota de entrada.");
 
                 if (data.Type == NotaFiscalTipo.SAIDA && prod.Tipo != TipoProduto.PA)
-                    throw new Exception($"Produto {prod.Name} não é PA. Somente PA aparece em nota de saída.");
+                    throw new ValidationException($"Produto {prod.Name} não é PA. Somente PA aparece em nota de saída.");
             }
 
             // 3️⃣ Iniciar transação ANTES de alterar estoque (garante atomicidade)
@@ -55,7 +57,7 @@ namespace SmartProd.API.Server.Services
                     else if (data.Type == NotaFiscalTipo.SAIDA)
                     {
                         if (prod.EstoqueAtual < item.Quantity)
-                            throw new InvalidOperationException(
+                            throw new ValidationException(
                                 $"Estoque insuficiente do produto {prod.Name}. Atual: {prod.EstoqueAtual} | Necessário: {item.Quantity}");
                         prod.EstoqueAtual -= item.Quantity;
                     }
@@ -66,11 +68,11 @@ namespace SmartProd.API.Server.Services
                 // 5️⃣ Criar a nota fiscal + items
                 // Validar campos obrigatórios
                 if (string.IsNullOrWhiteSpace(data.Number))
-                    throw new Exception("O número da nota é obrigatório.");
+                    throw new ValidationException("O número da nota é obrigatório.");
 
                 // Verifica unicidade do número da nota
                 if (await _context.NotasFiscais.AnyAsync(x => x.Number == data.Number))
-                    throw new Exception("O número da nota já existe.");
+                    throw new ValidationException("O número da nota já existe.");
 
                 var notaFiscal = new NotaFiscal
                 {
@@ -105,7 +107,7 @@ namespace SmartProd.API.Server.Services
             catch (DbUpdateException ex) when (ex.InnerException?.Message.Contains("duplicate key", StringComparison.OrdinalIgnoreCase) == true)
             {
                 await transaction.RollbackAsync();
-                throw new Exception("O número da nota já existe.");
+                throw new ValidationException("O número da nota já existe.");
             }
             catch
             {

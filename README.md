@@ -9,6 +9,8 @@ SmartProd_app/
 ├── SmartProd/
 │   ├── SmartProd.Server/       # ASP.NET Core Web API (.NET 10), EF Core e PostgreSQL
 │   ├── SmartProd.AppHost/      # Orquestração local com .NET Aspire
+│   ├── SmartProd.Tests.Unit/   # Testes unitários da API
+│   ├── SmartProd.Tests.Integration/ # Testes de integração da API
 │   └── frontend/               # React, TypeScript, Vite e React Query
 ├── SmartProd_Mobile_Front-end/ # Aplicativo .NET MAUI
 ├── db-init/                    # Inicialização do PostgreSQL no Docker
@@ -64,10 +66,21 @@ O Vite encaminha `/api` para a API local em `http://localhost:5481`. Para aponta
 
 ```powershell
 dotnet build SmartProd\SmartProd.Server\SmartProd.Server.csproj
+dotnet test SmartProd\SmartProd.Tests.Unit\SmartProd.Tests.Unit.csproj
+dotnet test SmartProd\SmartProd.Tests.Integration\SmartProd.Tests.Integration.csproj
 Set-Location SmartProd\frontend
 npm run build
 npm run lint
+npm run test -- --run
 ```
+
+GitHub Actions executa os pipelines de backend e frontend em pushes e pull requests para `main`. O workflow combinado também verifica os builds de Docker.
+
+## Observabilidade e exportações
+
+- `GET /health` verifica a disponibilidade da aplicação e suas dependências; `GET /health/ready` verifica se ela está pronta, incluindo a conexão PostgreSQL.
+- Para exportar traces, defina `OTEL_EXPORTER_OTLP_ENDPOINT` para o endpoint de um coletor OTLP. A API instrumenta ASP.NET Core, `HttpClient`, runtime e consultas Npgsql.
+- As rotas autenticadas `/api/v1/Relatorio/produtos.csv`, `/api/v1/Relatorio/movimentacoes.csv`, `/api/v1/Relatorio/estoque.pdf` e `/api/v1/Relatorio/boms.pdf` baixam os relatórios correspondentes.
 
 ## Rotas
 

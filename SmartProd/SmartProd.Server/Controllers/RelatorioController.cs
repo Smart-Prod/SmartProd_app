@@ -10,9 +10,40 @@ namespace SmartProd.API.Server.Controllers
     public class RelatorioController : ControllerBase
     {
         private readonly RelatorioService _relatorioService;
-        public RelatorioController(RelatorioService relatorioService)
+        private readonly ReportExportService _reportExportService;
+
+        public RelatorioController(RelatorioService relatorioService, ReportExportService reportExportService)
         {
             _relatorioService = relatorioService;
+            _reportExportService = reportExportService;
+        }
+
+        [HttpGet("produtos.csv")]
+        public async Task<IActionResult> ExportProductsCsv(CancellationToken cancellationToken)
+        {
+            var stream = await _reportExportService.ExportProductsCsvAsync(cancellationToken);
+            return File(stream, "text/csv; charset=utf-8", "smartprod-produtos.csv");
+        }
+
+        [HttpGet("movimentacoes.csv")]
+        public async Task<IActionResult> ExportMovementsCsv(CancellationToken cancellationToken)
+        {
+            var stream = await _reportExportService.ExportMovementsCsvAsync(cancellationToken);
+            return File(stream, "text/csv; charset=utf-8", "smartprod-movimentacoes.csv");
+        }
+
+        [HttpGet("estoque.pdf")]
+        public async Task<IActionResult> ExportInventoryPdf(CancellationToken cancellationToken)
+        {
+            var pdf = await _reportExportService.CreateInventoryPdfAsync(cancellationToken);
+            return File(pdf, "application/pdf", "smartprod-estoque.pdf");
+        }
+
+        [HttpGet("boms.pdf")]
+        public async Task<IActionResult> ExportBomPdf(CancellationToken cancellationToken)
+        {
+            var pdf = await _reportExportService.CreateBomPdfAsync(cancellationToken);
+            return File(pdf, "application/pdf", "smartprod-boms.pdf");
         }
 
         [HttpGet("producao")]

@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using SmartProd.API.Server.Data;
 using SmartProd.API.Server.DTOs;
 using SmartProd.API.Server.Models;
+using SmartProd.API.Server.Utils;
 
 namespace SmartProd.API.Server.Services
 {
@@ -17,7 +19,7 @@ namespace SmartProd.API.Server.Services
         public async Task<Produto> CreateProductAsync(ProdutoCreateDto dto, int usuarioId)
         {
             if (await _context.Produtos.AnyAsync(p => p.Code == dto.Code))
-                throw new Exception("Código de produto já está em uso.");
+                throw new ValidationException("Código de produto já está em uso.");
 
             var produto = new Produto
             {
@@ -49,7 +51,7 @@ namespace SmartProd.API.Server.Services
                 .Include(p => p.Bom)
                 .FirstOrDefaultAsync(p => p.Id == id);
             if (produto == null)
-                throw new Exception("Produto não encontrado.");
+                throw new NotFoundException("Produto não encontrado.");
             return produto;
         }
 
@@ -57,7 +59,7 @@ namespace SmartProd.API.Server.Services
         {
             var produto = await _context.Produtos.FindAsync(id);
             if (produto == null)
-                throw new Exception("Produto não encontrado.");
+                throw new NotFoundException("Produto não encontrado.");
 
             if (!string.IsNullOrWhiteSpace(dto.Code))
                 produto.Code = dto.Code;
@@ -86,7 +88,7 @@ namespace SmartProd.API.Server.Services
         {
             var produto = await _context.Produtos.FindAsync(id);
             if (produto == null)
-                throw new Exception("Produto não encontrado.");
+                throw new NotFoundException("Produto não encontrado.");
 
             _context.Produtos.Remove(produto);
             await _context.SaveChangesAsync();

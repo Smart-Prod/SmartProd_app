@@ -1,9 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SmartProd.API.Server.Data;
 using SmartProd.API.Server.DTOs;
 using SmartProd.API.Server.Enum;
 using SmartProd.API.Server.Models;
+using SmartProd.API.Server.Utils;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -25,7 +27,7 @@ namespace SmartProd.API.Server.Services
         public async Task<UsuarioResponseDto> CreateUserAsync(RegisterDto dto)
         {
             if (await _context.Usuarios.AnyAsync(u => u.Email == dto.Email))
-                throw new Exception("E-mail já está em uso.");
+                throw new ValidationException("E-mail já está em uso.");
 
             var hash = BCrypt.Net.BCrypt.HashPassword(dto.Senha);
 
@@ -127,14 +129,14 @@ namespace SmartProd.API.Server.Services
         {
             var user = await _context.Usuarios.FindAsync(id);
             if (user == null)
-                throw new Exception("Usuário não encontrado.");
+                throw new NotFoundException("Usuário não encontrado.");
 
             if (!string.IsNullOrWhiteSpace(dto.Name))
                 user.Name = dto.Name;
             if (!string.IsNullOrWhiteSpace(dto.Email))
             {
                 if (await _context.Usuarios.AnyAsync(u => u.Email == dto.Email && u.Id != id))
-                    throw new Exception("E-mail já está em uso.");
+                    throw new ValidationException("E-mail já está em uso.");
                 user.Email = dto.Email;
             }
             if (dto.Role.HasValue)
@@ -159,7 +161,7 @@ namespace SmartProd.API.Server.Services
         {
             var user = await _context.Usuarios.FindAsync(id);
             if (user == null)
-                throw new Exception("Usuário não encontrado.");
+                throw new NotFoundException("Usuário não encontrado.");
 
             _context.Usuarios.Remove(user);
             await _context.SaveChangesAsync();

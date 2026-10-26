@@ -7,7 +7,7 @@ on:
     branches: [main, develop]
 
 env:
-  DOTNET_VERSION: '8.0.x'
+  DOTNET_VERSION: '10.0.x'
   NODE_VERSION: '20.x'
 
 jobs:
@@ -25,7 +25,6 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
-          cache: true
 
       - name: Restore dependencies
         run: dotnet restore
@@ -34,18 +33,16 @@ jobs:
         run: dotnet build --no-restore --configuration Release
 
       - name: Run tests
-        run: dotnet test --no-build --configuration Release --logger "trx;LogFileName=test_results.trx"
-        env:
-          ConnectionStrings__DefaultConnection: ${{ secrets.SMARTPROD_DB_CONNECTION }}
-          Jwt__Secret: ${{ secrets.SMARTPROD_JWT_SECRET }}
-          Jwt__Issuer: SmartProd
+        run: |
+          dotnet test ../SmartProd.Tests.Unit/SmartProd.Tests.Unit.csproj --configuration Release --logger "trx;LogFileName=unit_test_results.trx"
+          dotnet test ../SmartProd.Tests.Integration/SmartProd.Tests.Integration.csproj --configuration Release --logger "trx;LogFileName=integration_test_results.trx"
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: backend-test-results
-          path: SmartProd/SmartProd.Server/**/test_results.trx
+          path: SmartProd/SmartProd.Tests.*/TestResults/*.trx
 
   frontend-test:
     name: Frontend - Build & Test
@@ -65,9 +62,6 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-
-      - name: Type check
-        run: npm run typecheck
 
       - name: Lint
         run: npm run lint

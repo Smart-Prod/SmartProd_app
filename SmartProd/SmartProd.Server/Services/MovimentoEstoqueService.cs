@@ -1,8 +1,10 @@
-﻿using SmartProd.API.Server.DTOs;
+﻿using System.ComponentModel.DataAnnotations;
+using SmartProd.API.Server.DTOs;
 using SmartProd.API.Server.Enum;
 using Microsoft.EntityFrameworkCore;
 using SmartProd.API.Server.Models;
 using SmartProd.API.Server.Data;
+using SmartProd.API.Server.Utils;
 
 
 namespace SmartProd.API.Server.Services
@@ -20,7 +22,7 @@ namespace SmartProd.API.Server.Services
         {
             var product = await _context.Produtos.FirstOrDefaultAsync(p => p.Code == dto.Code);
             if (product == null)
-                throw new Exception("Produto não encontrado.");
+                throw new NotFoundException("Produto não encontrado.");
 
             var movimentacao = new Movimentacao
             {
@@ -43,7 +45,7 @@ namespace SmartProd.API.Server.Services
         {
             var product = await _context.Produtos.FirstOrDefaultAsync(p => p.Code == dto.Code);
             if (product == null)
-                throw new Exception("Produto não encontrado.");
+                throw new NotFoundException("Produto não encontrado.");
 
             var movimentacao = new Movimentacao
             {
@@ -66,10 +68,10 @@ namespace SmartProd.API.Server.Services
         {
             var produto = await _context.Produtos.FindAsync(dto.ProductId);
             if (produto == null)
-                throw new Exception("Produto não encontrado.");
+                throw new NotFoundException("Produto não encontrado.");
 
             if (!System.Enum.TryParse<TipoMovimentacao>(dto.Tipo, true, out var tipo))
-                throw new Exception($"Tipo de movimentação inválido: {dto.Tipo}");
+                throw new ValidationException($"Tipo de movimentação inválido: {dto.Tipo}");
 
             var movimentacao = new Movimentacao
             {

@@ -1,0 +1,39 @@
+name: Backend CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore
+        run: |
+          dotnet restore SmartProd/SmartProd.Server/SmartProd.Server.csproj
+          dotnet restore SmartProd/SmartProd.Tests.Unit/SmartProd.Tests.Unit.csproj
+          dotnet restore SmartProd/SmartProd.Tests.Integration/SmartProd.Tests.Integration.csproj
+
+      - name: Build
+        run: dotnet build SmartProd/SmartProd.Server/SmartProd.Server.csproj --no-restore --configuration Release
+
+      - name: Build test projects
+        run: |
+          dotnet build SmartProd/SmartProd.Tests.Unit/SmartProd.Tests.Unit.csproj --no-restore --configuration Release
+          dotnet build SmartProd/SmartProd.Tests.Integration/SmartProd.Tests.Integration.csproj --no-restore --configuration Release
+
+      - name: Test backend projects
+        run: |
+          dotnet test SmartProd/SmartProd.Tests.Unit/SmartProd.Tests.Unit.csproj --no-build --configuration Release
+          dotnet test SmartProd/SmartProd.Tests.Integration/SmartProd.Tests.Integration.csproj --no-build --configuration Release

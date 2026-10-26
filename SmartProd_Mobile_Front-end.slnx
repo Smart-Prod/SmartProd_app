@@ -4,5 +4,7 @@
     <Deploy />
   </Project>
   <Project Path="SmartProd/SmartProd.Server/SmartProd.Server.csproj" />
+  <Project Path="SmartProd/SmartProd.Tests.Unit/SmartProd.Tests.Unit.csproj" />
+  <Project Path="SmartProd/SmartProd.Tests.Integration/SmartProd.Tests.Integration.csproj" />
   <Project Path="SmartProd_Mobile_Front-end/SmartProd_Mobile_Front-end.csproj" />
 </Solution>

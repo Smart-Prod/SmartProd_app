@@ -1,8 +1,10 @@
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
 using SmartProd.API.Server.Data;
 using SmartProd.API.Server.DTOs;
 using SmartProd.API.Server.Models;
+using SmartProd.API.Server.Utils;
 
 namespace SmartProd.API.Server.Services;
 
@@ -66,12 +68,12 @@ public sealed class BomService : IBomService
     public async Task<BomResponseDto> CreateAsync(CreateBomDto dto)
     {
         if (!await _context.Produtos.AnyAsync(product => product.Id == dto.ProductId))
-            throw new InvalidOperationException("Produto não encontrado.");
+            throw new NotFoundException("Produto não encontrado.");
 
         var materialIds = dto.Materials.Select(item => item.MaterialId).Distinct().ToArray();
         if (materialIds.Length != dto.Materials.Count ||
             await _context.Produtos.CountAsync(product => materialIds.Contains(product.Id)) != materialIds.Length)
-            throw new InvalidOperationException("Um ou mais materiais não existem ou foram repetidos.");
+            throw new ValidationException("Um ou mais materiais não existem ou foram repetidos.");
 
         var bom = new Materiais
         {
@@ -89,7 +91,7 @@ public sealed class BomService : IBomService
         await _context.SaveChangesAsync();
 
         return await GetByIdAsync(bom.Id)
-            ?? throw new InvalidOperationException("A estrutura criada não pôde ser carregada.");
+            ?? throw new NotFoundException("A estrutura criada não pôde ser carregada.");
     }
 
 }

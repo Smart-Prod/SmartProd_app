@@ -17,17 +17,10 @@ namespace SmartProd.API.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetDashboard()
+        public async Task<IActionResult> GetDashboard(CancellationToken cancellationToken)
         {
-            try
-            {
-                var data = await _dashboardService.GetDashboardAsync();
-                return Ok(data);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { error = ex.Message });
-            }
+            var data = await _dashboardService.GetDashboardAsync(cancellationToken);
+            return Ok(data);
         }
     }
 }

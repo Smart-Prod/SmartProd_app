@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SmartProd.API.Server.Data;
+using SmartProd.API.Server.DTOs;
 using SmartProd.API.Server.Enum;
 
 namespace SmartProd.API.Server.Services
@@ -13,49 +14,78 @@ namespace SmartProd.API.Server.Services
             _context = context;
         }
 
-        public async Task<object> GetDashboardAsync()
+        public async Task<DashboardResponseDto> GetDashboardAsync(CancellationToken cancellationToken = default)
         {
-            var totalOrdens = await _context.OrdensProducao.CountAsync();
-            var activeOps = await _context.OrdensProducao.CountAsync(o => o.Status == OrdemProducaoStatus.EM_PRODUCAO);
-            var completedOps = await _context.OrdensProducao.CountAsync(o => o.Status == OrdemProducaoStatus.CONCLUIDA);
-            var totalMovimentacoes = await _context.Movimentacoes.CountAsync();
-            var totalProdutos = await _context.Produtos.CountAsync();
-            var lowStock = await _context.Produtos.CountAsync(p => p.EstoqueAtual <= p.EstoqueMínimo);
+            var orders = _context.OrdensProducao.AsNoTracking();
+            var products = _context.Produtos.AsNoTracking();
+            var totalOrders = await orders.CountAsync(cancellationToken);
+            var activeOrders = await orders.CountAsync(
+                order => order.Status == OrdemProducaoStatus.EM_PRODUCAO,
+                cancellationToken);
+            var completedOrders = await orders.CountAsync(
+                order => order.Status == OrdemProducaoStatus.CONCLUIDA,
+                cancellationToken);
+            var totalMovements = await _context.Movimentacoes.CountAsync(cancellationToken);
+            var totalProducts = await products.CountAsync(cancellationToken);
+            var criticalStockProducts = await products
+                .Where(product => product.EstoqueAtual <= product.EstoqueMínimo)
+                .OrderBy(product => product.EstoqueAtual - product.EstoqueMínimo)
+                .Select(product => new CriticalStockProductDto(
+                    product.Id,
+                    product.Code,
+                    product.Name,
+                    product.EstoqueAtual,
+                    product.EstoqueMínimo))
+                .ToListAsync(cancellationToken);
 
-            var totalPlanned = await _context.OrdensProducao.SumAsync(o => (double?)o.Quantity) ?? 0;
-            var totalProduced = await _context.OrdensProducao.SumAsync(o => (double?)o.Produced) ?? 0;
-            var efficiency = totalPlanned > 0 ? Math.Round((totalProduced / totalPlanned) * 100, 1) : 0;
+            var plannedQuantity = await orders.SumAsync(order => (double?)order.Quantity, cancellationToken) ?? 0;
+            var producedQuantity = await orders.SumAsync(order => (double?)order.Produced, cancellationToken) ?? 0;
+            var efficiency = plannedQuantity > 0
+                ? Math.Round(producedQuantity / plannedQuantity * 100, 1)
+                : 0;
+            var revenue = Convert.ToDecimal(
+                await _context.Vendas.AsNoTracking().SumAsync(sale => (double?)sale.TotalValue, cancellationToken) ?? 0);
 
-            var history = await _context.OrdensProducao
+            var recentMovements = await _context.Movimentacoes
+                .AsNoTracking()
+                .OrderByDescending(movement => movement.CreatedAt)
+                .Take(10)
+                .Select(movement => new RecentMovementDto(
+                    movement.Id,
+                    movement.ProductId,
+                    movement.Produto.Name,
+                    movement.Tipo.ToString(),
+                    movement.Quantity,
+                    movement.CreatedAt))
+                .ToListAsync(cancellationToken);
+
+            var history = await orders
                 .Where(o => o.FinishedAt != null)
                 .OrderByDescending(o => o.FinishedAt)
                 .Take(10)
-                .Select(o => new
-                {
-                    date = o.FinishedAt!.Value.ToString("dd/MM"),
-                    throughput = o.Produced.ToString("F0"),
-                    status = o.Produced >= o.Quantity ? "CONCLUÍDO" : "PARCIAL"
-                })
-                .ToListAsync();
+                .Select(order => new CompletedOrderHistoryDto(
+                    order.Id,
+                    order.FinishedAt!.Value,
+                    order.Quantity,
+                    order.Produced,
+                    order.Produced >= order.Quantity ? "CONCLUIDA" : "PARCIAL"))
+                .ToListAsync(cancellationToken);
 
-            return new
+            return new DashboardResponseDto
             {
-                activeOps,
-                totalOps = totalOrdens,
-                efficiency = $"{efficiency}%",
-                efficiencyTrend = efficiency >= 80 ? "+2.5%" : "-1.2%",
-                throughput = $"{totalProduced:F0} unid.",
-                oeeTarget = 85.0,
-                alertsCount = lowStock,
-                alertMessage = lowStock > 0 ? $"{lowStock} produto(s) com estoque baixo" : "Nenhum alerta",
-                currentShift = "Turno A",
-                shiftProgress = "67%",
-                lineEfficiency = $"{efficiency}%",
-                latency = "320ms",
-                traceability = "100%",
-                oeeMeta = "85%",
-                oeeGap = $"{85 - efficiency:F1}%",
-                history
+                TotalOrders = totalOrders,
+                ActiveOrders = activeOrders,
+                CompletedOrders = completedOrders,
+                TotalMovements = totalMovements,
+                TotalProducts = totalProducts,
+                CriticalStockCount = criticalStockProducts.Count,
+                PlannedQuantity = plannedQuantity,
+                ProducedQuantity = producedQuantity,
+                ProductionEfficiencyPercent = efficiency,
+                Revenue = revenue,
+                CriticalStockProducts = criticalStockProducts,
+                RecentMovements = recentMovements,
+                CompletedOrderHistory = history
             };
         }
     }
