@@ -1,8 +1,9 @@
 ﻿namespace SmartProd.API.Server.Models
 {
-    public class NotaFiscalItem
+    public class NotaFiscalItem : ITenantOwned
     {
         public int Id { get; set; }
+        public int TenantId { get; set; }
         public int NotaFiscalId { get; set; }
         public NotaFiscal NotaFiscal { get; set; } = null!;
 

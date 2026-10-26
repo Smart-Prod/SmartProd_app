@@ -22,6 +22,8 @@ var connectionString = builder.Configuration["DB_CONNECTION_STRING"]
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ITenantContext, HttpTenantContext>();
 
 var corsOrigins = (builder.Configuration["CORS_ORIGINS"] ?? builder.Configuration["Cors:Origins"] ?? string.Empty)
     .Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
@@ -60,6 +62,7 @@ builder.Services.AddScoped<RelatorioService>();
 builder.Services.AddScoped<ReportExportService>();
 builder.Services.AddScoped<SeedService>();
 builder.Services.AddScoped<DashboardService>();
+builder.Services.AddScoped<IndustrialOperationsService>();
 
 // JWT Authentication
 var jwtSecret = builder.Configuration["JWT_SECRET"]

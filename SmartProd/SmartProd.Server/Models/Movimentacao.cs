@@ -2,9 +2,10 @@
 
 namespace SmartProd.API.Server.Models
 {
-    public class Movimentacao
+    public class Movimentacao : ITenantOwned
     {
         public int Id { get; set; }
+        public int TenantId { get; set; }
         public int ProductId { get; set; }
         public Produto Produto { get; set; } = null!;
         public int? OrderId { get; set; } // FK para OrdemProducao, se houver

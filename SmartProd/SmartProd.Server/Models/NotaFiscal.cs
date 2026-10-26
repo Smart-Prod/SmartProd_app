@@ -2,9 +2,10 @@
 
 namespace SmartProd.API.Server.Models
 {
-    public class NotaFiscal
+    public class NotaFiscal : ITenantOwned
     {
         public int Id { get; set; }
+        public int TenantId { get; set; }
         public NotaFiscalTipo Type { get; set; }
         public string Number { get; set; } = string.Empty;
         public DateTime Date { get; set; }
@@ -18,4 +19,3 @@ namespace SmartProd.API.Server.Models
         public List<NotaFiscalItem> Items { get; set; } = new();
     }
 }
-
