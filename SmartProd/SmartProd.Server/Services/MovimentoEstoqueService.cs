@@ -20,9 +20,18 @@ namespace SmartProd.API.Server.Services
 
         public async Task<(Movimentacao movement, Produto product)> CreateConsumptionAsync(ConsumoRequestDto dto)
         {
-            var product = await _context.Produtos.FirstOrDefaultAsync(p => p.Code == dto.Code);
-            if (product == null)
-                throw new NotFoundException("Produto não encontrado.");
+            if (dto.Quantity <= 0)
+                throw new ValidationException("A quantidade precisa ser maior que zero.");
+
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+            var product = await _context.Produtos.FirstOrDefaultAsync(p => p.Code == dto.Code)
+                ?? throw new NotFoundException("Produto não encontrado.");
+            if (product.Tipo != TipoProduto.MP)
+                throw new ValidationException("Somente matéria-prima pode ser registrada como consumo.");
+            if (product.EstoqueAtual < dto.Quantity)
+                throw new ValidationException($"Estoque insuficiente para consumir {product.Name}.");
+            if (dto.OrderId.HasValue && !await _context.OrdensProducao.AnyAsync(order => order.Id == dto.OrderId.Value))
+                throw new NotFoundException("Ordem de produção não encontrada.");
 
             var movimentacao = new Movimentacao
             {
@@ -34,18 +43,31 @@ namespace SmartProd.API.Server.Services
             };
             _context.Movimentacoes.Add(movimentacao);
 
-            product.EstoqueAtual -= dto.Quantity;
-            product.UpdatedAt = DateTime.UtcNow;
+            await ApplyStockDeltaAsync(product, -dto.Quantity);
             await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
 
             return (movimentacao, product);
         }
 
         public async Task<(Movimentacao movement, Produto product)> CompleteOrderAsync(ConsumoRequestDto dto)
         {
-            var product = await _context.Produtos.FirstOrDefaultAsync(p => p.Code == dto.Code);
-            if (product == null)
-                throw new NotFoundException("Produto não encontrado.");
+            if (dto.Quantity <= 0)
+                throw new ValidationException("A quantidade precisa ser maior que zero.");
+
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+            var product = await _context.Produtos.FirstOrDefaultAsync(p => p.Code == dto.Code)
+                ?? throw new NotFoundException("Produto não encontrado.");
+            if (product.Tipo != TipoProduto.PA)
+                throw new ValidationException("Somente produto acabado pode ser apontado como produção.");
+            if (dto.OrderId.HasValue)
+            {
+                var order = await _context.OrdensProducao
+                    .FirstOrDefaultAsync(candidate => candidate.Id == dto.OrderId.Value)
+                    ?? throw new NotFoundException("Ordem de produção não encontrada.");
+                if (order.ProductId != product.Id)
+                    throw new ValidationException("A ordem de produção não corresponde ao produto informado.");
+            }
 
             var movimentacao = new Movimentacao
             {
@@ -57,9 +79,9 @@ namespace SmartProd.API.Server.Services
             };
             _context.Movimentacoes.Add(movimentacao);
 
-            product.EstoqueAtual += dto.Quantity;
-            product.UpdatedAt = DateTime.UtcNow;
+            await ApplyStockDeltaAsync(product, dto.Quantity);
             await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
 
             return (movimentacao, product);
         }
@@ -70,9 +92,29 @@ namespace SmartProd.API.Server.Services
             if (produto == null)
                 throw new NotFoundException("Produto não encontrado.");
 
+            if (dto.Quantity <= 0)
+                throw new ValidationException("A quantidade precisa ser maior que zero.");
             if (!System.Enum.TryParse<TipoMovimentacao>(dto.Tipo, true, out var tipo))
                 throw new ValidationException($"Tipo de movimentação inválido: {dto.Tipo}");
 
+            var stockDelta = tipo switch
+            {
+                TipoMovimentacao.ENTRADA or TipoMovimentacao.PRODUCAO => dto.Quantity,
+                TipoMovimentacao.SAIDA or TipoMovimentacao.CONSUMO => -dto.Quantity,
+                _ => throw new ValidationException($"Tipo de movimentação não suportado: {tipo}")
+            };
+            if (stockDelta < 0 && produto.EstoqueAtual < -stockDelta)
+                throw new ValidationException($"Estoque insuficiente para o produto {produto.Name}.");
+            if (dto.OrderId.HasValue)
+            {
+                var order = await _context.OrdensProducao
+                    .FirstOrDefaultAsync(candidate => candidate.Id == dto.OrderId.Value)
+                    ?? throw new NotFoundException("Ordem de produção não encontrada.");
+                if (tipo == TipoMovimentacao.PRODUCAO && order.ProductId != produto.Id)
+                    throw new ValidationException("A ordem de produção não corresponde ao produto informado.");
+            }
+
+            await using var transaction = await _context.Database.BeginTransactionAsync();
             var movimentacao = new Movimentacao
             {
                 ProductId = dto.ProductId,
@@ -83,9 +125,33 @@ namespace SmartProd.API.Server.Services
             };
 
             _context.Movimentacoes.Add(movimentacao);
+            await ApplyStockDeltaAsync(produto, stockDelta);
             await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
 
             return movimentacao;
+        }
+
+        private async Task ApplyStockDeltaAsync(Produto product, double delta)
+        {
+            var stock = await _context.Estoque.FirstOrDefaultAsync(entry => entry.ProductId == product.Id);
+            var newBalance = product.EstoqueAtual + delta;
+            if (newBalance < 0)
+                throw new ValidationException("O saldo de estoque não pode ficar negativo.");
+            if (stock is null)
+            {
+                _context.Estoque.Add(new Estoque
+                {
+                    ProductId = product.Id,
+                    Quantity = newBalance,
+                    Unit = product.Unit
+                });
+            }
+            else
+                stock.Quantity = newBalance;
+
+            product.EstoqueAtual = newBalance;
+            product.UpdatedAt = DateTime.UtcNow;
         }
 
         public async Task<RespostaMovimentoEstoque> GetAllMovementsAsync(MovimentacaoFilterDto filters)

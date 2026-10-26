@@ -20,15 +20,21 @@ namespace SmartProd.API.Server.Services
         {
             if (data.Items == null || data.Items.Count == 0)
                 throw new ValidationException("A nota precisa ter ao menos 1 item.");
+            if (data.Type is not NotaFiscalTipo.ENTRADA and not NotaFiscalTipo.SAIDA)
+                throw new ValidationException("Tipo de nota fiscal inválido.");
+            if (data.Items.Any(item =>
+                    item.Quantity <= 0 || !double.IsFinite(item.Quantity) ||
+                    item.Value < 0 || !double.IsFinite(item.Value)))
+                throw new ValidationException("Quantidade ou valor de item inválido.");
 
             // 1️⃣ Buscar produtos usados na nota
-            var productIds = data.Items.Select(x => x.ProductId).ToList();
+            var productIds = data.Items.Select(x => x.ProductId).Distinct().ToList();
 
             var products = await _context.Produtos
                 .Where(p => productIds.Contains(p.Id))
                 .ToListAsync();
 
-            if (products.Count != data.Items.Count)
+            if (products.Count != productIds.Count)
                 throw new NotFoundException("Algum produto informado não existe.");
 
             // 2️⃣ Validar regras MP/PA
@@ -63,6 +69,32 @@ namespace SmartProd.API.Server.Services
                     }
 
                     _context.Produtos.Update(prod);
+
+                    var stock = await _context.Estoque
+                        .FirstOrDefaultAsync(entry => entry.ProductId == prod.Id);
+                    if (stock is null)
+                    {
+                        _context.Estoque.Add(new Estoque
+                        {
+                            ProductId = prod.Id,
+                            Quantity = prod.EstoqueAtual,
+                            Unit = prod.Unit
+                        });
+                    }
+                    else
+                    {
+                        stock.Quantity = prod.EstoqueAtual;
+                    }
+
+                    _context.Movimentacoes.Add(new Movimentacao
+                    {
+                        ProductId = prod.Id,
+                        Tipo = data.Type == NotaFiscalTipo.ENTRADA
+                            ? TipoMovimentacao.ENTRADA
+                            : TipoMovimentacao.SAIDA,
+                        Quantity = item.Quantity,
+                        CreatedAt = DateTime.UtcNow
+                    });
                 }
 
                 // 5️⃣ Criar a nota fiscal + items
@@ -79,6 +111,7 @@ namespace SmartProd.API.Server.Services
                     Type = data.Type,
                     Number = data.Number,
                     Date = data.Date,
+                    UsuarioId = usuarioId,
                     Supplier = data.Supplier,
                     Customer = data.Customer,
                     Status = NotaFiscalStatus.PROCESSADA,

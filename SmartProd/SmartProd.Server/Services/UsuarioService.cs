@@ -181,7 +181,8 @@ namespace SmartProd.API.Server.Services
                 new Claim(JwtRegisteredClaimNames.Email, user.Email ?? string.Empty),
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Email, user.Email ?? string.Empty),
-                new Claim(ClaimTypes.Role, user.Role.ToString())
+                new Claim(ClaimTypes.Role, user.Role.ToString()),
+                new Claim("tenant_id", user.TenantId.ToString())
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret));

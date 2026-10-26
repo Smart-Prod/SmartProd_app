@@ -1,8 +1,9 @@
 ﻿namespace SmartProd.API.Server.Models
 {
-    public class Materiais
+    public class Materiais : ITenantOwned
     {
         public int Id { get; set; }
+        public int TenantId { get; set; }
         public int ProdutoId { get; set; }
         public Produto Produto { get; set; } = null!;
 

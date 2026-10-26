@@ -2,9 +2,10 @@
 
 namespace SmartProd.API.Server.Models
 {
-    public class Produto
+    public class Produto : ITenantOwned
     {
         public int Id { get; set; }
+        public int TenantId { get; set; }
         public string Code { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
         public TipoProduto Tipo { get; set; }
@@ -12,6 +13,7 @@ namespace SmartProd.API.Server.Models
         public double EstoqueAtual { get; set; }
         public double EstoqueReservado { get; set; }
         public double EstoqueMínimo { get; set; }
+        public uint Version { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; }
 
@@ -29,4 +31,3 @@ namespace SmartProd.API.Server.Models
     }
 
 }
-

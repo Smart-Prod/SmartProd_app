@@ -22,6 +22,66 @@ namespace SmartProd.Server.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("SmartProd.API.Server.Models.AuditEvent", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)");
+
+                    b.Property<string>("ActorName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int?>("ActorUserId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("AfterJson")
+                        .HasColumnType("text");
+
+                    b.Property<string>("BeforeJson")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CorrelationId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("EntityId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("EntityType")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<DateTime>("OccurredAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Reason")
+                        .HasColumnType("text");
+
+                    b.Property<int>("TenantId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(1);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenantId", "OccurredAt");
+
+                    b.HasIndex("TenantId", "EntityType", "EntityId");
+
+                    b.ToTable("AuditEvents");
+                });
+
             modelBuilder.Entity("SmartProd.API.Server.Models.Estoque", b =>
                 {
                     b.Property<int>("Id")
@@ -36,6 +96,11 @@ namespace SmartProd.Server.Migrations
                     b.Property<double>("Quantity")
                         .HasColumnType("double precision");
 
+                    b.Property<int>("TenantId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(1);
+
                     b.Property<string>("Unit")
                         .IsRequired()
                         .HasColumnType("text");
@@ -44,7 +109,157 @@ namespace SmartProd.Server.Migrations
 
                     b.HasIndex("ProductId");
 
+                    b.HasIndex("TenantId");
+
                     b.ToTable("Estoque");
+                });
+
+            modelBuilder.Entity("SmartProd.API.Server.Models.Lot", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("ManufacturedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Number")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("character varying(120)");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ProductionOrderId")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("QuantityReceived")
+                        .HasPrecision(18, 3)
+                        .HasColumnType("numeric(18,3)");
+
+                    b.Property<decimal>("QuantityRemaining")
+                        .HasPrecision(18, 3)
+                        .HasColumnType("numeric(18,3)");
+
+                    b.Property<string>("SupplierLotNumber")
+                        .HasMaxLength(120)
+                        .HasColumnType("character varying(120)");
+
+                    b.Property<int>("TenantId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(1);
+
+                    b.Property<decimal?>("UnitCost")
+                        .HasPrecision(18, 4)
+                        .HasColumnType("numeric(18,4)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("ProductionOrderId");
+
+                    b.HasIndex("TenantId", "ProductId", "Number")
+                        .IsUnique();
+
+                    b.ToTable("Lots");
+                });
+
+            modelBuilder.Entity("SmartProd.API.Server.Models.LotGenealogy", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<int>("InputLotId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("OutputLotId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ProductionOrderId")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("QuantityConsumed")
+                        .HasPrecision(18, 3)
+                        .HasColumnType("numeric(18,3)");
+
+                    b.Property<DateTime>("RecordedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("TenantId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(1);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InputLotId");
+
+                    b.HasIndex("OutputLotId");
+
+                    b.HasIndex("ProductionOrderId");
+
+                    b.HasIndex("TenantId", "InputLotId", "OutputLotId", "ProductionOrderId")
+                        .IsUnique();
+
+                    b.ToTable("LotGenealogy");
+                });
+
+            modelBuilder.Entity("SmartProd.API.Server.Models.Machine", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("character varying(80)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)");
+
+                    b.Property<int>("TenantId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(1);
+
+                    b.Property<int>("WorkCenterId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkCenterId");
+
+                    b.HasIndex("TenantId", "Code")
+                        .IsUnique();
+
+                    b.ToTable("Machines");
                 });
 
             modelBuilder.Entity("SmartProd.API.Server.Models.Materiais", b =>
@@ -61,6 +276,11 @@ namespace SmartProd.Server.Migrations
                     b.Property<int>("ProdutoId")
                         .HasColumnType("integer");
 
+                    b.Property<int>("TenantId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(1);
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -68,6 +288,8 @@ namespace SmartProd.Server.Migrations
 
                     b.HasIndex("ProdutoId")
                         .IsUnique();
+
+                    b.HasIndex("TenantId");
 
                     b.ToTable("Materiais");
                 });
@@ -89,11 +311,18 @@ namespace SmartProd.Server.Migrations
                     b.Property<double>("Quantidade")
                         .HasColumnType("double precision");
 
+                    b.Property<int>("TenantId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(1);
+
                     b.HasKey("Id");
 
                     b.HasIndex("MateriaisId");
 
                     b.HasIndex("ProdutosId");
+
+                    b.HasIndex("TenantId");
 
                     b.ToTable("MateriaisItems");
                 });
@@ -118,12 +347,19 @@ namespace SmartProd.Server.Migrations
                     b.Property<double>("Quantity")
                         .HasColumnType("double precision");
 
+                    b.Property<int>("TenantId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(1);
+
                     b.Property<int>("Tipo")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("TenantId");
 
                     b.ToTable("Movimentacoes");
                 });
@@ -152,6 +388,11 @@ namespace SmartProd.Server.Migrations
                     b.Property<string>("Supplier")
                         .HasColumnType("text");
 
+                    b.Property<int>("TenantId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(1);
+
                     b.Property<int>("Type")
                         .HasColumnType("integer");
 
@@ -160,10 +401,10 @@ namespace SmartProd.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Number")
-                        .IsUnique();
-
                     b.HasIndex("UsuarioId");
+
+                    b.HasIndex("TenantId", "Number")
+                        .IsUnique();
 
                     b.ToTable("NotasFiscais");
                 });
@@ -185,6 +426,11 @@ namespace SmartProd.Server.Migrations
                     b.Property<double>("Quantity")
                         .HasColumnType("double precision");
 
+                    b.Property<int>("TenantId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(1);
+
                     b.Property<double>("Value")
                         .HasColumnType("double precision");
 
@@ -193,6 +439,8 @@ namespace SmartProd.Server.Migrations
                     b.HasIndex("NotaFiscalId");
 
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("TenantId");
 
                     b.ToTable("NotaFiscalItems");
                 });
@@ -226,6 +474,11 @@ namespace SmartProd.Server.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
+                    b.Property<int>("TenantId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(1);
+
                     b.Property<int>("UsuarioId")
                         .HasColumnType("integer");
 
@@ -233,9 +486,142 @@ namespace SmartProd.Server.Migrations
 
                     b.HasIndex("ProductId");
 
+                    b.HasIndex("TenantId");
+
                     b.HasIndex("UsuarioId");
 
                     b.ToTable("OrdensProducao");
+                });
+
+            modelBuilder.Entity("SmartProd.API.Server.Models.ProductionEvent", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("DeviceId")
+                        .HasMaxLength(120)
+                        .HasColumnType("character varying(120)");
+
+                    b.Property<long?>("DeviceSequence")
+                        .HasColumnType("bigint");
+
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("GoodQuantity")
+                        .HasPrecision(18, 3)
+                        .HasColumnType("numeric(18,3)");
+
+                    b.Property<int?>("MachineId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("OccurredAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("OperationId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("OperatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ReasonCode")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<DateTime>("ReceivedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<decimal>("ReworkQuantity")
+                        .HasPrecision(18, 3)
+                        .HasColumnType("numeric(18,3)");
+
+                    b.Property<decimal>("ScrapQuantity")
+                        .HasPrecision(18, 3)
+                        .HasColumnType("numeric(18,3)");
+
+                    b.Property<int>("TenantId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(1);
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MachineId");
+
+                    b.HasIndex("OperationId");
+
+                    b.HasIndex("OperatorId");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("TenantId", "EventId")
+                        .IsUnique();
+
+                    b.HasIndex("TenantId", "DeviceId", "DeviceSequence")
+                        .IsUnique()
+                        .HasFilter("\"DeviceId\" IS NOT NULL AND \"DeviceSequence\" IS NOT NULL");
+
+                    b.HasIndex("TenantId", "MachineId", "OccurredAt");
+
+                    b.HasIndex("TenantId", "OrderId", "OccurredAt");
+
+                    b.ToTable("ProductionEvents");
+                });
+
+            modelBuilder.Entity("SmartProd.API.Server.Models.ProductionOperation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("IdealCycleTimeSeconds")
+                        .HasPrecision(12, 3)
+                        .HasColumnType("numeric(12,3)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Sequence")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TenantId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(1);
+
+                    b.Property<int>("WorkCenterId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("WorkCenterId");
+
+                    b.HasIndex("TenantId", "ProductId", "Sequence")
+                        .IsUnique();
+
+                    b.ToTable("ProductionOperations");
                 });
 
             modelBuilder.Entity("SmartProd.API.Server.Models.Produto", b =>
@@ -266,6 +652,11 @@ namespace SmartProd.Server.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("TenantId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(1);
+
                     b.Property<int>("Tipo")
                         .HasColumnType("integer");
 
@@ -279,14 +670,62 @@ namespace SmartProd.Server.Migrations
                     b.Property<int>("UsuarioId")
                         .HasColumnType("integer");
 
-                    b.HasKey("Id");
+                    b.Property<uint>("Version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("xid")
+                        .HasColumnName("xmin");
 
-                    b.HasIndex("Code")
-                        .IsUnique();
+                    b.HasKey("Id");
 
                     b.HasIndex("UsuarioId");
 
+                    b.HasIndex("TenantId", "Code")
+                        .IsUnique();
+
                     b.ToTable("Produtos");
+                });
+
+            modelBuilder.Entity("SmartProd.API.Server.Models.Tenant", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("character varying(80)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Slug")
+                        .IsUnique();
+
+                    b.ToTable("Tenants");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            Name = "SmartProd Demo",
+                            Slug = "smartprod-demo"
+                        });
                 });
 
             modelBuilder.Entity("SmartProd.API.Server.Models.Usuario", b =>
@@ -327,12 +766,17 @@ namespace SmartProd.Server.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("TenantId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(1);
+
                     b.HasKey("Id");
 
-                    b.HasIndex("Email")
+                    b.HasIndex("RefreshTokenHash")
                         .IsUnique();
 
-                    b.HasIndex("RefreshTokenHash")
+                    b.HasIndex("TenantId", "Email")
                         .IsUnique();
 
                     b.ToTable("Usuarios");
@@ -355,6 +799,11 @@ namespace SmartProd.Server.Migrations
                     b.Property<double>("Quantity")
                         .HasColumnType("double precision");
 
+                    b.Property<int>("TenantId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(1);
+
                     b.Property<double>("TotalValue")
                         .HasColumnType("double precision");
 
@@ -362,7 +811,52 @@ namespace SmartProd.Server.Migrations
 
                     b.HasIndex("ProductId");
 
+                    b.HasIndex("TenantId");
+
                     b.ToTable("Vendas");
+                });
+
+            modelBuilder.Entity("SmartProd.API.Server.Models.WorkCenter", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("character varying(80)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<int>("TenantId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(1);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenantId", "Code")
+                        .IsUnique();
+
+                    b.ToTable("WorkCenters");
+                });
+
+            modelBuilder.Entity("SmartProd.API.Server.Models.AuditEvent", b =>
+                {
+                    b.HasOne("SmartProd.API.Server.Models.Tenant", null)
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("SmartProd.API.Server.Models.Estoque", b =>
@@ -373,7 +867,86 @@ namespace SmartProd.Server.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("SmartProd.API.Server.Models.Tenant", null)
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Produto");
+                });
+
+            modelBuilder.Entity("SmartProd.API.Server.Models.Lot", b =>
+                {
+                    b.HasOne("SmartProd.API.Server.Models.Produto", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SmartProd.API.Server.Models.OrdemProducao", "ProductionOrder")
+                        .WithMany()
+                        .HasForeignKey("ProductionOrderId");
+
+                    b.HasOne("SmartProd.API.Server.Models.Tenant", null)
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("ProductionOrder");
+                });
+
+            modelBuilder.Entity("SmartProd.API.Server.Models.LotGenealogy", b =>
+                {
+                    b.HasOne("SmartProd.API.Server.Models.Lot", "InputLot")
+                        .WithMany()
+                        .HasForeignKey("InputLotId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SmartProd.API.Server.Models.Lot", "OutputLot")
+                        .WithMany()
+                        .HasForeignKey("OutputLotId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SmartProd.API.Server.Models.OrdemProducao", "ProductionOrder")
+                        .WithMany()
+                        .HasForeignKey("ProductionOrderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SmartProd.API.Server.Models.Tenant", null)
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("InputLot");
+
+                    b.Navigation("OutputLot");
+
+                    b.Navigation("ProductionOrder");
+                });
+
+            modelBuilder.Entity("SmartProd.API.Server.Models.Machine", b =>
+                {
+                    b.HasOne("SmartProd.API.Server.Models.Tenant", null)
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SmartProd.API.Server.Models.WorkCenter", "WorkCenter")
+                        .WithMany()
+                        .HasForeignKey("WorkCenterId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("WorkCenter");
                 });
 
             modelBuilder.Entity("SmartProd.API.Server.Models.Materiais", b =>
@@ -382,6 +955,12 @@ namespace SmartProd.Server.Migrations
                         .WithOne("Bom")
                         .HasForeignKey("SmartProd.API.Server.Models.Materiais", "ProdutoId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SmartProd.API.Server.Models.Tenant", null)
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Produto");
@@ -401,6 +980,12 @@ namespace SmartProd.Server.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("SmartProd.API.Server.Models.Tenant", null)
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Materiais");
 
                     b.Navigation("Produtos");
@@ -414,11 +999,23 @@ namespace SmartProd.Server.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("SmartProd.API.Server.Models.Tenant", null)
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Produto");
                 });
 
             modelBuilder.Entity("SmartProd.API.Server.Models.NotaFiscal", b =>
                 {
+                    b.HasOne("SmartProd.API.Server.Models.Tenant", null)
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("SmartProd.API.Server.Models.Usuario", "Usuario")
                         .WithMany("NotaFiscal")
                         .HasForeignKey("UsuarioId")
@@ -442,6 +1039,12 @@ namespace SmartProd.Server.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("SmartProd.API.Server.Models.Tenant", null)
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("NotaFiscal");
 
                     b.Navigation("Produto");
@@ -455,6 +1058,12 @@ namespace SmartProd.Server.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("SmartProd.API.Server.Models.Tenant", null)
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("SmartProd.API.Server.Models.Usuario", "Usuario")
                         .WithMany("OrdemProducao")
                         .HasForeignKey("UsuarioId")
@@ -466,8 +1075,74 @@ namespace SmartProd.Server.Migrations
                     b.Navigation("Usuario");
                 });
 
+            modelBuilder.Entity("SmartProd.API.Server.Models.ProductionEvent", b =>
+                {
+                    b.HasOne("SmartProd.API.Server.Models.Machine", "Machine")
+                        .WithMany()
+                        .HasForeignKey("MachineId");
+
+                    b.HasOne("SmartProd.API.Server.Models.ProductionOperation", "Operation")
+                        .WithMany()
+                        .HasForeignKey("OperationId");
+
+                    b.HasOne("SmartProd.API.Server.Models.Usuario", "Operator")
+                        .WithMany()
+                        .HasForeignKey("OperatorId");
+
+                    b.HasOne("SmartProd.API.Server.Models.OrdemProducao", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SmartProd.API.Server.Models.Tenant", null)
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Machine");
+
+                    b.Navigation("Operation");
+
+                    b.Navigation("Operator");
+
+                    b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("SmartProd.API.Server.Models.ProductionOperation", b =>
+                {
+                    b.HasOne("SmartProd.API.Server.Models.Produto", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SmartProd.API.Server.Models.Tenant", null)
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SmartProd.API.Server.Models.WorkCenter", "WorkCenter")
+                        .WithMany()
+                        .HasForeignKey("WorkCenterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("WorkCenter");
+                });
+
             modelBuilder.Entity("SmartProd.API.Server.Models.Produto", b =>
                 {
+                    b.HasOne("SmartProd.API.Server.Models.Tenant", null)
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("SmartProd.API.Server.Models.Usuario", "Usuario")
                         .WithMany("Produtos")
                         .HasForeignKey("UsuarioId")
@@ -475,6 +1150,15 @@ namespace SmartProd.Server.Migrations
                         .IsRequired();
 
                     b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("SmartProd.API.Server.Models.Usuario", b =>
+                {
+                    b.HasOne("SmartProd.API.Server.Models.Tenant", null)
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("SmartProd.API.Server.Models.Vendas", b =>
@@ -485,7 +1169,22 @@ namespace SmartProd.Server.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("SmartProd.API.Server.Models.Tenant", null)
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Produto");
+                });
+
+            modelBuilder.Entity("SmartProd.API.Server.Models.WorkCenter", b =>
+                {
+                    b.HasOne("SmartProd.API.Server.Models.Tenant", null)
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("SmartProd.API.Server.Models.Materiais", b =>
