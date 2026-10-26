@@ -38,7 +38,7 @@ jobs:
           dotnet test ../SmartProd.Tests.Integration/SmartProd.Tests.Integration.csproj --configuration Release --logger "trx;LogFileName=integration_test_results.trx"
 
       - name: Upload test results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: backend-test-results
