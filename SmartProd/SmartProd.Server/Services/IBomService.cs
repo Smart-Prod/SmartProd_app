@@ -6,5 +6,6 @@ public interface IBomService
 {
     Task<List<BomResponseDto>> GetAllAsync();
     Task<BomResponseDto?> GetByIdAsync(int id);
+    Task<BomResponseDto?> GetByProductIdAsync(int productId);
     Task<BomResponseDto> CreateAsync(CreateBomDto dto);
 }

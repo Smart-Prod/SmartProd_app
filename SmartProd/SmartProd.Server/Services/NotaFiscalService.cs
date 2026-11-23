@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Xml.Linq;
 using Microsoft.EntityFrameworkCore;
 using SmartProd.API.Server.DTOs;
 using SmartProd.API.Server.Enum;
@@ -50,7 +51,7 @@ namespace SmartProd.API.Server.Services
             }
 
             // 3️⃣ Iniciar transação ANTES de alterar estoque (garante atomicidade)
-            using var transaction = await _context.Database.BeginTransactionAsync();
+            await using var transaction = await _context.Database.BeginTransactionAsync();
 
             try
             {
@@ -98,11 +99,9 @@ namespace SmartProd.API.Server.Services
                 }
 
                 // 5️⃣ Criar a nota fiscal + items
-                // Validar campos obrigatórios
                 if (string.IsNullOrWhiteSpace(data.Number))
                     throw new ValidationException("O número da nota é obrigatório.");
 
-                // Verifica unicidade do número da nota
                 if (await _context.NotasFiscais.AnyAsync(x => x.Number == data.Number))
                     throw new ValidationException("O número da nota já existe.");
 
@@ -132,9 +131,7 @@ namespace SmartProd.API.Server.Services
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
 
-                // Inclui Items ao retornar
                 await _context.Entry(notaFiscal).Collection(n => n.Items).LoadAsync();
-
                 return notaFiscal;
             }
             catch (DbUpdateException ex) when (ex.InnerException?.Message.Contains("duplicate key", StringComparison.OrdinalIgnoreCase) == true)
@@ -149,10 +146,197 @@ namespace SmartProd.API.Server.Services
             }
         }
 
+        public async Task<NotaFiscal> ProcessXmlInvoiceAsync(Stream xmlStream, int usuarioId, string? fileName = null)
+        {
+            XDocument doc;
+            try
+            {
+                doc = await XDocument.LoadAsync(xmlStream, LoadOptions.None, CancellationToken.None);
+            }
+            catch (Exception ex)
+            {
+                throw new ValidationException($"Arquivo XML inválido ou corrompido: {ex.Message}");
+            }
+
+            var root = doc.Root;
+            if (root == null)
+                throw new ValidationException("O arquivo XML da NF-e está vazio.");
+
+            var infNFe = root.Descendants().FirstOrDefault(e => e.Name.LocalName == "infNFe");
+            var ide = root.Descendants().FirstOrDefault(e => e.Name.LocalName == "ide");
+            if (ide == null)
+                throw new ValidationException("Estrutura de NF-e inválida: elemento <ide> não encontrado.");
+
+            var chaveAcesso = infNFe?.Attribute("Id")?.Value?.Replace("NFe", "").Trim() ?? string.Empty;
+            var nNF = ide.Elements().FirstOrDefault(e => e.Name.LocalName == "nNF")?.Value?.Trim();
+            var tpNFStr = ide.Elements().FirstOrDefault(e => e.Name.LocalName == "tpNF")?.Value?.Trim();
+            var dEmiStr = ide.Elements().FirstOrDefault(e => e.Name.LocalName == "dhEmi" || e.Name.LocalName == "dEmi")?.Value;
+
+            if (string.IsNullOrWhiteSpace(nNF))
+                throw new ValidationException("Número da nota fiscal (<nNF>) não encontrado no XML.");
+
+            var type = tpNFStr == "0" ? NotaFiscalTipo.ENTRADA : NotaFiscalTipo.SAIDA;
+
+            DateTime date = DateTime.UtcNow;
+            if (!string.IsNullOrWhiteSpace(dEmiStr) && DateTime.TryParse(dEmiStr, out var parsedDate))
+            {
+                date = parsedDate.ToUniversalTime();
+            }
+
+            var emit = root.Descendants().FirstOrDefault(e => e.Name.LocalName == "emit");
+            var supplier = emit?.Elements().FirstOrDefault(e => e.Name.LocalName == "xNome")?.Value?.Trim() ?? "Fornecedor / Emitente";
+
+            var dest = root.Descendants().FirstOrDefault(e => e.Name.LocalName == "dest");
+            var customer = dest?.Elements().FirstOrDefault(e => e.Name.LocalName == "xNome")?.Value?.Trim() ?? "Cliente / Destinatário";
+
+            var detElements = root.Descendants().Where(e => e.Name.LocalName == "det").ToList();
+            if (detElements.Count == 0)
+                throw new ValidationException("A NF-e não contém nenhum item (<det>).");
+
+            var itemsToProcess = new List<(string code, string name, string unit, double qty, double val)>();
+
+            foreach (var det in detElements)
+            {
+                var prod = det.Elements().FirstOrDefault(e => e.Name.LocalName == "prod");
+                if (prod == null) continue;
+
+                var cProd = prod.Elements().FirstOrDefault(e => e.Name.LocalName == "cProd")?.Value?.Trim() ?? string.Empty;
+                var xProd = prod.Elements().FirstOrDefault(e => e.Name.LocalName == "xProd")?.Value?.Trim() ?? "Item NF-e";
+                var uCom = prod.Elements().FirstOrDefault(e => e.Name.LocalName == "uCom")?.Value?.Trim() ?? "UN";
+                var qComStr = prod.Elements().FirstOrDefault(e => e.Name.LocalName == "qCom")?.Value?.Replace(',', '.');
+                var vUnComStr = prod.Elements().FirstOrDefault(e => e.Name.LocalName == "vUnCom" || e.Name.LocalName == "vProd")?.Value?.Replace(',', '.');
+
+                double.TryParse(qComStr, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var qty);
+                double.TryParse(vUnComStr, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var val);
+
+                if (qty <= 0) qty = 1.0;
+                if (string.IsNullOrWhiteSpace(cProd)) cProd = $"PROD-{Math.Abs(xProd.GetHashCode() % 100000)}";
+
+                itemsToProcess.Add((cProd, xProd, uCom, qty, val));
+            }
+
+            if (itemsToProcess.Count == 0)
+                throw new ValidationException("Nenhum produto válido encontrado no XML da NF-e.");
+
+            var notaNumber = !string.IsNullOrWhiteSpace(chaveAcesso) && chaveAcesso.Length >= 8
+                ? $"{nNF} (Chave: {chaveAcesso[..8]}...)"
+                : nNF;
+
+            if (await _context.NotasFiscais.AnyAsync(n => n.Number == nNF || n.Number == notaNumber))
+                throw new ValidationException($"A NF-e nº {nNF} já foi importada e processada anteriormente.");
+
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+
+            try
+            {
+                var notaFiscal = new NotaFiscal
+                {
+                    Type = type,
+                    Number = notaNumber,
+                    Date = date,
+                    Supplier = supplier,
+                    Customer = customer,
+                    Status = NotaFiscalStatus.PROCESSADA,
+                    UsuarioId = usuarioId,
+                    Items = new List<NotaFiscalItem>()
+                };
+
+                foreach (var item in itemsToProcess)
+                {
+                    var product = await _context.Produtos
+                        .FirstOrDefaultAsync(p => p.Code == item.code || p.Name == item.name);
+
+                    if (product == null)
+                    {
+                        if (type == NotaFiscalTipo.ENTRADA)
+                        {
+                            product = new Produto
+                            {
+                                Code = item.code,
+                                Name = item.name,
+                                Tipo = TipoProduto.MP,
+                                Unit = item.unit.Length <= 5 ? item.unit.ToUpperInvariant() : "UN",
+                                EstoqueAtual = 0,
+                                EstoqueMínimo = 0,
+                                EstoqueReservado = 0,
+                                UsuarioId = usuarioId,
+                                CreatedAt = DateTime.UtcNow,
+                                UpdatedAt = DateTime.UtcNow
+                            };
+                            _context.Produtos.Add(product);
+                            await _context.SaveChangesAsync();
+                        }
+                        else
+                        {
+                            throw new ValidationException($"Produto '{item.name}' ({item.code}) não encontrado para saída fiscal.");
+                        }
+                    }
+
+                    if (type == NotaFiscalTipo.ENTRADA)
+                    {
+                        product.EstoqueAtual += item.qty;
+                        product.UpdatedAt = DateTime.UtcNow;
+                    }
+                    else
+                    {
+                        if (product.EstoqueAtual < item.qty)
+                            throw new ValidationException($"Estoque insuficiente para faturar '{product.Name}'. Atual: {product.EstoqueAtual} | Requerido: {item.qty}");
+
+                        product.EstoqueAtual -= item.qty;
+                        product.UpdatedAt = DateTime.UtcNow;
+                    }
+
+                    _context.Movimentacoes.Add(new Movimentacao
+                    {
+                        ProductId = product.Id,
+                        Tipo = type == NotaFiscalTipo.ENTRADA ? TipoMovimentacao.ENTRADA : TipoMovimentacao.SAIDA,
+                        Quantity = item.qty,
+                        CreatedAt = DateTime.UtcNow
+                    });
+
+                    var stock = await _context.Estoque.FirstOrDefaultAsync(e => e.ProductId == product.Id);
+                    if (stock == null)
+                    {
+                        _context.Estoque.Add(new Estoque
+                        {
+                            ProductId = product.Id,
+                            Quantity = product.EstoqueAtual,
+                            Unit = product.Unit
+                        });
+                    }
+                    else
+                    {
+                        stock.Quantity = product.EstoqueAtual;
+                    }
+
+                    notaFiscal.Items.Add(new NotaFiscalItem
+                    {
+                        ProductId = product.Id,
+                        Quantity = item.qty,
+                        Value = item.val
+                    });
+                }
+
+                _context.NotasFiscais.Add(notaFiscal);
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                await _context.Entry(notaFiscal).Collection(n => n.Items).LoadAsync();
+                return notaFiscal;
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }
+
         public async Task<List<NotaFiscal>> GetAllInvoicesAsync()
         {
             return await _context.NotasFiscais
                 .Include(n => n.Items)
+                    .ThenInclude(i => i.Produto)
+                .OrderByDescending(n => n.Date)
                 .ToListAsync();
         }
     }

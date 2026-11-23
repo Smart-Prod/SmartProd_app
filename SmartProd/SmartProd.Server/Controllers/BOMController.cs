@@ -24,6 +24,13 @@ namespace SmartProd.API.Server.Controllers
             return bom == null ? NotFound() : Ok(bom);
         }
 
+        [HttpGet("product/{productId:int}")]
+        public async Task<ActionResult<BomResponseDto>> GetByProductId(int productId)
+        {
+            var bom = await _service.GetByProductIdAsync(productId);
+            return bom == null ? NotFound() : Ok(bom);
+        }
+
         [HttpPost]
         public async Task<ActionResult<BomResponseDto>> Create([FromBody] CreateBomDto dto)
         {

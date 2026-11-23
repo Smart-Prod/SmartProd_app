@@ -65,6 +65,11 @@ public sealed class BomService : IBomService
         .Select(ResponseProjection)
         .FirstOrDefaultAsync();
 
+    public Task<BomResponseDto?> GetByProductIdAsync(int productId) => _context.Materiais
+        .Where(bom => bom.ProdutoId == productId)
+        .Select(ResponseProjection)
+        .FirstOrDefaultAsync();
+
     public async Task<BomResponseDto> CreateAsync(CreateBomDto dto)
     {
         if (!await _context.Produtos.AnyAsync(product => product.Id == dto.ProductId))

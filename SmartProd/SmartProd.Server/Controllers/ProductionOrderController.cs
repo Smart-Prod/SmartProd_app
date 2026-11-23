@@ -35,15 +35,18 @@ namespace SmartProd.API.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllOrders()
         {
-            try
-            {
-                var orders = await _service.GetAllOrdersAsync();
-                return Ok(new { message = "Ordens listadas com sucesso!", orders });
-            }
-            catch (System.Exception ex)
-            {
-                return StatusCode(500, new { error = ex.Message });
-            }
+            var orders = await _service.GetAllOrdersAsync();
+            return Ok(new { message = "Ordens listadas com sucesso!", orders });
+        }
+
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetOrderById(int id)
+        {
+            var order = await _service.GetOrderByIdAsync(id);
+            if (order == null)
+                return NotFound(new { error = "Ordem de produção não encontrada ou não pertence à sua organização." });
+
+            return Ok(order);
         }
 
         [HttpPut("{id:int}")]

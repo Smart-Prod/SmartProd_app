@@ -76,6 +76,14 @@ namespace SmartProd.API.Server.Services
                 .ToListAsync();
         }
 
+        public async Task<OrdemProducao?> GetOrderByIdAsync(int id)
+        {
+            return await _context.OrdensProducao
+                .Include(o => o.Produto)
+                .Include(o => o.Usuario)
+                .FirstOrDefaultAsync(o => o.Id == id);
+        }
+
         public async Task<OrdemProducao> UpdateOrderStatusAsync(int id, OrdemProducaoStatus status, double? produced = null)
         {
             var order = await _context.OrdensProducao
@@ -123,6 +131,40 @@ namespace SmartProd.API.Server.Services
                     else
                     {
                         stock.Quantity = order.Produto.EstoqueAtual;
+                    }
+
+                    // Abate automático dos insumos pela Ficha Técnica (BOM)
+                    var bom = await _context.Materiais
+                        .Include(b => b.Materials)
+                            .ThenInclude(bm => bm.Produtos)
+                        .FirstOrDefaultAsync(b => b.ProdutoId == order.ProductId);
+
+                    if (bom?.Materials != null && bom.Materials.Count > 0)
+                    {
+                        foreach (var item in bom.Materials)
+                        {
+                            if (item.Produtos != null)
+                            {
+                                var consumedQty = item.Quantidade * producedQty;
+                                item.Produtos.EstoqueAtual = Math.Max(0, item.Produtos.EstoqueAtual - consumedQty);
+                                item.Produtos.UpdatedAt = DateTime.UtcNow;
+
+                                _context.Movimentacoes.Add(new Movimentacao
+                                {
+                                    ProductId = item.ProdutosId,
+                                    OrderId = order.Id,
+                                    Tipo = TipoMovimentacao.CONSUMO,
+                                    Quantity = consumedQty,
+                                    CreatedAt = DateTime.UtcNow
+                                });
+
+                                var matStock = await _context.Estoque.FirstOrDefaultAsync(entry => entry.ProductId == item.ProdutosId);
+                                if (matStock != null)
+                                {
+                                    matStock.Quantity = item.Produtos.EstoqueAtual;
+                                }
+                            }
+                        }
                     }
                 }
             }
