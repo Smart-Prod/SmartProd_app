@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-      x:Class="SmartProd_Mobile_Front_end.Views.ScannerPage"
-             Title="ScannerPage"
-             Shell.NavBarIsVisible="True">
+             x:Class="SmartProd_Mobile_Front_end.Views.ScannerPage"
+             Title="Scanner Industrial"
+             Shell.NavBarIsVisible="True"
+             BackgroundColor="#1A202C">
 
     <Shell.TitleView>
         <Grid ColumnDefinitions="Auto, *, Auto"
@@ -17,7 +18,7 @@
                    CharacterSpacing="1.5"
                    VerticalOptions="Center" />
             <Label Grid.Column="1"
-                   Text="Scanner"
+                   Text="QR Code &amp; NFC"
                    FontSize="13"
                    TextColor="#A0AEC0"
                    VerticalOptions="Center"
@@ -38,107 +39,147 @@
 
     <Grid RowDefinitions="*, Auto">
 
-        <!-- Camera View (created programmatically in code-behind for lifecycle management) -->
-
         <!-- Dark overlay for readability -->
         <BoxView Grid.Row="0"
                  Color="#000000"
-                 Opacity="0.35" />
+                 Opacity="0.45" />
 
         <!-- Scanner Interface Overlay -->
         <ScrollView Grid.Row="0">
-            <VerticalStackLayout Spacing="24" VerticalOptions="Center" Padding="30">
+            <VerticalStackLayout Spacing="16" VerticalOptions="Start" Padding="20,12">
 
-                <Border BackgroundColor="#5A7C8A" 
-                        Padding="12,4" 
-                        HorizontalOptions="Center"
-                        StrokeThickness="0"
-                        StrokeShape="RoundRectangle 4">
-                    <Label Text="SCANNER ATIVO" FontSize="11" FontAttributes="Bold" TextColor="White" CharacterSpacing="1" />
+                <!-- Header Badge da Ordem de Produção -->
+                <Border BackgroundColor="#2D3748" 
+                        Padding="14,8" 
+                        Stroke="#FF8C00"
+                        StrokeThickness="1.5"
+                        StrokeShape="RoundRectangle 8">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="{Binding OrderInfoText}" 
+                               FontSize="13" 
+                               FontAttributes="Bold" 
+                               TextColor="#FF8C00" />
+                        <Label Text="{Binding ExpectedMaterialsText}" 
+                               FontSize="11" 
+                               TextColor="#CBD5E0" 
+                               LineBreakMode="WordWrap" />
+                    </VerticalStackLayout>
                 </Border>
 
-                <Label Text="ALINHE O QR CODE" 
-                       FontSize="36" 
-                       FontAttributes="Bold" 
-                       TextColor="White" 
-                       HorizontalOptions="Center" />
-
-                <Label Text="Posicione o código na área de leitura para registrar o uso." 
-                       FontSize="15" 
-                       TextColor="White" 
-                       HorizontalTextAlignment="Center" 
-                       Opacity="0.8" />
+                <!-- Status de Hardware NFC -->
+                <Border BackgroundColor="#1E293B"
+                        Padding="10,6"
+                        StrokeThickness="0"
+                        HorizontalOptions="Center"
+                        StrokeShape="RoundRectangle 20">
+                    <HorizontalStackLayout Spacing="6" VerticalOptions="Center">
+                        <BoxView WidthRequest="8" HeightRequest="8" CornerRadius="4" Color="#38A169" VerticalOptions="Center" />
+                        <Label Text="{Binding NfcStatusText}" FontSize="11" TextColor="#E2E8F0" VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                </Border>
 
                 <!-- Scan Frame (Target Area) -->
-                <Grid HeightRequest="300" 
-                      WidthRequest="300" 
-                      HorizontalOptions="Center"
-                      MaximumWidthRequest="300">
-                    <BoxView HorizontalOptions="Start" VerticalOptions="Start" WidthRequest="40" HeightRequest="4" Color="White" />
-                    <BoxView HorizontalOptions="Start" VerticalOptions="Start" WidthRequest="4" HeightRequest="40" Color="White" />
-                    <BoxView HorizontalOptions="End" VerticalOptions="Start" WidthRequest="40" HeightRequest="4" Color="White" />
-                    <BoxView HorizontalOptions="End" VerticalOptions="Start" WidthRequest="4" HeightRequest="40" Color="White" />
-                    <BoxView HorizontalOptions="Start" VerticalOptions="End" WidthRequest="40" HeightRequest="4" Color="White" />
-                    <BoxView HorizontalOptions="Start" VerticalOptions="End" WidthRequest="4" HeightRequest="40" Color="White" />
-                    <BoxView HorizontalOptions="End" VerticalOptions="End" WidthRequest="40" HeightRequest="4" Color="White" />
-                    <BoxView HorizontalOptions="End" VerticalOptions="End" WidthRequest="4" HeightRequest="40" Color="White" />
-                    <BoxView HeightRequest="2" Color="White" VerticalOptions="Center" Opacity="0.3" />
+                <Grid HeightRequest="220" 
+                      WidthRequest="220" 
+                      HorizontalOptions="Center">
+                    <BoxView HorizontalOptions="Start" VerticalOptions="Start" WidthRequest="32" HeightRequest="4" Color="#FF8C00" />
+                    <BoxView HorizontalOptions="Start" VerticalOptions="Start" WidthRequest="4" HeightRequest="32" Color="#FF8C00" />
+                    <BoxView HorizontalOptions="End" VerticalOptions="Start" WidthRequest="32" HeightRequest="4" Color="#FF8C00" />
+                    <BoxView HorizontalOptions="End" VerticalOptions="Start" WidthRequest="4" HeightRequest="32" Color="#FF8C00" />
+                    <BoxView HorizontalOptions="Start" VerticalOptions="End" WidthRequest="32" HeightRequest="4" Color="#FF8C00" />
+                    <BoxView HorizontalOptions="Start" VerticalOptions="End" WidthRequest="4" HeightRequest="32" Color="#FF8C00" />
+                    <BoxView HorizontalOptions="End" VerticalOptions="End" WidthRequest="32" HeightRequest="4" Color="#FF8C00" />
+                    <BoxView HorizontalOptions="End" VerticalOptions="End" WidthRequest="4" HeightRequest="32" Color="#FF8C00" />
+                    <BoxView HeightRequest="2" Color="#FF8C00" VerticalOptions="Center" Opacity="0.4" />
                 </Grid>
 
-                <!-- Status Message -->
-                <Label Text="{Binding StatusMessage}"
-                       FontSize="14"
-                       TextColor="White"
-                       HorizontalTextAlignment="Center"
-                       Opacity="0.9" />
+                <!-- Card Dinâmico de Validação de BOM / NFC -->
+                <Border BackgroundColor="#2D3748"
+                        Stroke="{Binding ValidationColor}"
+                        StrokeThickness="2"
+                        StrokeShape="RoundRectangle 8"
+                        Padding="14,10">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="{Binding StatusMessage}"
+                               FontSize="13"
+                               FontAttributes="Bold"
+                               TextColor="White"
+                               HorizontalTextAlignment="Center" />
+                    </VerticalStackLayout>
+                </Border>
 
-                <!-- Real-time Stats Overlay -->
-                <Grid ColumnDefinitions="*, *" ColumnSpacing="16" Margin="0,16,0,0">
-                    <Border Grid.Column="0" 
-                            BackgroundColor="#2D3748" 
-                            Stroke="#FF8C00" 
-                            StrokeThickness="1"
-                            StrokeShape="RoundRectangle 8"
-                            Padding="16">
-                        <VerticalStackLayout Spacing="4">
-                            <Label Text="PROGRESSO DO TURNO" FontSize="10" FontAttributes="Bold" TextColor="#FF8C00" CharacterSpacing="0.5" />
-                            <Label Text="{Binding ShiftProgress}" FontSize="24" FontAttributes="Bold" TextColor="White" />
-                        </VerticalStackLayout>
-                    </Border>
-                    <Border Grid.Column="1" 
-                            BackgroundColor="#2D3748" 
-                            Stroke="#27AE60" 
-                            StrokeThickness="1"
-                            StrokeShape="RoundRectangle 8"
-                            Padding="16">
-                        <VerticalStackLayout Spacing="4">
-                            <Label Text="STATUS DO DISPOSITIVO" FontSize="10" FontAttributes="Bold" TextColor="#27AE60" CharacterSpacing="0.5" />
-                            <HorizontalStackLayout Spacing="8">
-                                <BoxView WidthRequest="8" HeightRequest="8" CornerRadius="4" Color="#27AE60" VerticalOptions="Center" />
-                                <Label Text="{Binding DeviceStatus}" FontSize="20" FontAttributes="Bold" TextColor="White" VerticalOptions="Center" />
-                            </HorizontalStackLayout>
-                        </VerticalStackLayout>
-                    </Border>
-                </Grid>
+                <!-- Botões do Modo Resiliente / Demonstração (Para Apresentação da Banca) -->
+                <Border BackgroundColor="#283141"
+                        Stroke="#4A5568"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 8"
+                        Padding="12,10">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="MODO DEMONSTRAÇÃO (APRESENTAÇÃO SEM HARDWARE FÍSICO)" 
+                               FontSize="10" 
+                               FontAttributes="Bold" 
+                               TextColor="#A0AEC0" 
+                               HorizontalTextAlignment="Center" />
+
+                        <Grid ColumnDefinitions="*, *" ColumnSpacing="8">
+                            <Button Grid.Column="0"
+                                    Text="Simular Insumo Válido (BOM)"
+                                    Command="{Binding SimulateValidBOMScanCommand}"
+                                    BackgroundColor="#2F855A"
+                                    TextColor="White"
+                                    FontSize="11"
+                                    FontAttributes="Bold"
+                                    CornerRadius="6"
+                                    HeightRequest="42" />
+
+                            <Button Grid.Column="1"
+                                    Text="Simular Insumo Inválido"
+                                    Command="{Binding SimulateInvalidBOMScanCommand}"
+                                    BackgroundColor="#C53030"
+                                    TextColor="White"
+                                    FontSize="11"
+                                    FontAttributes="Bold"
+                                    CornerRadius="6"
+                                    HeightRequest="42" />
+                        </Grid>
+
+                        <Grid ColumnDefinitions="*, *" ColumnSpacing="8">
+                            <Button Grid.Column="0"
+                                    Text="Simular TAG NFC"
+                                    Command="{Binding SimulateNfcTagCommand}"
+                                    BackgroundColor="#2B6CB0"
+                                    TextColor="White"
+                                    FontSize="11"
+                                    FontAttributes="Bold"
+                                    CornerRadius="6"
+                                    HeightRequest="38" />
+
+                            <Button Grid.Column="1"
+                                    Text="Digitar Código Manual"
+                                    Command="{Binding ManualEntryCommand}"
+                                    BackgroundColor="#4A5568"
+                                    TextColor="White"
+                                    FontSize="11"
+                                    CornerRadius="6"
+                                    HeightRequest="38" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
 
             </VerticalStackLayout>
         </ScrollView>
 
-        <!-- Fixed Actions & Bottom Nav -->
-        <VerticalStackLayout Grid.Row="1">
-            <Button Text="REGISTRAR USO" 
+        <!-- Bottom Action Bar -->
+        <VerticalStackLayout Grid.Row="1" Padding="20,10,20,16" BackgroundColor="#1A202C">
+            <Button Text="CONFIRMAR APONTAMENTO" 
                     Command="{Binding ScanResultCommand}"
                     IsEnabled="{Binding CanRegister}"
                     BackgroundColor="#FF8C00" 
                     TextColor="White" 
                     FontAttributes="Bold" 
-                    FontSize="18" 
-                    HeightRequest="56" 
-                    CornerRadius="8" 
-                    Margin="20,0,20,20" />
-
-            <!-- Bottom spacing for Shell TabBar -->
-            <BoxView HeightRequest="8" Color="Transparent" />
+                    FontSize="16" 
+                    HeightRequest="50" 
+                    CornerRadius="8" />
         </VerticalStackLayout>
 
     </Grid>

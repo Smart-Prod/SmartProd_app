@@ -11,12 +11,12 @@ public partial class ScannerPage : ContentPage
     private readonly ScannerViewModel _viewModel;
     private CameraBarcodeReaderView? _cameraReader;
 
-	public ScannerPage(ApiService apiService)
-	{
-		InitializeComponent();
-		_viewModel = new ScannerViewModel(apiService);
-		BindingContext = _viewModel;
-	}
+    public ScannerPage(ApiService apiService, INfcService nfcService)
+    {
+        InitializeComponent();
+        _viewModel = new ScannerViewModel(apiService, nfcService);
+        BindingContext = _viewModel;
+    }
 
     public string? OpId
     {
@@ -33,7 +33,7 @@ public partial class ScannerPage : ContentPage
         SetupCamera();
         _viewModel.IsScanning = true;
         _viewModel.LastScannedCode = string.Empty;
-        _viewModel.StatusMessage = "Aponte a câmera para o QR Code";
+        _viewModel.UpdateNfcStatus();
     }
 
     protected override void OnDisappearing()
@@ -48,33 +48,46 @@ public partial class ScannerPage : ContentPage
         if (_cameraReader != null)
             TeardownCamera();
 
-        _cameraReader = new CameraBarcodeReaderView
+        try
         {
-            IsDetecting = true,
-            HorizontalOptions = LayoutOptions.Fill,
-            VerticalOptions = LayoutOptions.Fill,
-            WidthRequest = 400,
-            HeightRequest = 600
-        };
-        _cameraReader.BarcodesDetected += OnBarcodesDetected;
-        Grid.SetRow(_cameraReader, 0);
-        Grid.SetRowSpan(_cameraReader, 2);
+            _cameraReader = new CameraBarcodeReaderView
+            {
+                IsDetecting = true,
+                HorizontalOptions = LayoutOptions.Fill,
+                VerticalOptions = LayoutOptions.Fill,
+                WidthRequest = 400,
+                HeightRequest = 600
+            };
+            _cameraReader.BarcodesDetected += OnBarcodesDetected;
+            Grid.SetRow(_cameraReader, 0);
+            Grid.SetRowSpan(_cameraReader, 2);
 
-        var grid = (Grid)Content;
-        grid.Children.Insert(0, _cameraReader);
+            var grid = (Grid)Content;
+            grid.Children.Insert(0, _cameraReader);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"[ScannerPage] Câmera não inicializada no ambiente atual: {ex.Message}");
+        }
     }
 
     private void TeardownCamera()
     {
         if (_cameraReader == null) return;
 
-        _cameraReader.IsDetecting = false;
-        _cameraReader.BarcodesDetected -= OnBarcodesDetected;
+        try
+        {
+            _cameraReader.IsDetecting = false;
+            _cameraReader.BarcodesDetected -= OnBarcodesDetected;
 
-        var grid = (Grid)Content;
-        grid.Children.Remove(_cameraReader);
-
-        _cameraReader = null;
+            var grid = (Grid)Content;
+            grid.Children.Remove(_cameraReader);
+        }
+        catch { }
+        finally
+        {
+            _cameraReader = null;
+        }
     }
 
     private void OnBarcodesDetected(object? sender, BarcodeDetectionEventArgs e)

@@ -170,5 +170,51 @@ namespace SmartProd_Mobile_Front_end.Services
             var errorBody = await response.Content.ReadFromJsonAsync<ApiErrorResponse>(_jsonOptions);
             return (null, errorBody?.Error ?? "Erro ao carregar dashboard");
         }
+
+        public async Task<(List<BomResponse>? boms, string? error)> GetBOMsAsync()
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync("api/v1/BOM");
+                if (response.IsSuccessStatusCode)
+                {
+                    var boms = await response.Content.ReadFromJsonAsync<List<BomResponse>>(_jsonOptions);
+                    return (boms, null);
+                }
+
+                var errorBody = await response.Content.ReadFromJsonAsync<ApiErrorResponse>(_jsonOptions);
+                return (null, errorBody?.Error ?? "Erro ao carregar Fichas Técnicas (BOM)");
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
+
+        public async Task<(BomResponse? bom, string? error)> GetBomByProductIdAsync(int productId)
+        {
+            var (boms, error) = await GetBOMsAsync();
+            if (error != null)
+                return (null, error);
+
+            var bom = boms?.FirstOrDefault(b => b.ProdutoId == productId);
+            return (bom, bom == null ? "Nenhuma Ficha Técnica encontrada para este produto" : null);
+        }
+
+        public async Task<(ConsumoResponse? response, string? error)> RegisterNfcMovementAsync(string nfcTag, int? orderId)
+        {
+            // Movimentação automatizada via TAG NFC: identifica o produto e registra movimentação industrial
+            var payload = new { code = nfcTag, orderId, quantity = 1.0 };
+            var response = await _httpClient.PostAsJsonAsync("api/v1/Movimentacao/consumo", payload);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadFromJsonAsync<ConsumoResponse>(_jsonOptions);
+                return (result, null);
+            }
+
+            var errorBody = await response.Content.ReadFromJsonAsync<ApiErrorResponse>(_jsonOptions);
+            return (null, errorBody?.Error ?? $"Erro ao processar movimentação da TAG NFC {nfcTag}");
+        }
     }
 }
