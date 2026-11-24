@@ -13,8 +13,9 @@ import { toast } from 'sonner';
 import { InvoiceType } from '../models';
 
 export const InvoicesPage: React.FC = () => {
-  const { invoices, products, addInvoice } = useApp();
+  const { invoices, products, addInvoice, uploadInvoiceXml } = useApp();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [invoiceType, setInvoiceType] = useState<InvoiceType>('ENTRADA');
   const [formData, setFormData] = useState({
     number: '',
@@ -23,12 +24,30 @@ export const InvoicesPage: React.FC = () => {
     items: [{ productId: 0, quantity: 0, value: 0 }],
   });
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file && file.name.endsWith('.xml')) {
-      toast.error('A importação de XML ainda não está disponível. Use o cadastro manual.');
-    } else {
-      toast.error('Por favor, selecione um arquivo XML válido');
+    if (!file) return;
+
+    if (!file.name.toLowerCase().endsWith('.xml')) {
+      toast.error('Por favor, selecione um arquivo XML (.xml) válido da NF-e.');
+      return;
+    }
+
+    try {
+      setIsUploading(true);
+      const res = await uploadInvoiceXml(file);
+      const itemsCount = res.itemsProcessed ?? 0;
+      toast.success(res.message || 'NF-e importada e processada com sucesso!', {
+        description: `Itens movimentados atomicamente no estoque: ${itemsCount}`
+      });
+      setIsDialogOpen(false);
+    } catch (error: unknown) {
+      const err = error as { response?: { data?: { error?: string } }; message?: string };
+      const msg = err.response?.data?.error || err.message || 'Falha ao processar o XML da Nota Fiscal.';
+      toast.error('Erro no processamento da NF-e', { description: msg });
+    } finally {
+      setIsUploading(false);
+      e.target.value = '';
     }
   };
 
@@ -157,16 +176,25 @@ export const InvoicesPage: React.FC = () => {
                     </div>
                   </div>
                   
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-                    <Upload className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center bg-gray-50/50">
+                    <Upload className={`mx-auto h-12 w-12 text-gray-400 mb-4 ${isUploading ? 'animate-bounce text-blue-500' : ''}`} />
                     <div className="space-y-2">
-                      <p>Arraste o arquivo XML aqui ou clique para selecionar</p>
+                      <p className="font-medium text-gray-700">Selecione ou arraste o arquivo XML da NF-e SEFAZ</p>
+                      <p className="text-xs text-gray-500">
+                        O backend processará o XML em transação atômica, registrando os itens e atualizando o saldo de estoque físico.
+                      </p>
                       <Input
                         type="file"
                         accept=".xml"
+                        disabled={isUploading}
                         onChange={handleFileUpload}
-                        className="max-w-xs mx-auto"
+                        className="max-w-xs mx-auto cursor-pointer"
                       />
+                      {isUploading && (
+                        <p className="text-sm font-semibold text-blue-600 animate-pulse mt-2">
+                          Processando NF-e XML e atualizando saldos em transação atômica...
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>

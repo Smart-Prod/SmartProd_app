@@ -1,14 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useApp } from '../contexts/AppContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
 import {
   Package,
   Factory,
-  AlertTriangle,
   TrendingUp,
+  Activity,
+  RotateCw,
+  ShieldAlert,
+  Radio,
 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
 import { ProductionStatus } from '../models';
@@ -34,16 +38,54 @@ function isStatus(value: unknown): value is ProductionStatus {
 }
 
 export const Dashboard: React.FC = () => {
-  const { products, productionOrders, movimentacoes } = useApp();
+  const { products, productionOrders, movimentacoes, refreshData } = useApp();
+  const [isSyncing, setIsSyncing] = useState(false);
+
+  const handleSync = async () => {
+    setIsSyncing(true);
+    try {
+      await refreshData();
+    } finally {
+      setTimeout(() => setIsSyncing(false), 500);
+    }
+  };
 
   // Calculate metrics
   const mpProducts = products.filter(p => p.type === 'MP');
   const paProducts = products.filter(p => p.type === 'PA');
 
-  const lowStockProducts = products.filter(p => p.currentStock <= p.minStock);
+  const ruptureProducts = products.filter(p => p.currentStock <= p.minStock);
+
   const activeOrders = productionOrders.filter(o => o.status === 'EM_PRODUCAO');
   const plannedOrders = productionOrders.filter(o => o.status === 'PLANEJADA');
   const completedOrders = productionOrders.filter(o => o.status === 'CONCLUIDA');
+  const canceledOrders = productionOrders.filter(o => o.status === 'CANCELADA');
+
+  // OEE (Overall Equipment Effectiveness) Calculation
+  const totalOrders = productionOrders.length;
+  const totalPlannedUnits = productionOrders.reduce((sum, o) => sum + o.quantity, 0);
+  const totalProducedUnits = productionOrders.reduce((sum, o) => sum + o.produced, 0);
+
+  // Disponibilidade (A): Razão entre ordens produtivas (ativas/concluídas) e o total de ordens
+  const disponibilidade = totalOrders > 0
+    ? (completedOrders.length + activeOrders.length) / totalOrders
+    : 1.0;
+
+  // Performance (P): Razão entre o total produzido e o total planejado
+  const performance = totalPlannedUnits > 0
+    ? Math.min(1.0, totalProducedUnits / totalPlannedUnits)
+    : (totalOrders > 0 ? 0.85 : 1.0);
+
+  // Qualidade (Q): Razão de conformidade (concluídas sem cancelamento/perdas)
+  const finalizedCount = completedOrders.length + canceledOrders.length;
+  const qualidade = finalizedCount > 0
+    ? completedOrders.length / finalizedCount
+    : 1.0;
+
+  const oeePercent = Math.round(disponibilidade * performance * qualidade * 100);
+  const dispPercent = Math.round(disponibilidade * 100);
+  const perfPercent = Math.round(performance * 100);
+  const qualPercent = Math.round(qualidade * 100);
 
   // Production chart data
   const productionData = productionOrders.map((order) => {
@@ -74,20 +116,107 @@ export const Dashboard: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl">Dashboard</h1>
-        <p className="text-gray-600">Visão geral do sistema em tempo real</p>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h1 className="text-3xl font-bold">Dashboard Gerencial</h1>
+          <p className="text-gray-600">Indicadores industriais OEE, estoque e produção em tempo real</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Badge variant="outline" className="flex items-center gap-1.5 px-3 py-1 bg-green-50 text-green-700 border-green-200">
+            <Radio className="h-3 w-3 animate-pulse text-green-600" />
+            <span>Sincronização Ativa</span>
+          </Badge>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleSync}
+            disabled={isSyncing}
+            className="flex items-center gap-1.5"
+          >
+            <RotateCw className={`h-4 w-4 ${isSyncing ? 'animate-spin text-blue-600' : ''}`} />
+            <span>Sincronizar</span>
+          </Button>
+        </div>
       </div>
 
-      {/* Alerts */}
-      {lowStockProducts.length > 0 && (
-        <Alert variant="destructive">
-          <AlertTriangle className="h-4 w-4" />
+      {/* Alertas de Ruptura de Estoque */}
+      {ruptureProducts.length > 0 && (
+        <Alert variant="destructive" className="border-red-300 bg-red-50 text-red-900">
+          <ShieldAlert className="h-5 w-5 text-red-600" />
           <AlertDescription>
-            {lowStockProducts.length} produto(s) com estoque baixo: {lowStockProducts.map(p => p.name).join(', ')}
+            <span className="font-semibold">{ruptureProducts.length} produto(s) em estado crítico ou de ruptura:</span>{' '}
+            {ruptureProducts.map(p => (
+              <span key={p.id} className="inline-block mr-2 font-mono text-xs bg-red-100 px-1.5 py-0.5 rounded border border-red-300">
+                {p.name} (Atual: {p.currentStock} / Mín: {p.minStock})
+              </span>
+            ))}
           </AlertDescription>
         </Alert>
       )}
+
+      {/* OEE INDUSTRIAL WIDGET */}
+      <Card className="border-slate-200 shadow-sm overflow-hidden">
+        <CardHeader className="bg-gradient-to-r from-slate-900 to-slate-800 text-white pb-4">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+            <div>
+              <CardTitle className="text-lg flex items-center gap-2 text-white">
+                <Activity className="h-5 w-5 text-emerald-400" />
+                OEE — Eficiência Global dos Equipamentos
+              </CardTitle>
+              <CardDescription className="text-slate-300 text-xs">
+                Métrica padrão internacional da indústria: Disponibilidade × Performance × Qualidade
+              </CardDescription>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="text-right">
+                <span className="text-3xl font-extrabold text-emerald-400">{oeePercent}%</span>
+                <p className="text-[10px] text-slate-300 uppercase tracking-wider">Índice Geral</p>
+              </div>
+              <Badge className={
+                oeePercent >= 85 ? 'bg-emerald-600' : oeePercent >= 65 ? 'bg-amber-600' : 'bg-rose-600'
+              }>
+                {oeePercent >= 85 ? 'Classe Mundial' : oeePercent >= 65 ? 'Operação Típica' : 'Atenção Operacional'}
+              </Badge>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="pt-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="space-y-2 bg-slate-50 p-4 rounded-lg border">
+              <div className="flex justify-between items-center text-sm">
+                <span className="font-medium text-slate-700">Disponibilidade</span>
+                <span className="font-bold text-slate-900">{dispPercent}%</span>
+              </div>
+              <Progress value={dispPercent} className="h-2.5" />
+              <p className="text-xs text-muted-foreground">
+                {activeOrders.length + completedOrders.length} de {totalOrders} OPs operacionais
+              </p>
+            </div>
+
+            <div className="space-y-2 bg-slate-50 p-4 rounded-lg border">
+              <div className="flex justify-between items-center text-sm">
+                <span className="font-medium text-slate-700">Performance</span>
+                <span className="font-bold text-slate-900">{perfPercent}%</span>
+              </div>
+              <Progress value={perfPercent} className="h-2.5" />
+              <p className="text-xs text-muted-foreground">
+                {totalProducedUnits} de {totalPlannedUnits} peças produzidas
+              </p>
+            </div>
+
+            <div className="space-y-2 bg-slate-50 p-4 rounded-lg border">
+              <div className="flex justify-between items-center text-sm">
+                <span className="font-medium text-slate-700">Qualidade</span>
+                <span className="font-bold text-slate-900">{qualPercent}%</span>
+              </div>
+              <Progress value={qualPercent} className="h-2.5" />
+              <p className="text-xs text-muted-foreground">
+                {completedOrders.length} concluídas com conformidade total
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

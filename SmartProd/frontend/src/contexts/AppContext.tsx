@@ -33,6 +33,13 @@ interface AppContextType {
     customer?: string;
     items: Array<Pick<Invoice["items"][number], "productId" | "quantity" | "value">>;
   }) => Promise<Invoice>;
+  uploadInvoiceXml: (file: File) => Promise<{
+    message: string;
+    itemsProcessed?: number;
+    totalValue?: number;
+    type?: string;
+  }>;
+  refreshData: () => Promise<void>;
   addBOM: (bom: { productId: number; materials: Array<{ materialId: number; quantity: number }> }) => Promise<BOM>;
 }
 
@@ -162,26 +169,31 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     queryKey: ["products"],
     queryFn: async () => (await API.get<unknown>("/api/Produto")).data,
     select: data => asArray(data, "products").map(mapProduct),
+    refetchInterval: 6000,
   });
   const bomsQuery = useQuery({
     queryKey: ["boms"],
     queryFn: async () => (await API.get<unknown>("/api/BOM")).data,
     select: data => asArray(data, "boms").map(mapBom),
+    refetchInterval: 10000,
   });
   const movementsQuery = useQuery({
     queryKey: ["movimentacoes"],
     queryFn: async () => (await API.get<unknown>("/api/Movimentacao")).data,
     select: mapMovementsResponse,
+    refetchInterval: 6000,
   });
   const ordersQuery = useQuery({
     queryKey: ["productionOrders"],
     queryFn: async () => (await API.get<unknown>("/api/ProductionOrder")).data,
     select: data => asArray(data, "orders").map(value => asObject(value) as unknown as ProductionOrder),
+    refetchInterval: 6000,
   });
   const invoicesQuery = useQuery({
     queryKey: ["invoices"],
     queryFn: async () => (await API.get<unknown>("/api/NotaFiscal")).data,
     select: data => asArray(data, "invoices").map(value => asObject(value) as unknown as Invoice),
+    refetchInterval: 10000,
   });
 
   useEffect(() => {
@@ -268,6 +280,37 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["boms"] }),
   });
 
+  const uploadInvoiceXmlMutation = useMutation({
+    mutationFn: async (file: File) => {
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await API.post<{
+        message: string;
+        itemsProcessed?: number;
+        totalValue?: number;
+        type?: string;
+      }>("/api/NotaFiscal/upload-xml", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      return res.data;
+    },
+    onSuccess: () => Promise.all([
+      queryClient.invalidateQueries({ queryKey: ["invoices"] }),
+      queryClient.invalidateQueries({ queryKey: ["products"] }),
+      queryClient.invalidateQueries({ queryKey: ["movimentacoes"] }),
+    ]),
+  });
+
+  const refreshData = async () => {
+    await Promise.all([
+      queryClient.invalidateQueries({ queryKey: ["products"] }),
+      queryClient.invalidateQueries({ queryKey: ["boms"] }),
+      queryClient.invalidateQueries({ queryKey: ["movimentacoes"] }),
+      queryClient.invalidateQueries({ queryKey: ["productionOrders"] }),
+      queryClient.invalidateQueries({ queryKey: ["invoices"] }),
+    ]);
+  };
+
   const addProduct = (product: Pick<Product, "code" | "name" | "type" | "unit" | "currentStock" | "reservedStock" | "minStock">) =>
     createProduct.mutateAsync(product);
   const updateProduct = async (id: number, product: Partial<Product>) => editProduct.mutateAsync({ id, product });
@@ -276,6 +319,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const updateProductionOrder = async (id: number, order: Partial<ProductionOrder>) => editOrder.mutateAsync({ id, order });
   const addStockMovement = (movement: Omit<Movimentacao, "id" | "createdAt">) => createMovement.mutateAsync(movement);
   const addInvoice = (invoice: Parameters<AppContextType["addInvoice"]>[0]) => createInvoice.mutateAsync(invoice);
+  const uploadInvoiceXml = (file: File) => uploadInvoiceXmlMutation.mutateAsync(file);
   const addBOM = (bom: Parameters<AppContextType["addBOM"]>[0]) => createBom.mutateAsync(bom);
 
   const contextValue: AppContextType = {
@@ -291,6 +335,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     addMovimentacao: addStockMovement,
     addStockMovement,
     addInvoice,
+    uploadInvoiceXml,
+    refreshData,
     addBOM,
   };
 
