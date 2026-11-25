@@ -44,7 +44,11 @@ if (rawConn.StartsWith("postgres://", StringComparison.OrdinalIgnoreCase) ||
 }
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(connectionString));
+{
+    options.UseNpgsql(connectionString);
+    options.ConfigureWarnings(warnings =>
+        warnings.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning));
+});
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ITenantContext, HttpTenantContext>();
 
@@ -161,65 +165,73 @@ app.UseForwardedHeaders();
 
 if (builder.Configuration.GetValue("Database:ApplyMigrations", true))
 {
-    await using var scope = app.Services.CreateAsyncScope();
-    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    await dbContext.Database.MigrateAsync();
-    if (!await dbContext.Usuarios.AnyAsync())
+    try
     {
-        var adminEmail = builder.Configuration["ADMIN_INITIAL_EMAIL"];
-        var adminPassword = builder.Configuration["ADMIN_INITIAL_PASSWORD"];
-        if (string.IsNullOrWhiteSpace(adminEmail) ||
-            !new System.ComponentModel.DataAnnotations.EmailAddressAttribute().IsValid(adminEmail) ||
-            string.IsNullOrWhiteSpace(adminPassword) ||
-            adminPassword.Length < 12)
+        await using var scope = app.Services.CreateAsyncScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        await dbContext.Database.MigrateAsync();
+        if (!await dbContext.Usuarios.AnyAsync())
         {
-            throw new InvalidOperationException(
-                "An empty database requires ADMIN_INITIAL_EMAIL and ADMIN_INITIAL_PASSWORD (at least 12 characters) to provision the first administrator.");
-        }
-
-        dbContext.Usuarios.Add(new Usuario
-        {
-            Name = "Administrador",
-            Email = adminEmail,
-            Senha = BCrypt.Net.BCrypt.HashPassword(adminPassword),
-            Active = true,
-            CreatedAt = DateTime.UtcNow,
-            Role = UserRole.Admin
-        });
-        await dbContext.SaveChangesAsync();
-    }
-
-    var platformAdminEmail = builder.Configuration["PLATFORM_ADMIN_EMAIL"];
-    var platformAdminPassword = builder.Configuration["PLATFORM_ADMIN_PASSWORD"];
-    if (!string.IsNullOrWhiteSpace(platformAdminEmail) || !string.IsNullOrWhiteSpace(platformAdminPassword))
-    {
-        if (string.IsNullOrWhiteSpace(platformAdminEmail) ||
-            !new System.ComponentModel.DataAnnotations.EmailAddressAttribute().IsValid(platformAdminEmail) ||
-            string.IsNullOrWhiteSpace(platformAdminPassword) ||
-            platformAdminPassword.Length < 12)
-        {
-            throw new InvalidOperationException(
-                "Configure both PLATFORM_ADMIN_EMAIL and PLATFORM_ADMIN_PASSWORD (at least 12 characters) to bootstrap the platform administrator.");
-        }
-
-        if (!await dbContext.Usuarios.IgnoreQueryFilters().AnyAsync(user => user.Role == UserRole.SuperAdmin))
-        {
-            if (await dbContext.Usuarios.IgnoreQueryFilters().AnyAsync(user => user.Email == platformAdminEmail))
+            var adminEmail = builder.Configuration["ADMIN_INITIAL_EMAIL"];
+            var adminPassword = builder.Configuration["ADMIN_INITIAL_PASSWORD"];
+            if (string.IsNullOrWhiteSpace(adminEmail) ||
+                !new System.ComponentModel.DataAnnotations.EmailAddressAttribute().IsValid(adminEmail) ||
+                string.IsNullOrWhiteSpace(adminPassword) ||
+                adminPassword.Length < 12)
+            {
                 throw new InvalidOperationException(
-                    "PLATFORM_ADMIN_EMAIL is already assigned to another user. Use a new email; existing accounts are never silently promoted.");
+                    "An empty database requires ADMIN_INITIAL_EMAIL and ADMIN_INITIAL_PASSWORD (at least 12 characters) to provision the first administrator.");
+            }
 
             dbContext.Usuarios.Add(new Usuario
             {
-                TenantId = 1,
-                Name = "Platform Administrator",
-                Email = platformAdminEmail,
-                Senha = BCrypt.Net.BCrypt.HashPassword(platformAdminPassword),
+                Name = "Administrador",
+                Email = adminEmail,
+                Senha = BCrypt.Net.BCrypt.HashPassword(adminPassword),
                 Active = true,
                 CreatedAt = DateTime.UtcNow,
-                Role = UserRole.SuperAdmin
+                Role = UserRole.Admin
             });
             await dbContext.SaveChangesAsync();
         }
+
+        var platformAdminEmail = builder.Configuration["PLATFORM_ADMIN_EMAIL"];
+        var platformAdminPassword = builder.Configuration["PLATFORM_ADMIN_PASSWORD"];
+        if (!string.IsNullOrWhiteSpace(platformAdminEmail) || !string.IsNullOrWhiteSpace(platformAdminPassword))
+        {
+            if (string.IsNullOrWhiteSpace(platformAdminEmail) ||
+                !new System.ComponentModel.DataAnnotations.EmailAddressAttribute().IsValid(platformAdminEmail) ||
+                string.IsNullOrWhiteSpace(platformAdminPassword) ||
+                platformAdminPassword.Length < 12)
+            {
+                throw new InvalidOperationException(
+                    "Configure both PLATFORM_ADMIN_EMAIL and PLATFORM_ADMIN_PASSWORD (at least 12 characters) to bootstrap the platform administrator.");
+            }
+
+            if (!await dbContext.Usuarios.IgnoreQueryFilters().AnyAsync(user => user.Role == UserRole.SuperAdmin))
+            {
+                if (await dbContext.Usuarios.IgnoreQueryFilters().AnyAsync(user => user.Email == platformAdminEmail))
+                    throw new InvalidOperationException(
+                        "PLATFORM_ADMIN_EMAIL is already assigned to another user. Use a new email; existing accounts are never silently promoted.");
+
+                dbContext.Usuarios.Add(new Usuario
+                {
+                    TenantId = 1,
+                    Name = "Platform Administrator",
+                    Email = platformAdminEmail,
+                    Senha = BCrypt.Net.BCrypt.HashPassword(platformAdminPassword),
+                    Active = true,
+                    CreatedAt = DateTime.UtcNow,
+                    Role = UserRole.SuperAdmin
+                });
+                await dbContext.SaveChangesAsync();
+            }
+        }
+    }
+    catch (Exception ex)
+    {
+        var logger = app.Services.GetRequiredService<ILogger<Program>>();
+        logger.LogWarning(ex, "Database migration check finished with status: {Message}", ex.Message);
     }
 }
 
