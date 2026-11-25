@@ -1,0 +1,11 @@
+{
+  "name": "smartprod-root",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "npm --prefix SmartProd/frontend run build"
+  },
+  "dependencies": {
+    "@neon/config": "^1.14.7",
+    "@neon/env": "^2.1.10"
+  }
+}

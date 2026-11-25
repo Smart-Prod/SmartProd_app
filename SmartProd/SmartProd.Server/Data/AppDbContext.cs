@@ -432,17 +432,23 @@ namespace SmartProd.API.Server.Data
             foreach (var trackedState in trackedStates)
             {
                 var entry = trackedState.Entry;
-                entry.State = EntityState.Unchanged;
-                entry.CurrentValues.SetValues(trackedState.CurrentValues);
 
                 if (acceptAllChangesOnSuccess)
                 {
-                    entry.OriginalValues.SetValues(trackedState.CurrentValues);
                     if (trackedState.State == EntityState.Deleted)
                         entry.State = EntityState.Detached;
                     else
                         entry.State = EntityState.Unchanged;
                     continue;
+                }
+
+                entry.State = EntityState.Unchanged;
+                foreach (var prop in trackedState.CurrentValues.Properties)
+                {
+                    if (!prop.IsKey())
+                    {
+                        entry.Property(prop.Name).CurrentValue = trackedState.CurrentValues[prop.Name];
+                    }
                 }
 
                 entry.OriginalValues.SetValues(trackedState.OriginalValues);

@@ -15,10 +15,30 @@ using SmartProd.API.Server.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration["DB_CONNECTION_STRING"]
+var rawConn = builder.Configuration["DATABASE_URL_UNPOOLED"]
+    ?? builder.Configuration["DATABASE_URL"]
+    ?? builder.Configuration["DB_CONNECTION_STRING"]
     ?? builder.Configuration["SMARTPROD_DB_CONNECTION"]
     ?? builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? throw new InvalidOperationException("Configure DB_CONNECTION_STRING or ConnectionStrings:DefaultConnection.");
+    ?? throw new InvalidOperationException("Configure DATABASE_URL_UNPOOLED, DATABASE_URL, DB_CONNECTION_STRING or ConnectionStrings:DefaultConnection.");
+
+string connectionString = rawConn;
+if (rawConn.StartsWith("postgres://", StringComparison.OrdinalIgnoreCase) ||
+    rawConn.StartsWith("postgresql://", StringComparison.OrdinalIgnoreCase))
+{
+    var uri = new Uri(rawConn);
+    var userInfo = uri.UserInfo.Split(':');
+    var builderConn = new Npgsql.NpgsqlConnectionStringBuilder
+    {
+        Host = uri.Host,
+        Port = uri.Port > 0 ? uri.Port : 5432,
+        Database = uri.AbsolutePath.TrimStart('/'),
+        Username = userInfo.Length > 0 ? Uri.UnescapeDataString(userInfo[0]) : string.Empty,
+        Password = userInfo.Length > 1 ? Uri.UnescapeDataString(userInfo[1]) : string.Empty,
+        SslMode = Npgsql.SslMode.Require
+    };
+    connectionString = builderConn.ConnectionString;
+}
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
@@ -94,7 +114,9 @@ var jwtSecret = builder.Configuration["JWT_SECRET"]
     ?? throw new InvalidOperationException("Configure JWT_SECRET or Jwt:Secret.");
 if (Encoding.UTF8.GetByteCount(jwtSecret) < 32)
     throw new InvalidOperationException("JWT_SECRET must contain at least 32 bytes.");
-var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? throw new InvalidOperationException("Jwt:Issuer not configured");
+var jwtIssuer = builder.Configuration["JWT_ISSUER"]
+    ?? builder.Configuration["Jwt:Issuer"]
+    ?? "SmartProd";
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

@@ -20,7 +20,7 @@ public sealed class PostgresHealthCheck(IServiceScopeFactory scopeFactory) : IHe
         }
         catch (Exception exception)
         {
-            return HealthCheckResult.Unhealthy("PostgreSQL connectivity check failed.", exception);
+            return HealthCheckResult.Unhealthy($"PostgreSQL connectivity check failed: {exception.GetType().Name} - {exception.Message}", exception);
         }
     }
 }
